@@ -27,25 +27,18 @@ public class Controller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int count = 0;
 		try {
 			Cookie ck[] = request.getCookies();
 			String user = getServletContext().getInitParameter("user");
 			String pass = getServletContext().getInitParameter("pass");
-			if(ck!=null & LoginServlet.login.equals("")){  
-				for (Cookie x : ck) {
-					//response.getWriter().println(x.getName() + ": " + x.getValue());
-					if (x.getValue().equalsIgnoreCase(user) || x.getValue().equalsIgnoreCase(pass)) {
-						count += 1;
+			if(ck!=null){  
+				for (int i = 0; i < ck.length-1; i++) {
+					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equalsIgnoreCase(pass)) {
+						response.sendRedirect("LoginServlet?username=" + user + "&password=" + pass);
 					}
 				}
-		        if(count == 2){ 
-		        	LoginServlet.login = user;
-		        } else {
-		        	LoginServlet.login = "";   
-		        }
 	      	} 
-			response.sendRedirect("home");
+			response.sendRedirect("setuserbean.jsp?username=&password=");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.getWriter().print(e);

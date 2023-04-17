@@ -30,15 +30,19 @@ public class LogoutServlet extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		try {
 			Cookie ck[] = request.getCookies();
-			if (ck != null) {
-				for (Cookie x : ck) {
-					//response.getWriter().println("Username: " + x.getName());
-					//response.getWriter().println("Password: " + x.getValue());
-					x.setMaxAge(0);
-					response.addCookie(x);
+			String user = getServletContext().getInitParameter("user");
+			String pass = getServletContext().getInitParameter("pass");
+			if(ck!=null){  
+				for (int i = 0; i < ck.length-1; i++) {
+					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equalsIgnoreCase(pass)) {
+						ck[i].setMaxAge(0);
+						response.addCookie(ck[i]);
+						ck[i+1].setMaxAge(0);
+						response.addCookie(ck[i+1]);
+					}
 				}
-			}
-			LoginServlet.login = "";
+	      	} 
+			response.sendRedirect("setuserbean.jsp?username=&password=");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

@@ -13,7 +13,6 @@ import java.io.IOException;
  */
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public static String login = "";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,10 +42,9 @@ public class LoginServlet extends HttpServlet {
 					response.addCookie(userCookie);
 			        response.addCookie(passCookie);
 				}
-				login = user;
-		        response.getWriter().write("Success");
+		        response.sendRedirect("setuserbean.jsp?username="+ user + "&password=" + password);
 			} else {
-				response.getWriter().write("Erorr");
+				response.sendRedirect("home.jsp");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
