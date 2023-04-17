@@ -9,14 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class Controller
+ * Servlet implementation class LoginServlet
  */
-public class Controller extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    public static String login = "";
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Controller() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,30 +28,32 @@ public class Controller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int count = 0;
 		try {
-			Cookie ck[] = request.getCookies();
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
 			String user = getServletContext().getInitParameter("user");
 			String pass = getServletContext().getInitParameter("pass");
-			if(ck!=null & LoginServlet.login.equals("")){  
-				for (Cookie x : ck) {
-					//response.getWriter().println(x.getName() + ": " + x.getValue());
-					if (x.getValue().equalsIgnoreCase(user) || x.getValue().equalsIgnoreCase(pass)) {
-						count += 1;
-					}
+			if (username.equalsIgnoreCase(user) && password.equals(pass)) {
+				String remember = request.getParameter("remember");
+				if (remember != null) {
+					Cookie userCookie = new Cookie("username",username);
+					Cookie passCookie = new Cookie("password",password);
+					userCookie.setMaxAge(60 * 60 * 24);
+					passCookie.setMaxAge(60 * 60 * 24);
+					response.addCookie(userCookie);
+			        response.addCookie(passCookie);
 				}
-		        if(count == 2){ 
-		        	LoginServlet.login = user;
-		        } else {
-		        	LoginServlet.login = "";   
-		        }
-	      	} 
-			response.sendRedirect("home");
+				login = user;
+		        response.getWriter().write("Success");
+			} else {
+				response.getWriter().write("Erorr");
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			response.getWriter().print(e);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
