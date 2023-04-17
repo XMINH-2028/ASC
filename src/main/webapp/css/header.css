@@ -125,6 +125,10 @@ header .admin .content span {
 	margin-right: 20px;
 }
 
+header .admin .logout {
+	color: rgb(145, 145, 145);;
+}
+
 header .admin .logout:hover {
 	cursor: pointer;
 	color: gold;
