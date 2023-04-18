@@ -1,7 +1,6 @@
-package test;
-
-import jakarta.servlet.ServletException;
+package get;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
@@ -28,12 +27,18 @@ public class Get extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String user = getServletContext().getInitParameter("user");
+		String pass = getServletContext().getInitParameter("pass");
 		Cookie ck[] = request.getCookies();
-		if(ck!=null){  
-			for (int i = 0; i < ck.length; i++) {
-				response.getWriter().print(ck[i].getName() + ": " + ck[i].getValue());
+		for (int i = 0; i < ck.length; i++) {
+			response.getWriter().print(ck[i].getName() + ": " + ck[i].getValue());
+		}
+		for (int i = 0; i < ck.length-1; i++) {
+			if (ck[i].getValue().equalsIgnoreCase(user) & ck[i+1].getValue().equals(pass)) {
+				response.getWriter().print("XMINH");
 			}
-      	} 
+		}
+		
 	}
 
 	/**

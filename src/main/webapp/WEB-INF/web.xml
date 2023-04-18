@@ -82,4 +82,14 @@
     <servlet-name>Get</servlet-name>
     <url-pattern>/Get</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Het</display-name>
+    <servlet-name>Het</servlet-name>
+    <servlet-class>get.Get</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Het</servlet-name>
+    <url-pattern>/Het</url-pattern>
+  </servlet-mapping>
 </web-app>

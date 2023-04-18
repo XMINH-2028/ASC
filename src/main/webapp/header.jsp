@@ -1,6 +1,9 @@
 <%@ page import="controller.*"%>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<% if (admin.getUsername() != null) {%>
+<% if (admin.getUsername() == null) 
+	{ 
+		response.sendRedirect("Controller");
+	} else {%>
 	<header>
 		<div class="top">
 			<img alt="logo" src="images/logo.png" class="logo">
@@ -45,6 +48,4 @@
 			</ul>
 		</div>
 	</header>
-<% } else {
-	request.getRequestDispatcher("Controller").forward(request, response);
-} %>
+<% }  %>
