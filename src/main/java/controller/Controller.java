@@ -26,24 +26,25 @@ public class Controller extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int count = 0;
 		try {
 			Cookie ck[] = request.getCookies();
 			String user = getServletContext().getInitParameter("user");
 			String pass = getServletContext().getInitParameter("pass");
-			if(ck!=null & LoginServlet.login.equals("")){  
-				for (Cookie x : ck) {
-					//response.getWriter().println(x.getName() + ": " + x.getValue());
-					if (x.getValue().equalsIgnoreCase(user) || x.getValue().equalsIgnoreCase(pass)) {
-						count += 1;
+			String login =  request.getParameter("login");
+			String logout =  request.getParameter("logout");
+			if (login != null && login.equals("on")) {
+				response.sendRedirect("home?user=" + user);
+			}
+			if (logout != null && logout.equals("on")) {
+				response.sendRedirect("home");
+			}
+			if(ck!=null){  
+				for (int i = 0; i < ck.length - 1; i++) {
+					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equals(pass)) {
+						response.sendRedirect("home?user=" + user);
 					}
 				}
-		        if(count == 2){ 
-		        	LoginServlet.login = user;
-		        } else {
-		        	LoginServlet.login = "";   
-		        }
+				response.sendRedirect("home");
 	      	} 
 			response.sendRedirect("home");
 		} catch (Exception e) {

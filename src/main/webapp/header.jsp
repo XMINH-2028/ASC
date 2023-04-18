@@ -1,4 +1,5 @@
 <%@ page import="controller.*"%>
+<% String user = request.getParameter("user");%>
 <header>
 	<div class="top">
 		<img alt="logo" src="images/logo.png" class="logo">
@@ -18,11 +19,11 @@
 			<li><a href="#">About us</a></li>
 		</ul>
 		<ul class="right">
-			<% if (!LoginServlet.login.equals("")) { %>
+			<% if (user != null) { %>
 			<li class='admin'><span>M</span>
 				<ul class='content vision'>
-					<li><span><%=(LoginServlet.login).substring(0, 1)%></span><%=LoginServlet.login%></li>
-					<li class='logout'>Logout</li>
+					<li><span><%=user.substring(0, 1)%></span><%= user%></li>
+					<li><a class='logout' href="LogoutServlet">Logout</a></li>
 				</ul></li>
 			<script>
 			$(document).ready(function() {
@@ -33,15 +34,6 @@
 					    	$(".content").addClass("vision");
 					})
 				});
-				
-				$(".logout").click(function() {
-					var xhttp = new XMLHttpRequest();
-					xhttp.onreadystatechange = function() {
-						window.location.href = "home";
-					};
-					xhttp.open("GET", "LogoutServlet", true);
-					xhttp.send();
-				})
 			});
 			</script>
 			<% } else { %>

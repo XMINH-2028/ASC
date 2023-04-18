@@ -13,7 +13,6 @@ import java.io.IOException;
  */
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    public static String login = "";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,23 +30,16 @@ public class LoginServlet extends HttpServlet {
 		try {
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
-			String user = getServletContext().getInitParameter("user");
-			String pass = getServletContext().getInitParameter("pass");
-			if (username.equalsIgnoreCase(user) && password.equals(pass)) {
-				String remember = request.getParameter("remember");
-				if (remember != null) {
-					Cookie userCookie = new Cookie("username",username);
-					Cookie passCookie = new Cookie("password",password);
-					userCookie.setMaxAge(60 * 60 * 24);
-					passCookie.setMaxAge(60 * 60 * 24);
-					response.addCookie(userCookie);
-			        response.addCookie(passCookie);
-				}
-				login = user;
-		        response.getWriter().write("Success");
-			} else {
-				response.getWriter().write("Erorr");
-			}
+			String remember = request.getParameter("remember");
+			if (remember != null) {
+				Cookie userCookie = new Cookie("username",username);
+				Cookie passCookie = new Cookie("password",password);
+				userCookie.setMaxAge(60 * 60 * 24);
+				passCookie.setMaxAge(60 * 60 * 24);
+				response.addCookie(userCookie);
+		        response.addCookie(passCookie);
+			} 
+			request.getRequestDispatcher("Controller?login=on").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

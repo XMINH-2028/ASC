@@ -1,4 +1,4 @@
-function validateFormLogin() {
+/*function validateFormLogin() {
 	//Tên đăng nhập không được để trống
 	if (!$("#Username").val().trim()) {
 		$(".passAlert").text('');
@@ -15,21 +15,23 @@ function validateFormLogin() {
 	$(".userAlert").text('');
 	$(".passAlert").text('');
 	return 1;
-}
+}*/
 $(document).ready(function(){
-  	$(":reset").on("click", function(){
+  	$("#res").on("click", function(){
 		$(".erorrAlert").text(''); 
+		$("input:text").val('');
+		$("input:password").val('');
 	});
 });
 
-$(document).on("click", "#sub", function() { 
+/*$(document).on("click", "#sub", function() { 
 	let x = validateFormLogin();
 	if ( x == 1) {
 	    $.get("LoginServlet",$("#loginForm").serialize(),function(responseText) {
 			if (responseText == "Erorr")
 				$(".erorrAlert").text('Username or password is invalid!'); 
 			else if ((responseText == "Success"))
-				window.location.href = 'home'; 
+				$("#loginForm").submit();
 	    });
 	 }
-});
+});*/

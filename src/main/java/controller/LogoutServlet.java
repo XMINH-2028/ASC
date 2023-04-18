@@ -38,7 +38,7 @@ public class LogoutServlet extends HttpServlet {
 					response.addCookie(x);
 				}
 			}
-			LoginServlet.login = "";
+			request.getRequestDispatcher("Controller?logout=on").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
