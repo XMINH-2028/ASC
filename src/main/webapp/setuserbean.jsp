@@ -7,13 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:useBean id="user" class="bean.User" scope="session"></jsp:useBean>
-<jsp:setProperty property="*" name="user" />
-<% if (request.getParameter("username").equals("")) { %>
-	<jsp:setProperty property="username" name="user" value="" />
+<jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
+<jsp:setProperty property="*" name="admin" />
+<% if (request.getParameter("username") == null || request.getParameter("username").equals("")) { %>
+	<jsp:setProperty property="username" name="admin" value="" />
 <% } %>
-<% if (request.getParameter("password").equals("")) { %>
-	<jsp:setProperty property="password" name="user" value="" />
+<% if (request.getParameter("password") == null || request.getParameter("password").equals("")) { %>
+	<jsp:setProperty property="password" name="admin" value="" />
 <% } %>
 <% response.sendRedirect("home"); %>
 </body>

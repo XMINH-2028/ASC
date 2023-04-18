@@ -1,14 +1,20 @@
 package bean;
 
 public class User {
-	private String username = "";
-	private String password = "";
-	private String usermess = "";
-	private String passmess = "";
+	private String username;
+	private String password;
+	private String usermess;
+	private String passmess;
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
 	}
 
 	public String getUsername() {
@@ -43,7 +49,7 @@ public class User {
 		this.password = password;
 	}
 	
-	public boolean validate() {
+	public boolean validate(String user, String pass) {
 		if (username.trim().equals("")) {
 			this.usermess = "Please input Username!";
 			this.setPassmess("");
@@ -52,6 +58,12 @@ public class User {
 		if (password.trim().equals("")) {
 			this.passmess = "Please input Password!";
 			this.setUsermess("");
+			return false;
+		} 
+		if (!(username.trim().equalsIgnoreCase(user) && password.trim().equals(pass))) {
+			this.passmess = "Please input Password!";
+			this.setUsermess("ABCCCCCCCCCCCC");
+			this.setPassmess("ABCCCCCCCCCCCC");
 			return false;
 		} 
 		return true;

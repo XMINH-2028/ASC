@@ -42,7 +42,8 @@ public class LogoutServlet extends HttpServlet {
 					}
 				}
 	      	} 
-			response.sendRedirect("setuserbean.jsp?username=&password=");
+			getServletContext().setAttribute( "logout", "on" );
+			request.getRequestDispatcher("Controller").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

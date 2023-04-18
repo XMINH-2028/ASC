@@ -12,54 +12,37 @@
 <script type="text/javascript" src="js/login.js"></script>
 </head>
 <body>
-<jsp:useBean id="user" class="bean.User" scope="session"></jsp:useBean>
-<jsp:setProperty property="*" name="user"/>
-<%
-	String action = request.getParameter("action");
-	if (action != null) {
-		if (request.getParameter("username").equals("")) { %>
-			<jsp:setProperty property="username" name="user" value="" />
-		<% }
-		if (request.getParameter("password").equals("")) { %>
-			<jsp:setProperty property="password" name="user" value="" />
-		<% }
-		if (user.validate()) {
-			String us = getServletContext().getInitParameter("user");
-			String pa = getServletContext().getInitParameter("pass");
-			if (user.getUsername().equalsIgnoreCase(us) && user.getPassword().equals(pa)) {
-				user.setPassmess("");
-				user.setUsermess("");
-				response.sendRedirect("home.jsp");
-				
-			} else {
-				user.setPassmess("Username or password is invalid!");
-				user.setUsermess("Username or password is invalid!");
-			}
-		}
-	}
+<jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
+<% if (admin.getUsername() != null && admin.getUsername().equals("") && admin.getPassword().equals("")) {
+	String usermess = request.getParameter("usermess");
+	String username = request.getParameter("username");
+	String passmess = request.getParameter("passmess");
+	String password = request.getParameter("password");
 %>
-
-<img class="icon" alt="login" src="images/key.png">		
-<form action="login.jsp" method="POST">
-    <input type="hidden" name="action" value="1">
-	<p class="wrap">
-		<label for="Username">Username<span><jsp:getProperty property="usermess" name="user"/></span></label>
-		<input id="Username" type="text" name="username" placeholder="Enter Username" value="<jsp:getProperty property="username" name="user"/>">
-	</p>
-	<p class="wrap">
-		<label for="Password">Password<span><jsp:getProperty property="passmess" name="user"/></span></label>
-		<input id="Password" type="password" name="password" placeholder="Enter Password" value="<jsp:getProperty property="password" name="user"/>">
-	</p>
-	<button type="submit" id="sub">Login</button>
-	<p>
-		<input type="checkbox" id="Remember" name="remember">
-		<label for="Remember">Remember me</label>
-	</p>
-	<div class="footer">
-		<button type="reset">Cancel</button>
-		<p>Forgot<a href="#"> password?</a></p>
-	</div>
-</form>
-<span class="close"><a href = "home">+</a></span>
+	<img class="icon" alt="login" src="images/key.png">		
+	<form action="Controller" method="POST">
+	    <input type="hidden" name="action" value="submit">
+		<p class="wrap">
+			<label for="Username">Username<span class="erorrAlert"><%= usermess == null ? "" : usermess%></span></label>
+			<input id="Username" type="text" name="username" placeholder="Enter Username" value="<%= username == null ? "" : username%>">
+		</p>
+		<p class="wrap">
+			<label for="Password">Password<span class="erorrAlert"><%= passmess == null ? "" : passmess%></span></label>
+			<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password == null ? "" : password%>">
+		</p>
+		<button type="submit" id="sub">Login</button>
+		<p>
+			<input type="checkbox" id="Remember" name="remember">
+			<label for="Remember">Remember me</label>
+		</p>
+		<div class="footer">
+			<button type="button" id="reset">Cancel</button>
+			<p>Forgot<a href="#"> password?</a></p>
+		</div>
+	</form>
+	<span class="close"><a href = "home">+</a></span>
+<% } else { 
+	request.getRequestDispatcher("Controller?login=on").forward(request, response);
+} %>
 </body>
 </html>

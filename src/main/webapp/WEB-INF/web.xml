@@ -62,4 +62,24 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/LogoutServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Set</display-name>
+    <servlet-name>Set</servlet-name>
+    <servlet-class>test.Set</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Set</servlet-name>
+    <url-pattern>/Set</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Get</display-name>
+    <servlet-name>Get</servlet-name>
+    <servlet-class>test.Get</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Get</servlet-name>
+    <url-pattern>/Get</url-pattern>
+  </servlet-mapping>
 </web-app>
