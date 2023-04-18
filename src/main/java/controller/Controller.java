@@ -28,8 +28,7 @@ public class Controller extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int count = 0;
+	
 		try {
 			String action = request. getParameter("action");
 			if (action == null) {
@@ -39,7 +38,7 @@ public class Controller extends HttpServlet {
 				String logout = (String) getServletContext().getAttribute( "logout" );
 				String login = request.getParameter("login");
 				if (login != null && login.equals("on")) {
-					response.sendRedirect("home.jsp");
+					response.sendRedirect("home");
 				}
 				if (logout != null && logout.equals("on")) {
 					response.sendRedirect("setuserbean.jsp?username=&password=");
@@ -47,11 +46,9 @@ public class Controller extends HttpServlet {
 				if(ck!=null){  
 					for (int i = 0; i < ck.length-1; i++) {
 						if (ck[i].getValue().equalsIgnoreCase(user) & ck[i+1].getValue().equalsIgnoreCase(pass)) {
-							count += 1;
 							request.getRequestDispatcher("LoginServlet?username=" + user + "&password=" + pass).forward(request, response);
 						}
 					}
-					response.sendRedirect("setuserbean.jsp");
 		      	} else {
 		      		response.sendRedirect("setuserbean.jsp");
 		      	}
