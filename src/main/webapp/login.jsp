@@ -13,7 +13,9 @@
 </head>
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<% if (admin.getUsername() != null && admin.getUsername().equals("") && admin.getPassword().equals("")) {
+<% if (admin.getUsername() == null) {
+	request.getRequestDispatcher("Controller").forward(request, response);
+} else if ( admin.getUsername().equals("") && admin.getPassword().equals("")) {
 	String usermess = request.getParameter("usermess")  == null ? "" : request.getParameter("usermess");;
 	String username = request.getParameter("username") == null ? "" : request.getParameter("username");
 	String passmess = request.getParameter("passmess")  == null ? "" : request.getParameter("passmess");;
@@ -42,7 +44,7 @@
 	</form>
 	<span class="close"><a href="home">+</a></span>
 <% } else { 
-	request.getRequestDispatcher("Controller").forward(request, response);
+	response.sendRedirect("home?start=5");
 } %>
 </body>
 </html>
