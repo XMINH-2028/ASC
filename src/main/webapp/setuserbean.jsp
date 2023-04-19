@@ -9,10 +9,8 @@
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
 <jsp:setProperty property="*" name="admin" />
-<% if (request.getParameter("username") == null || request.getParameter("username").equals("")) { %>
+<% if (request.getParameter("username") == null && request.getParameter("password") == null) { %>
 	<jsp:setProperty property="username" name="admin" value="" />
-<% } %>
-<% if (request.getParameter("password") == null || request.getParameter("password").equals("")) { %>
 	<jsp:setProperty property="password" name="admin" value="" />
 <% } %>
 <% response.sendRedirect("home"); %>

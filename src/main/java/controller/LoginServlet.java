@@ -39,7 +39,9 @@ public class LoginServlet extends HttpServlet {
 				response.addCookie(userCookie);
 		        response.addCookie(passCookie);
 			}
-	        response.sendRedirect("setuserbean.jsp?username="+ username + "&password=" + password);
+			if (username != null && password != null) {
+				response.sendRedirect("setuserbean.jsp?username="+ username + "&password=" + password);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

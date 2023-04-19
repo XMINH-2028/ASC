@@ -14,21 +14,21 @@
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
 <% if (admin.getUsername() != null && admin.getUsername().equals("") && admin.getPassword().equals("")) {
-	String usermess = request.getParameter("usermess");
-	String username = request.getParameter("username");
-	String passmess = request.getParameter("passmess");
-	String password = request.getParameter("password");
+	String usermess = request.getParameter("usermess") == null ? "" : request.getParameter("usermess");
+	String username = request.getParameter("username") == null ? "" : request.getParameter("username");
+	String passmess = request.getParameter("passmess") == null ? "" : request.getParameter("passmess");
+	String password = request.getParameter("password") == null ? "" : request.getParameter("password");
 %>
 	<img class="icon" alt="login" src="images/key.png">		
 	<form action="Controller" method="POST">
 	    <input type="hidden" name="action" value="submit">
 		<p class="wrap">
-			<label for="Username">Username<span class="erorrAlert"><%= usermess == null ? "" : usermess%></span></label>
-			<input id="Username" type="text" name="username" placeholder="Enter Username" value="<%= username == null ? "" : username%>">
+			<label for="Username">Username<span class="erorrAlert"><%= usermess.trim()%></span></label>
+			<input id="Username" type="text" name="username" placeholder="Enter Username" value="<%= username.trim()%>">
 		</p>
 		<p class="wrap">
-			<label for="Password">Password<span class="erorrAlert"><%= passmess == null ? "" : passmess%></span></label>
-			<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password == null ? "" : password%>">
+			<label for="Password">Password<span class="erorrAlert"><%= passmess == null ? "" : passmess.trim()%></span></label>
+			<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password.trim()%>">
 		</p>
 		<button type="submit" id="sub">Login</button>
 		<p>

@@ -62,8 +62,8 @@ public class User {
 		} 
 		if (!(username.trim().equalsIgnoreCase(user) && password.trim().equals(pass))) {
 			this.passmess = "Please input Password!";
-			this.setUsermess("ABCCCCCCCCCCCC");
-			this.setPassmess("ABCCCCCCCCCCCC");
+			this.setUsermess("Username or Password is invalid!");
+			this.setPassmess("Username or Password is invalid!");
 			return false;
 		} 
 		return true;

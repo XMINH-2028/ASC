@@ -42,13 +42,13 @@ public class Controller extends HttpServlet {
 					response.sendRedirect("home");
 				}
 				if (logout != null && logout.equals("on")) {
-					response.sendRedirect("setuserbean.jsp?username=&password=");
+					response.sendRedirect("setuserbean.jsp");
 				}
 				if(ck!=null){  
 					for (int i = 0; i < ck.length-1; i++) {
 						if (ck[i].getValue().equalsIgnoreCase(user) & ck[i+1].getValue().equalsIgnoreCase(pass)) {
 							count += 1;
-							response.sendRedirect("LoginServlet?username=" + user + "&password=" + pass);
+							response.sendRedirect("setuserbean.jsp?username="+ user + "&password=" + pass);
 						}
 					}
 					if (count == 0) {
