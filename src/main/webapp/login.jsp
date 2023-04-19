@@ -55,6 +55,7 @@
 		<input type="checkbox" id="Remember" name="remember">
 		<label for="Remember">Remember me</label>
 	</p>
+	<br/>
 	<div class="footer">
 		<button type="button" id="res">Cancel</button>
 		<p>Forgot<a href="#"> password?</a></p>
