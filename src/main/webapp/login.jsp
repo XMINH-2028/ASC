@@ -13,7 +13,9 @@
 </head>
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<% if (admin.getUsername() != null && admin.getUsername().equals("") && admin.getPassword().equals("")) {
+<% if (admin.getUsername() == null) {
+	request.getRequestDispatcher("Controller").forward(request, response);
+} else if (admin.getUsername().equals("") && admin.getPassword().equals("")) {
 	String usermess = request.getParameter("usermess") == null ? "" : request.getParameter("usermess");
 	String username = request.getParameter("username") == null ? "" : request.getParameter("username");
 	String passmess = request.getParameter("passmess") == null ? "" : request.getParameter("passmess");
@@ -27,7 +29,7 @@
 			<input id="Username" type="text" name="username" placeholder="Enter Username" value="<%= username.trim()%>">
 		</p>
 		<p class="wrap">
-			<label for="Password">Password<span class="erorrAlert"><%= passmess == null ? "" : passmess.trim()%></span></label>
+			<label for="Password">Password<span class="erorrAlert"><%= passmess.trim()%></span></label>
 			<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password.trim()%>">
 		</p>
 		<button type="submit" id="sub">Login</button>
@@ -42,7 +44,7 @@
 	</form>
 	<span class="close"><a href = "home">+</a></span>
 <% } else { 
-	request.getRequestDispatcher("Controller?login=on").forward(request, response);
+	response.sendRedirect("home?start=6");
 } %>
 </body>
 </html>

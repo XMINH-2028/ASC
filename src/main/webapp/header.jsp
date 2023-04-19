@@ -24,7 +24,7 @@
 				<li class='admin'><span>M</span>
 					<ul class='content vision'>
 						<li><span><%=admin.getUsername().substring(0, 1)%></span><%=admin.getUsername()%></li>
-						<li><a class='logout' href="LogoutServlet">Logout</a></li>
+						<li><a class='logout' href="Controller?action=logout">Logout</a></li>
 					</ul></li>
 				<script>
 				$(document).ready(function() {

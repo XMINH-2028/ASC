@@ -13,6 +13,6 @@
 	<jsp:setProperty property="username" name="admin" value="" />
 	<jsp:setProperty property="password" name="admin" value="" />
 <% } %>
-<% response.sendRedirect("home"); %>
+<% response.sendRedirect("home?start=" + request.getParameter("start")); %>
 </body>
 </html>
