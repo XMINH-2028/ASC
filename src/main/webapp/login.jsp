@@ -40,9 +40,9 @@
 			<p>Forgot<a href="#"> password?</a></p>
 		</div>
 	</form>
-	<span class="close"><a href = "home">+</a></span>
+	<span class="close"><a href="home">+</a></span>
 <% } else { 
-	request.getRequestDispatcher("Controller?login=on").forward(request, response);
+	request.getRequestDispatcher("Controller").forward(request, response);
 } %>
 </body>
 </html>

@@ -34,7 +34,7 @@ public class LogoutServlet extends HttpServlet {
 			String pass = getServletContext().getInitParameter("pass");
 			if(ck!=null){  
 				for (int i = 0; i < ck.length-1; i++) {
-					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equalsIgnoreCase(pass)) {
+					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equals(pass)) {
 						ck[i].setMaxAge(0);
 						response.addCookie(ck[i]);
 						ck[i+1].setMaxAge(0);
@@ -42,8 +42,7 @@ public class LogoutServlet extends HttpServlet {
 					}
 				}
 	      	} 
-			getServletContext().setAttribute( "logout", "on" );
-			request.getRequestDispatcher("Controller").forward(request, response);
+			response.sendRedirect("setuserbean.jsp?start=4");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
