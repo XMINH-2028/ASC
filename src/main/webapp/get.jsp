@@ -8,6 +8,6 @@
 </head>
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<%= admin.getPassword() %>
+<%= request.getAttribute("name") %>
 </body>
 </html>

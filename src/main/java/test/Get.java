@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Servlet implementation class Get
@@ -28,12 +29,8 @@ public class Get extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Cookie ck[] = request.getCookies();
-		if(ck!=null){  
-			for (int i = 0; i < ck.length; i++) {
-				response.getWriter().print(ck[i].getName() + ": " + ck[i].getValue());
-			}
-      	} 
+		PrintWriter out = response.getWriter();
+		out.print(request.getAttribute("name"));
 	}
 
 	/**
