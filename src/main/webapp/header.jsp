@@ -15,9 +15,12 @@
 		</div>
 		<div class="topnav">
 			<ul class="left">
-				<li><a href="#">Home</a></li>
-				<li><a href="#">Products</a></li>
-				<li><a href="#">About us</a></li>
+				<li class="menu"><i class='fas fa-bars'></i></li>
+				<ul class="item">
+					<li ><a href="#">Home</a></li>
+					<li><a href="#">Products</a></li>
+					<li><a href="#">About us</a></li>
+				</ul>
 			</ul>
 			<ul class="right">
 				<% if (admin.getUsername() != null && !admin.getUsername().equals("")) { %>
@@ -41,6 +44,7 @@
 				</script>
 				<% } else { %>
 				<li><a href='Controller?action=login'>Login</a></li>
+				<li><a href='Controller?action=register'>Register</a></li>
 				<% } %>
 			</ul>
 		</div>

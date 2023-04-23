@@ -1,8 +1,13 @@
+header {
+	background: white;
+}
+
 header .top {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	background-color: white;
+	padding: 0 30px;
 }
 
 header .logo {
@@ -11,7 +16,6 @@ header .logo {
 
 header form {
 	width: 50%;
-	margin-right: 15px;
 }
 
 header .searchBox {
@@ -39,9 +43,13 @@ header .searchBox button {
 	padding: 5px;
 }
 
+header .searchBox button i {
+	font-size: 30px;
+}
+
 header .searchBox button:hover {
 	cursor: pointer;
-	color: gold;
+	color: #ffc107;
 }
 
 header .topnav {
@@ -49,7 +57,7 @@ header .topnav {
 	justify-content: space-between;
 	background-color: black;
 	color: white;
-	padding: 5px 15px;
+	padding: 5px 30px;
 	font-size: 18px;
 }
 
@@ -61,11 +69,12 @@ header .topnav ul {
 
 header .topnav ul a {
 	color: white;
+	font-size: 18px;
 }
 
 header .topnav ul a:hover {
 	cursor: pointer;
-	color: gold;
+	color: #ffc107;
 }
 
 header li {
@@ -74,6 +83,10 @@ header li {
 
 header .left li {
 	margin-right: 20px;
+}
+
+header .left .menu {
+	display: none;
 }
 
 header .right li {
@@ -91,7 +104,7 @@ header .right .admin {
 }
 
 header .right .admin>span:hover {
-	border: 2px solid gold;
+	border: 2px solid #ffc107;
 	cursor: pointer;
 }
 
@@ -118,10 +131,10 @@ header .admin .content li:nth-of-type(1) {
 }
 
 header .admin .content span {
-	border: 2px solid gold;
+	border: 2px solid #ffc107;
 	border-radius: 100%;
 	padding: 15px;
-	color: gold;
+	color: #ffc107;
 	margin-right: 20px;
 }
 
@@ -131,5 +144,56 @@ header .admin .logout {
 
 header .admin .logout:hover {
 	cursor: pointer;
-	color: gold;
+	color: #ffc107;
+}
+
+@media screen and (max-width: 992px) {
+  	header .top {
+	    padding: 0 20px;
+	}
+} 
+
+@media only screen and (max-width:600px) {
+	header .left {
+		position: relative;
+	}
+	
+	header .left .menu {
+		display: block;
+		padding: 0;
+	}	
+	
+	header .left .menu:hover {
+		cursor: pointer;
+		color: #ffc107;
+	}	
+	
+	header .left .item {
+	    display: none;
+	    position: absolute;
+	    top: 48px;
+	    left: -20px;
+	    background: black;
+	    padding: 0 20px;
+	    width: 200px;
+	}	
+}
+
+@media only screen and (max-width:460px) {
+	header .searchBox button {
+		font-size: 20px;
+		min-width: 40px;
+	}
+	
+	header .searchBox button i {
+		font-size: 20px;
+	}
+	
+	header .logo {
+	    max-width: 80px;
+	}
+	
+	header .top {
+	    padding: 0 10px;
+	}
 }
