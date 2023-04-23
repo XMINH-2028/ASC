@@ -16,7 +16,10 @@
 <script type="text/javascript" src="js/home.js"></script>
 </head>
 <body>
+	<!-- Header -->
 	<%@ include file="header.jsp"%>
+	
+	<!-- Main -->
 	<div class="grid-container content">
 		<div class="grid-item main">
 			<div class="wrap">
@@ -215,11 +218,12 @@
 						<button>Add to Cart</button>
 					</li>
 				</ul>
-				
 			</div>
 		</div>
 	</div>
 	<hr>
-<%@ include file="footer.jsp" %>
+	
+	<!-- Footer -->
+	<%@ include file="footer.jsp" %>
 </body>
 </html>

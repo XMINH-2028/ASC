@@ -1,3 +1,4 @@
+//Menu switching on mobile devices
 $(document).ready(function(){
   	$("header .menu").click(function(){
     	$(this).siblings(".item").toggle("fast");

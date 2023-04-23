@@ -16,6 +16,8 @@
 	$(".passAlert").text('');
 	return 1;
 }*/
+
+//Reset form
 $(document).ready(function(){
   	$("#res").on("click", function(){
 		$(".erorrAlert").text(''); 

@@ -22,8 +22,9 @@
 				</ul>
 			</ul>
 		<ul class="right">
+		<!-- When logged in -->
 			<% if (user != null) { %>
-			<li class='admin'><span>M</span>
+			<li class='admin'><span><%=user.substring(0, 1)%></span>
 				<ul class='content vision'>
 					<li><span><%=user.substring(0, 1)%></span><%= user%></li>
 					<li><a class='logout' href="LogoutServlet">Logout</a></li>
@@ -39,6 +40,7 @@
 				});
 			});
 			</script>
+			<!-- When not logged in -->
 			<% } else { %>
 			<li><a href='login'>Login</a></li>
 			<% } %>
