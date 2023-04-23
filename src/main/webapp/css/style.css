@@ -2,10 +2,13 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	font-size: 16px;
 }
+
 .vision {
-	display: none! important;
+	display: none ! important;
 }
+
 a {
 	text-decoration: none;
 }

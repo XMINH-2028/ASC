@@ -14,10 +14,13 @@
 	</div>
 	<div class="topnav">
 		<ul class="left">
-			<li><a href="#">Home</a></li>
-			<li><a href="#">Products</a></li>
-			<li><a href="#">About us</a></li>
-		</ul>
+				<li class="menu"><i class='fas fa-bars'></i></li>
+				<ul class="item">
+					<li ><a href="#">Home</a></li>
+					<li><a href="#">Products</a></li>
+					<li><a href="#">About us</a></li>
+				</ul>
+			</ul>
 		<ul class="right">
 			<% if (user != null) { %>
 			<li class='admin'><span>M</span>
@@ -28,10 +31,10 @@
 			<script>
 			$(document).ready(function() {
 				$(".admin > span").on("click", function() {
-					$(".content").toggleClass("vision");
+					$(".admin .content").toggleClass("vision");
 					$(document).on("click",(e)=> {
 					    if (e.target.closest(".admin") == null)
-					    	$(".content").addClass("vision");
+					    	$(".admin .content").addClass("vision");
 					})
 				});
 			});
