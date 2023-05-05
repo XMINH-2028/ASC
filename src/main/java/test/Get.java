@@ -29,8 +29,9 @@ public class Get extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
-		out.print(request.getAttribute("name"));
+		//String encodedURL = response.encodeRedirectURL("Set");
+		//response.sendRedirect(encodedURL);
+		response.getWriter().print(request.getServletPath());
 	}
 
 	/**

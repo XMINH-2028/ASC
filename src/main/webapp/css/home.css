@@ -16,62 +16,62 @@ body {
 	align-self: flex-start;
 }
 
-.wrap {
+.home_wrap {
 	background: white;
 	padding: 15px;
 	margin-bottom: 15px;
 }
 
-.wrap img {
+.home_wrap img {
 	width: 100%;
 	margin-bottom: 15px;
 }
 
-.wrap .info p {
+.home_wrap .info p {
 	line-height: 20px;
 	margin-bottom: 10px;
 	display: flex;
 	align-items: center;
 }
 
-.wrap .info .price {
+.home_wrap .info .price {
 	font-weight: bold;
 	font-size: 20px;
 	color: #d0021c;
 }
 
-.wrap .info .discount {
+.home_wrap .info .discount {
 	background: #484df9;
 	color: gold;
 	margin-left: 20px;
 }
 
-.wrap .info .more {
+.home_wrap .info .more {
 	font-weight: bold;
 	color: orange;
 	margin-bottom: 0;
 }
 
-.wrap .info .more .star {
+.home_wrap .info .more .star {
 	font-size: 12px;
 	margin-left: 2px;
 }
 
-.wrap .info .more .sold {
+.home_wrap .info .more .sold {
 	font-weight: normal;
 	margin-left: 20px;
 	color: grey;
 }
 
-.wrap button {
-    padding: 5px;
-    margin-top: 5px;
-    color: #FFC107;
-    background: #9C27B0;
+.home_wrap button {
+	padding: 5px;
+	margin-top: 5px;
+	color: #FFC107;
+	background: #9C27B0;
 }
 
 .side {
-		align-self: flex-start;
+	align-self: flex-start;
 }
 
 .side .shopping {
@@ -85,7 +85,6 @@ body {
 }
 
 .side h1 {
-	vertical-align: middle;
 	white-space: nowrap;
 	color: #ffc107;
 	font-size: 20px;
@@ -114,26 +113,27 @@ body {
 	list-style-type: none;
 }
 
-.side .wrap {
+.side .home_wrap {
 	margin: 0;
 	border-bottom: 1px dashed black;
 	display: none;
 }
 
-.side .popular ul > span {
+.side .popular ul > li > span {
 	display: block;
 	margin-bottom: 10px;
 }
-.side .popular ul span:hover {
+
+.side .popular ul > li > span:hover {
 	cursor: pointer;
 }
 
-.side .popular ul .wrap:last-child {
+.side .popular ul .home_wrap:last-child {
 	border-bottom: 1px solid black;
 	margin-bottom: 10px;
 }
 
-.side .popular ul:last-child .wrap:last-child {
+.side .popular ul:last-child .home_wrap:last-child {
 	border-bottom: none;
 	margin-bottom: 0;
 }
@@ -142,84 +142,103 @@ body {
 	transform: rotate(90deg);
 }
 
-body > hr {
-	height: 3px;
-	background: black;
+.pagination {
+	grid-column: 1/span 2;
+}
+
+.pagination {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+	transition: background-color .3s;
+	border: 1px solid #ddd;
+	margin: 0 4px;
+	margin-bottom: 5px;
+}
+
+.pagination a.active {
+	background-color: #4CAF50;
+	color: white;
+	border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: #ddd;
 }
 
 @media screen and (max-width: 992px) {
-  	.main {
-	    grid-template-columns: 1fr 1fr 1fr;
+	.main {
+		grid-template-columns: 1fr 1fr 1fr;
 	}
-	
 	.grid-container.content {
-	    padding: 15px 20px;
+		padding: 15px 20px;
 	}
-} 
+}
 
 @media screen and (max-width: 768px) {
-  	.main {
-	    grid-template-columns: 1fr 1fr;
+	.main {
+		grid-template-columns: 1fr 1fr;
 	}
-} 
+}
 
 @media screen and (max-width: 600px) {
-  	.grid-container.content {
-	    grid-template-columns: 1fr;
-	    row-gap: 15px;
+	.grid-container.content {
+		grid-template-columns: 1fr;
+		row-gap: 15px;
+		column-gap: 0;
 	}
-	
 	.side {
-	    grid-area: 1 / 1 / 2 / 2;
-	}	
-	
+		grid-area: 1/1/2/1;
+	}
+	.main {
+		grid-area: 2/1/3/1;
+	}
 	.side .popular ul {
-	    list-style-type: none;
-	    display: flex;
-	    flex-wrap: wrap;
+		list-style-type: none;
+		display: flex;
+		flex-wrap: wrap;
 	}
-	
-	.side .popular ul > span {
-	    width: 100%;
+	.side .popular ul>span {
+		width: 100%;
 	}
-	
-	.side .popular ul .wrap {
-	    width: 50%;
-	    margin-bottom: 10px !important;
-	    border: none !important;
+	.side .popular ul .home_wrap {
+		width: 50%;
+		margin-bottom: 10px !important;
+		border: none !important;
 	}
-} 
+}
 
 @media screen and (max-width: 460px) {
-  	header .topnav {
-	    padding: 5px 10px;
+	header .topnav {
+		padding: 5px 10px;
 	}
-	
 	.grid-container.content {
-	    padding: 15px 10px;
+		padding: 15px 10px;
 	}
-} 
+}
 
 @media screen and (max-width: 360px) {
-  	.wrap {
-	    padding: 15px 2px;
-	    margin-bottom: 2px;
+	.home_wrap {
+		padding: 15px 2px;
+		margin-bottom: 2px;
 	}
-	
 	.main {
-	    column-gap: 2px;
-	}	
-	
+		column-gap: 2px;
+	}
 	.grid-container.content {
-	    padding: 15px 0px;
+		padding: 15px 0px;
 	}
-	
 	.side .popular {
-	    padding: 15px 2px;
+		padding: 15px 2px;
 	}
-	
 	.side .shopping {
-	    padding: 15px 2px;
+		padding: 15px 2px;
 	}
-
-} 
+}

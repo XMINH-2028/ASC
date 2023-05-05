@@ -1,115 +1,207 @@
 body {
-	width: 100%;
-	min-height: 100vh;
-	position: relative;
-	padding: 15px;
-	border: 10px solid #999999;
+	background: silver;
 }
-.wrapper {
+
+.login {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	min-height: 60vh;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+	overflow-y: scroll;
+	min-width: 280px;
 }
-.icon {
-	display: block;
-	max-height: 260px;
-	margin: auto;
-	padding:15px;
-	border: 15px solid #9835fd;
-	border-radius: 50%;
+
+.login .container {
+	display: flex;
+	min-width: 900px;
 }
-form {
+
+.login form {
+	width: 50%;
 	padding: 20px 0;
+	background: white;
+	padding: 40px;
 }
-form p {
+
+.login form h1 {
+	font-size: 36px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login form p {
 	display: flex;
 	flex-direction: column;
 }
-label {
+
+.login label {
 	font-size: 18px;
 	font-weight: bold;
 	margin: 5px 0;
 	display: flex;
+	align-items: flex-end;
 }
-label span {
+
+.login label span {
 	color: red;
-	margin-left: 20px;
+	margin-left: 10px;
+	font-size: 13px;
+    white-space: nowrap;
 }
-.wrap input {
+
+.login .wrap input {
 	height: 40px;
 	font-size: 15px;
 	border: 1px solid #d3d3d3;
 	padding: 0 15px;
 }
-form button[id="sub"] {
+
+.login form button[id="sub"] {
 	width: 100%;
 	padding: 10px;
 	margin: 20px 0 0;
 	font-size: 18px;
-	background: #67ac5b;
+	background: black;
 	border: none;
 	color: white;
 }
-form button:hover {
+
+.login form button:hover {
 	cursor: pointer;
 	color: gold;
 }
-form > p:last-of-type {
+
+.login form>p:last-of-type {
 	flex-direction: row;
 	margin-bottom: 15px;
 }
-input[type="checkbox"]{
+
+.login input[type="checkbox"] {
 	margin-right: 5px;
 }
-form > p:last-of-type input:hover {
+
+.login form>p:last-of-type input:hover {
 	cursor: pointer;
 }
-form > p:last-of-type label:hover {
+
+.login form>p:last-of-type label:hover {
 	cursor: pointer;
 }
-.close {
+
+.login .close {
 	display: block;
 	position: absolute;
-	top: 15px;
+	top: 5px;
 	right: 15px;
-	font-weight: bold;
-	font-size: 30px;
 	transform: rotate(45deg);
 }
-.close:hover {
+
+.login .close:hover {
 	cursor: pointer;
 }
-.footer {
-	position:absolute;
-	left: 0;
-	bottom: 0;
-	display: flex;
-	width: 100%;
-	justify-content:space-between;
-	align-items: center;
-	background: #f1f1f1;
-	padding: 15px;
+
+.login .close:hover a {
+	color: gold;
 }
-.footer button {
+
+.login .close a {
+	font-weight: bold;
+	font-size: 30px;
+	color: white;
+}
+
+.login .footer {
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login .footer button {
 	padding: 8px 12px;
 	color: white;
 	background: red;
 	border: none;
 }
-.footer p {
+
+.login .footer p {
 	flex-direction: row;
 }
-.footer p a {
+
+.login .footer p a {
 	margin-left: 3px;
 }
-@media screen and (max-width: 320px) {
-	.icon {
-		max-height: 230px;
+
+.login .welcome {
+	position: relative;
+    width: 50%;
+    background: #0f1230;
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.login .welcome h1 {
+    font-size: 36px;
+    line-height: 33px;
+    margin-bottom: 10px;
+}
+
+.login .welcome p {
+    font-size: 18px;
+}
+
+
+@media screen and (max-width: 992px) {
+	.login .container {
+		min-width: auto;
 	}
 }
-@media screen and (min-width: 1500px) {
-	.icon {
-		max-height: 512px;
+
+
+@media screen and (max-width: 768px) {
+	.login .container {
+		flex-direction: column;
+		flex-wrap: wrap;
+		padding: 30px;
+	}
+	
+	.login .welcome {
+		order: 1;
+		width: 100%;
+		padding: 15px;
+	}
+	
+	.login .welcome h1 {
+		font-size: 28px;
+	}
+	
+	.login form {
+		order: 2;
+		width: 100%;
+		padding: 15px;
+	}
+	
+	.login .close {
+	    top: 0px;
+	    right: 10px;
+	}
+}
+
+@media screen and (max-width: 360px) {
+	.login {
+		padding: 0;
+	}
+	
+	.login .container {
+		padding: 5px;
 	}
 }

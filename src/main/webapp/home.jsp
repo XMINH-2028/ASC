@@ -12,14 +12,14 @@
 <title>Home</title>
 <script src="https://kit.fontawesome.com/72f1026e9f.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script type="text/javascript" src="js/header.js"></script>
-<script type="text/javascript" src="js/home.js"></script>
 </head>
 <body>
+
 	<%@ include file="header.jsp"%>
+	
 	<div class="grid-container content">
 		<div class="grid-item main">
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -33,7 +33,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -47,7 +47,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -61,7 +61,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -75,7 +75,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -89,7 +89,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -103,7 +103,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -117,7 +117,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-			<div class="wrap">
+			<div class="home_wrap">
 				<img alt="iphone14"
 					src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 				<div class="info">
@@ -131,7 +131,7 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-
+	
 		</div>
 		<div class="grid-item side">
 			<div class="shopping">
@@ -145,8 +145,8 @@
 				<h1>Popular products</h1>
 				<hr>
 				<ul>
-					<span><i class='fas fa-angle-right control'></i> Samsung</span>
-					<li class="wrap">
+					<li><span><i class='fas fa-angle-right control'></i> Samsung</span><li>
+					<li class="home_wrap">
 						<img alt="iphone14" src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 						<div class="info">
 							<p class="name">iPhone 14 Pro Max 128GB</p>
@@ -159,7 +159,7 @@
 						</div>
 						<button>Add to Cart</button>
 					</li>
-					<li class="wrap">
+					<li class="home_wrap">
 						<img alt="iphone14" src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 						<div class="info">
 							<p class="name">iPhone 14 Pro Max 128GB</p>
@@ -174,8 +174,8 @@
 					</li>
 				</ul>
 				<ul>
-					<span><i class='fas fa-angle-right control'></i> Iphone</span>
-					<li class="wrap">
+					<li><span><i class='fas fa-angle-right control'></i> Iphone</span></li>
+					<li class="home_wrap">
 						<img alt="iphone14" src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 						<div class="info">
 							<p class="name">iPhone 14 Pro Max 128GB</p>
@@ -188,7 +188,7 @@
 						</div>
 						<button>Add to Cart</button>
 					</li>
-					<li class="wrap">
+					<li class="home_wrap">
 						<img alt="iphone14" src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 						<div class="info">
 							<p class="name">iPhone 14 Pro Max 128GB</p>
@@ -201,7 +201,7 @@
 						</div>
 						<button>Add to Cart</button>
 					</li>
-					<li class="wrap">
+					<li class="home_wrap">
 						<img alt="iphone14" src="images/iphone-14-pro-max-den-thumb-600x600.jpg">
 						<div class="info">
 							<p class="name">iPhone 14 Pro Max 128GB</p>
@@ -218,8 +218,27 @@
 				
 			</div>
 		</div>
+		<script>
+			$(document).ready(function(){
+			  $(".side ul > li > span").click(function(){
+			    $(this).parents("ul").children(".home_wrap").fadeToggle("fast");
+			     $(this).children(".control").toggleClass("rotate90deg");
+			  });
+			});
+		</script>
+		<div class="pagination">
+			<a href="#">&laquo;</a>
+		  	<a href="#">1</a>
+		  	<a href="#" class="active">2</a>
+		  	<a href="#">3</a>
+		  	<a href="#">4</a>
+		  	<a href="#">5</a>
+		  	<a href="#">6</a>
+		  	<a href="#">&raquo;</a>
+		</div>
 	</div>
-	<hr>
-<%@ include file="footer.jsp" %>
+	
+	<%@ include file="footer.jsp" %>
+	
 </body>
 </html>

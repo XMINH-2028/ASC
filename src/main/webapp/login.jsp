@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; text/css; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java"
+	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,43 +8,69 @@
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <title>Login</title>
+<script src="https://kit.fontawesome.com/72f1026e9f.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script type="text/javascript" src="js/login.js"></script>
 </head>
 <body>
-<jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<% if (admin.getUsername() == null) {
-	request.getRequestDispatcher("Controller").forward(request, response);
-} else if (admin.getUsername().equals("") && admin.getPassword().equals("")) {
-	String usermess = request.getParameter("usermess") == null ? "" : request.getParameter("usermess");
-	String username = request.getParameter("username") == null ? "" : request.getParameter("username");
-	String passmess = request.getParameter("passmess") == null ? "" : request.getParameter("passmess");
-	String password = request.getParameter("password") == null ? "" : request.getParameter("password");
-%>
-	<img class="icon" alt="login" src="images/key.png">		
-	<form action="Controller" method="POST">
-	    <input type="hidden" name="action" value="submit">
-		<p class="wrap">
-			<label for="Username">Username<span class="erorrAlert"><%= usermess.trim()%></span></label>
-			<input id="Username" type="text" name="username" placeholder="Enter Username" value="<%= username.trim()%>">
-		</p>
-		<p class="wrap">
-			<label for="Password">Password<span class="erorrAlert"><%= passmess.trim()%></span></label>
-			<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password.trim()%>">
-		</p>
-		<button type="submit" id="sub">Login</button>
-		<p>
-			<input type="checkbox" id="Remember" name="remember">
-			<label for="Remember">Remember me</label>
-		</p>
-		<div class="footer">
-			<button type="button" id="reset">Cancel</button>
-			<p>Forgot<a href="#"> password?</a></p>
+	<div class="login">
+		<div class="container">
+		<%	
+			if (session.getAttribute("mail") != null) {
+				response.sendRedirect("admin/index");
+			}
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String mailalert = request.getParameter("mailalert");
+			String passalert = request.getParameter("passalert");
+			if (email == null) {
+				Cookie ck[] = request.getCookies();
+				String mail = getServletContext().getInitParameter("mail");
+				if (ck != null) {
+					for (Cookie i : ck) {
+						if (i.getValue().equals(mail)) {
+							email = mail;					
+						}
+					}
+				}
+			}
+	
+		%>
+			<form action="LoginServlet" method="POST">
+				<h1>Sign in</h1>
+			    <input type="hidden" name="action" value="submit">
+				<p class="wrap">
+					<label for="Email">Email<span class="erorrAlert"><%= mailalert == null ? "" : mailalert%></span></label>
+					<input id="Email" type="text" name="email" placeholder="Enter Email" value="<%= email == null ? "" : email%>">
+				</p>
+				<p class="wrap">
+					<label for="Password">Password<span class="erorrAlert"><%= passalert == null ? "" : passalert%></span></label>
+					<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password == null ? "" : password %>">
+				</p>
+				<button type="submit" id="sub">Login</button>
+				<p>
+					<input type="checkbox" id="Remember" name="remember">
+					<label for="Remember">Remember me</label>
+				</p>
+				<div class="footer">
+					<button type="button" id="reset">Cancel</button>
+					<script>
+						$(document).ready(function(){
+						  	$("#reset").on("click", function(){
+								$(".erorrAlert").text(''); 
+								$("input:text").val("");
+								$("input:password").val("");
+							});
+						});
+					</script>
+					<p>Forgot<a href="#"> password?</a></p>
+				</div>
+			</form>
+			<div class="welcome">
+				<h1>Welcome to <br>Smart World</h1>
+				<p>To keep connected  with us<br>please login with your personal info</p>
+				<span class="close"><a href="home">+</a></span>
+			</div>
 		</div>
-	</form>
-	<span class="close"><a href = "home">+</a></span>
-<% } else { 
-	response.sendRedirect("home?start=6");
-} %>
+	</div>
 </body>
 </html>

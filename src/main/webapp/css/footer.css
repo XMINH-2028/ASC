@@ -3,6 +3,12 @@ footer {
 	text-align: center;
 }
 
+
+footer hr {
+	height: 3px;
+	background: black;
+}
+
 footer .grid-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;

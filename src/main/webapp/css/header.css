@@ -85,6 +85,10 @@ header .left li {
 	margin-right: 20px;
 }
 
+header .left .item {
+	padding: 0;
+}
+
 header .left .menu {
 	display: none;
 }
@@ -151,7 +155,17 @@ header .admin .logout:hover {
   	header .top {
 	    padding: 0 20px;
 	}
+	
+	header .topnav {
+	    padding: 5px 20px;
+	}
 } 
+
+@media only screen and (min-width:601px) {
+	header .left .item > ul {
+	    display: flex !important;
+	}	
+}
 
 @media only screen and (max-width:600px) {
 	header .left {
@@ -168,10 +182,10 @@ header .admin .logout:hover {
 		color: #ffc107;
 	}	
 	
-	header .left .item {
+	header .left .item > ul {
 	    display: none;
 	    position: absolute;
-	    top: 48px;
+	    top: 46px;
 	    left: -20px;
 	    background: black;
 	    padding: 0 20px;

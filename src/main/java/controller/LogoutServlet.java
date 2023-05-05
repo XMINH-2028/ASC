@@ -6,6 +6,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 /**
@@ -29,20 +31,9 @@ public class LogoutServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		try {
-			Cookie ck[] = request.getCookies();
-			String user = getServletContext().getInitParameter("user");
-			String pass = getServletContext().getInitParameter("pass");
-			if(ck!=null){  
-				for (int i = 0; i < ck.length-1; i++) {
-					if (ck[i].getValue().equalsIgnoreCase(user) && ck[i+1].getValue().equalsIgnoreCase(pass)) {
-						ck[i].setMaxAge(0);
-						response.addCookie(ck[i]);
-						ck[i+1].setMaxAge(0);
-						response.addCookie(ck[i+1]);
-					}
-				}
-	      	} 
-			response.sendRedirect("setuserbean.jsp?start=5");
+			HttpSession session = request.getSession();
+			session.removeAttribute("mail");
+			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

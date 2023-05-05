@@ -1,6 +1,7 @@
 <%@ page language="java"
 	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 <footer>
+	<hr>
 	<div class="grid-container">
 		<div class="left">
 			<h1>SMARTPHONE WORLD</h1>

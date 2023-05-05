@@ -32,6 +32,7 @@ public class Set extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		/*
 		//Request scope
 		a++;
 		PrintWriter out = response.getWriter();
@@ -58,6 +59,9 @@ public class Set extends HttpServlet {
 		context.setAttribute("hits", hits);
 		out.print("\n");
 		out.print(hits);
+		
+		*/
+		request.getRequestDispatcher("get.jsp").forward(request, response);
 	}
 
 	/**

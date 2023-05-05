@@ -8,6 +8,7 @@
 </head>
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<%= request.getAttribute("name") %>
+<%= request.getParameter("name") %>
+<%= request.getAttribute("age") %>
 </body>
 </html>

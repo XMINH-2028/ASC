@@ -7,6 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%= getServletContext().getInitParameter("user") %>
+<%
+Cookie ck[] = request.getCookies();
+String mail = getServletContext().getInitParameter("mail");
+if (ck != null) {
+	for (Cookie i : ck) {
+		out.print(i.getName() + ": " + i.getValue() );
+	}
+}
+%>
 </body>
 </html>

@@ -28,33 +28,15 @@ public class Controller extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int count = 0;
+		
 		try {
 			String action = request. getParameter("action");
-			if (action == null) {
-				Cookie ck[] = request.getCookies();
-				String user = getServletContext().getInitParameter("user");
-				String pass = getServletContext().getInitParameter("pass");
-				if(ck!=null){  
-					for (int i = 0; i < ck.length-1; i++) {
-						if (ck[i].getValue().equalsIgnoreCase(user) & ck[i+1].getValue().equalsIgnoreCase(pass)) {
-							count += 1;
-							response.sendRedirect("setuserbean.jsp?start=0&username="+ user + "&password=" + pass);
-						}
-					}
-					if (count == 0) {
-						response.sendRedirect("setuserbean.jsp?start=1");
-					}
-		      	} else {
-		      		response.sendRedirect("setuserbean.jsp?start=2");
-		      	}
-			} else if (action.equals("login")) {
+			if (action.equals("loginform")) {
 				response.sendRedirect("login");
-			} else if (action.equals("logout")) {
-				response.sendRedirect("LogoutServlet");
-			}
-			
+			}			
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.getWriter().print(e);
@@ -65,20 +47,6 @@ public class Controller extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String action = request. getParameter("action");
-		String user = getServletContext().getInitParameter("user");
-		String pass = getServletContext().getInitParameter("pass");
-		if (action != null && action.equals("submit")) {
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			User admin = new User(username,password);
-			if (admin.validate(user, pass)) {
-				request.getRequestDispatcher("LoginServlet").forward(request, response);
-			} else {
-				request.getRequestDispatcher("login?username="+username+"&password="+password+"&usermess="+admin.getUsermess()+
-						"&passmess="+admin.getPassmess()).forward(request, response);;
-			}
-		}
 	}
 
 }
