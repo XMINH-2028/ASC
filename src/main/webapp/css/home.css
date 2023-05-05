@@ -119,12 +119,12 @@ body {
 	display: none;
 }
 
-.side .popular ul > li > span {
+.side .popular ul>li>span {
 	display: block;
 	margin-bottom: 10px;
 }
 
-.side .popular ul > li > span:hover {
+.side .popular ul>li>span:hover {
 	cursor: pointer;
 }
 
@@ -148,8 +148,8 @@ body {
 
 .pagination {
 	display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .pagination a {
@@ -205,7 +205,7 @@ body {
 		display: flex;
 		flex-wrap: wrap;
 	}
-	.side .popular ul>span {
+	.side .popular ul li:first-child {
 		width: 100%;
 	}
 	.side .popular ul .home_wrap {

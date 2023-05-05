@@ -29,7 +29,7 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		//Khi người dùng chọn đăng xuất xóa session lưu email đã đăng nhập và chuyển sang trang chủ
 		try {
 			HttpSession session = request.getSession();
 			session.removeAttribute("mail");

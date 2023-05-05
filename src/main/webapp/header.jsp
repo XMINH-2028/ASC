@@ -1,4 +1,4 @@
-<%@ page import="controller.*, jakarta.servlet.http.Cookie"%>
+<%@ page import="jakarta.servlet.http.Cookie" pageEncoding="utf-8"%>
 
 <header>
 	<div class="top">
@@ -24,11 +24,12 @@
 			</li>
 		</ul>
 		<ul class="right">
-			<li><a href='Controller?action=loginform' class="loginform">Login</a></li>
+			<li><a href='login' class="loginform">Login</a></li>
 		</ul>
 	</div>
 	
 	<script>
+		//Ẩn hiện menu chuyển trang với các thiết bị di động
 		$(document).ready(function(){
 		  	$("header .menu").click(function(){
 		    	$(this).siblings(".item").children().toggle("fast");
@@ -37,18 +38,6 @@
 				    	$(this).siblings(".item").children().css("display","none");
 				})
 		  	});
-		});
-	
-		$(document).ready(function() {
-			$(".admin > span").on("click", function() {
-				$(".admin .content").toggleClass("vision");
-				$(document).on("click",(e)=> {
-				    if (e.target.closest(".admin") == null)
-				    	$(".admin .content").addClass("vision");
-				})
-			});
-			
-			
 		});
 	</script>
 </header>

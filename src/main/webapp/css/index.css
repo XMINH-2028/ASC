@@ -69,7 +69,9 @@
 	font-size: 20px;
 }
 
-button {
+.left a {
+	display: block;
+	padding: 10px;
 	color: #8b3c9d;
 	background-color: #FFC107;
 	position: absolute;
@@ -78,12 +80,9 @@ button {
 	border: none;
 	width: calc(100% - 20px);
 	font-weight: bold;
+	text-align: center;
 }
 
-button a {
-	display: block;
-	padding: 10px;
-}
 
 @media screen and (max-width: 992px) {
 	.grid-container {

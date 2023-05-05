@@ -14,14 +14,16 @@
 <body>
 	<div class="login">
 		<div class="container">
-		<%	
+		<%	//Kiểm tra nếu người dùng đã đăng nhập thì chyển sang trang admin 
 			if (session.getAttribute("mail") != null) {
 				response.sendRedirect("admin/index");
 			}
+			//Lấy dữ liệu phản hồi từ LoginServlet
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String mailalert = request.getParameter("mailalert");
 			String passalert = request.getParameter("passalert");
+			//Khi chuyển đến trang login nếu người dùng đã chọn remember thì lấy email từ cookie và điền vào form 
 			if (email == null) {
 				Cookie ck[] = request.getCookies();
 				String mail = getServletContext().getInitParameter("mail");
@@ -54,6 +56,7 @@
 				<div class="footer">
 					<button type="button" id="reset">Cancel</button>
 					<script>
+						//Xóa dữ liệu form khi chọn "Cancer"
 						$(document).ready(function(){
 						  	$("#reset").on("click", function(){
 								$(".erorrAlert").text(''); 

@@ -14,9 +14,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>
-
+	<!-- Chèn file header.jsp vào trang chủ -->
 	<%@ include file="header.jsp"%>
-	
+	<!-- Nội dung trang chủ -->
 	<div class="grid-container content">
 		<div class="grid-item main">
 			<div class="home_wrap">
@@ -131,7 +131,6 @@
 				</div>
 				<button>Add to Cart</button>
 			</div>
-	
 		</div>
 		<div class="grid-item side">
 			<div class="shopping">
@@ -219,6 +218,7 @@
 			</div>
 		</div>
 		<script>
+			//Tạo hiệu ứng khi click vào tên nhãn hàng ở side bar
 			$(document).ready(function(){
 			  $(".side ul > li > span").click(function(){
 			    $(this).parents("ul").children(".home_wrap").fadeToggle("fast");
@@ -237,7 +237,7 @@
 		  	<a href="#">&raquo;</a>
 		</div>
 	</div>
-	
+	<!-- Chèn file footer.jsp vào trang chủ -->
 	<%@ include file="footer.jsp" %>
 	
 </body>

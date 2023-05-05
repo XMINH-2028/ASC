@@ -39,16 +39,20 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		try {
 			HttpSession session = request.getSession();
+			//Lấy dữ liệu từ form login
 			String action = request. getParameter("action");
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String mailalert = "";
 			String passalert = "";
 			if (action != null) {
+				//Regex kiểm tra password và email
 				String regex="[a-z0-9_-]{6,12}+";
 				String regexmail="^[\\w_]+@[\\w\\.]+\\.[A-Za-z]{2,6}$";
+				//Lấy dữ liệu lưu trong file web.xml
 				String mail = request.getServletContext().getInitParameter("mail");
 				String pass = request.getServletContext().getInitParameter("pass");
+				//Kiểm tra dữ liệu nhận từ form và trả về thông báo nếu có lỗi
 				if (email.equals("")) {
 					mailalert = "please input email";
 					response.sendRedirect("login?email="+email+"&password="+password+"&mailalert="+mailalert);				
@@ -62,7 +66,9 @@ public class LoginServlet extends HttpServlet {
 					passalert = "invalid syntax";
 					response.sendRedirect("login?email="+email+"&password="+password+"&passalert="+passalert);	
 				} else {
+					//Kiểm tra thông tin nhận từ form login có khớp với dữ liệu đã lưu hay không
 					if (email.equalsIgnoreCase(mail) && password.equals(pass)) {
+						//Nếu đúng thì lưu email vào session và cookie nếu người dùng chọn remember
 						session.setAttribute("mail", email);
 						String remember = request.getParameter("remember");
 						if (remember != null) {
@@ -73,8 +79,9 @@ public class LoginServlet extends HttpServlet {
 							response.addCookie(mailCookie);
 					        response.addCookie(passCookie);
 						}
-						response.sendRedirect("admin/index.jsp");
+						response.sendRedirect("admin/index");
 					} else {
+						//Nếu sai thì thông báo lỗi
 						passalert = "email or password is invalid";
 						mailalert = "email or password is invalid";
 						response.sendRedirect("login?email="+email+"&password="+password+"&passalert="+passalert+"&mailalert="+mailalert);
