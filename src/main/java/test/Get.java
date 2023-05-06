@@ -31,7 +31,7 @@ public class Get extends HttpServlet {
 		// TODO Auto-generated method stub
 		//String encodedURL = response.encodeRedirectURL("Set");
 		//response.sendRedirect(encodedURL);
-		response.getWriter().print(request.getServletPath());
+		response.getWriter().print(request.getAttribute("con"));
 	}
 
 	/**

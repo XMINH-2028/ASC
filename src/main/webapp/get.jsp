@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="controller.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,9 @@
 </head>
 <body>
 <jsp:useBean id="admin" class="bean.User" scope="session"></jsp:useBean>
-<%= request.getParameter("name") %>
-<%= request.getAttribute("age") %>
+<%
+
+%>
+
 </body>
 </html>

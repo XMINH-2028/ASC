@@ -8,7 +8,6 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file>
-    <welcome-file>home.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
     <description></description>
@@ -20,9 +19,19 @@
     <servlet-name>Controller</servlet-name>
     <url-pattern>/Controller</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>Admin</servlet-name>
+    <jsp-file>/manager/admin.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Admin</servlet-name>
+    <url-pattern>/manager/admin</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Home</servlet-name>
-    <jsp-file>/home.jsp</jsp-file>
+    <jsp-file>/index.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>Home</servlet-name>
@@ -48,14 +57,6 @@
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>controller.LoginServlet</servlet-class>
   </servlet>
-  <context-param>
-    <param-name>mail</param-name>
-    <param-value>minhnguyenx28@gmail.com</param-value>
-  </context-param>
-  <context-param>
-    <param-name>pass</param-name>
-    <param-value>19111993</param-value>
-  </context-param>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/LoginServlet</url-pattern>
@@ -93,4 +94,21 @@
   <session-config>
     <session-timeout>1</session-timeout>
   </session-config>
+  <servlet>
+    <description></description>
+    <display-name>Connect</display-name>
+    <servlet-name>Connect</servlet-name>
+    <servlet-class>database.Connect</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Connect</servlet-name>
+    <url-pattern>/Connect</url-pattern>
+  </servlet-mapping>
+  
+   <resource-ref>
+      <description>DB Connection</description>
+      <res-ref-name>jdbc/shoppingdb</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
 </web-app>

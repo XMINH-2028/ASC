@@ -14,30 +14,31 @@
 <body>
 	<div class="login">
 		<div class="container">
-		<%	
+		<%	//Kiểm tra nếu người dùng đã đăng nhập thì chyển sang trang admin 
 			if (session.getAttribute("mail") != null) {
-				response.sendRedirect("admin/index");
+				response.sendRedirect("manager/admin");
 			}
+			//Lấy dữ liệu phản hồi từ LoginServlet
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String mailalert = request.getParameter("mailalert");
 			String passalert = request.getParameter("passalert");
+			//Khi chuyển đến trang login nếu người dùng đã chọn remember thì lấy email từ cookie và điền vào form 
 			if (email == null) {
 				Cookie ck[] = request.getCookies();
-				String mail = getServletContext().getInitParameter("mail");
 				if (ck != null) {
 					for (Cookie i : ck) {
-						if (i.getValue().equals(mail)) {
-							email = mail;					
+						if (i.getName().equals("email")) {
+							email = i.getValue();					
 						}
 					}
 				}
 			}
 	
 		%>
-			<form action="LoginServlet" method="POST">
+			<form action="Controller" method="POST">
 				<h1>Sign in</h1>
-			    <input type="hidden" name="action" value="submit">
+			    <input type="hidden" name="action" value="login">
 				<p class="wrap">
 					<label for="Email">Email<span class="erorrAlert"><%= mailalert == null ? "" : mailalert%></span></label>
 					<input id="Email" type="text" name="email" placeholder="Enter Email" value="<%= email == null ? "" : email%>">
@@ -54,6 +55,7 @@
 				<div class="footer">
 					<button type="button" id="reset">Cancel</button>
 					<script>
+						//Xóa dữ liệu form khi chọn "Cancer"
 						$(document).ready(function(){
 						  	$("#reset").on("click", function(){
 								$(".erorrAlert").text(''); 
@@ -68,7 +70,7 @@
 			<div class="welcome">
 				<h1>Welcome to <br>Smart World</h1>
 				<p>To keep connected  with us<br>please login with your personal info</p>
-				<span class="close"><a href="home">+</a></span>
+				<span class="close"><a href="Controller?action=closelogin">+</a></span>
 			</div>
 		</div>
 	</div>

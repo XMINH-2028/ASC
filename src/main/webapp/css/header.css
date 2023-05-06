@@ -100,7 +100,7 @@ header .right li {
 header .right .admin>span {
 	border: 2px solid white;
 	border-radius: 100%;
-	padding: 10px;
+	padding: 10px 12px;
 }
 
 header .right .admin {
@@ -114,19 +114,18 @@ header .right .admin>span:hover {
 
 header .admin .content {
 	position: absolute;
-	top: 60px;
-	right: -15px;
+	top: 46px;
+	right: -30px;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	background-color: white;
-	color: rgb(145, 145, 145);
+	background-color: black;
 }
 
 header .admin .content li {
 	margin: 0px;
 	padding: 15px;
-	color: rgb(145, 145, 145);
+	color: white;
 }
 
 header .admin .content li:nth-of-type(1) {
@@ -137,13 +136,13 @@ header .admin .content li:nth-of-type(1) {
 header .admin .content span {
 	border: 2px solid #ffc107;
 	border-radius: 100%;
-	padding: 15px;
+	padding: 15px 17px;
 	color: #ffc107;
 	margin-right: 20px;
 }
 
 header .admin .logout {
-	color: rgb(145, 145, 145);;
+	color: white;
 }
 
 header .admin .logout:hover {
@@ -158,6 +157,10 @@ header .admin .logout:hover {
 	
 	header .topnav {
 	    padding: 5px 20px;
+	}
+	
+	header .admin .content {
+		right: -20px;
 	}
 } 
 
@@ -209,5 +212,9 @@ header .admin .logout:hover {
 	
 	header .top {
 	    padding: 0 10px;
+	}
+	
+	header .admin .content {
+		right: -10px;
 	}
 }
