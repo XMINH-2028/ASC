@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import sendemail.SendEmail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,10 +33,11 @@ public class Set extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		PrintWriter out = response.getWriter();
 		/*
 		//Request scope
 		a++;
-		PrintWriter out = response.getWriter();
+		
 		out.print(a);
 		out.print("<p>I am </p>");
 		request.setAttribute("name", "Minh");
@@ -61,7 +63,8 @@ public class Set extends HttpServlet {
 		out.print(hits);
 		
 		*/
-		request.getRequestDispatcher("get.jsp").forward(request, response);
+		SendEmail.send("minhnguyenx28@gmail.com", "Verify code", "1234");
+		out.print("success");
 	}
 
 	/**

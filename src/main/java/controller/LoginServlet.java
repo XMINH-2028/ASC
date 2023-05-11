@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 import database.Account;
 
@@ -32,8 +35,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+		response.sendRedirect(response.encodeRedirectURL("home"));
 	}
 
 	/**
@@ -48,54 +50,49 @@ public class LoginServlet extends HttpServlet {
 			String action = request. getParameter("action");
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
-			String mailalert = "";
-			String passalert = "";
-			if (action != null) {
-				//Regex kiểm tra password và email
-				String regex="[a-z0-9_-]{6,12}+";
-				String regexmail="^[\\w_]+@[\\w\\.]+\\.[A-Za-z]{2,6}$";
-				//Kiểm tra dữ liệu nhận từ form và trả về thông báo nếu có lỗi
-				if (email.equals("")) {
-					mailalert = "please input email";
-					response.sendRedirect("login?email="+email+"&password="+password+"&mailalert="+mailalert);				
-				} else if (!email.matches(regexmail)) {
-					mailalert = "invalid syntax";
-					response.sendRedirect("login?email="+email+"&password="+password+"&mailalert="+mailalert);	
-				} else if (password.equals("")) {
-					passalert = "please input password";
-					response.sendRedirect("login?email="+email+"&password="+password+"&passalert="+passalert);	
-				} else if (!password.matches(regex)) {
-					passalert = "invalid syntax";
-					response.sendRedirect("login?email="+email+"&password="+password+"&passalert="+passalert);	
-				} else {
-					//Kiểm tra thông tin nhận từ form login có khớp với dữ liệu đã lưu hay không
-					Connection con = (Connection) request.getAttribute("con");
-					Account account = new Account(con);
-					if (!account.login(email,password).equals("0")) {
-						//Nếu đúng thì lưu email vào session và cookie nếu người dùng chọn remember
-						session.setAttribute("mail", email);
-						String remember = request.getParameter("remember");
-						if (remember != null) {
-							Cookie mailCookie = new Cookie("email",email);
-							Cookie passCookie = new Cookie("password",password);
-							mailCookie.setMaxAge(60 * 60 * 24);
-							passCookie.setMaxAge(60 * 60 * 24);
-							response.addCookie(mailCookie);
-					        response.addCookie(passCookie);
-						}
-						if (account.login(email,password).equals("1")) {
-							response.sendRedirect("manager/admin");
-						} else {
-							response.sendRedirect("home");
-						}
-						con.close();
-						
-					} else {
-						//Nếu sai thì thông báo lỗi
-						passalert = "email or password is invalid";
-						mailalert = "email or password is invalid";
-						response.sendRedirect("login?email="+email+"&password="+password+"&passalert="+passalert+"&mailalert="+mailalert);
+			Account account = new Account();
+			
+			if (!account.vlogin(email, password)) {
+				//Kiểm tra email hoặc password không hợp lệ thì chuyển hướng về trang login và thông báo lỗi
+				session.setAttribute("vlogin", account);
+				response.sendRedirect(response.encodeRedirectURL("login"));
+			} else {
+				//Nếu email và password hợp lệ thì kiểm tra xem có khớp với dữ liệu đã lưu hay không
+				//Kết nối tới database
+				Connection con = null;
+				DataSource ds = (DataSource)session.getAttribute("ds");
+				try {
+					con = ds.getConnection();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					out.print("Can't connect to database");
+					return;
+				}
+				int loginnumber = account.login(con,email,password);
+				if (loginnumber != 0) {
+					//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
+					session.removeAttribute("vlogin");
+					//Nếu đúng thì lưu thông tin vào session và cookie nếu người dùng chọn remember
+					session.setAttribute("user", account);
+					String remember = request.getParameter("remember");
+					if (remember != null) {
+						Cookie mailCookie = new Cookie("email",email);
+						mailCookie.setMaxAge(60 * 60 * 24);
+						response.addCookie(mailCookie);
 					}
+					if (loginnumber == 1) {
+						//Nếu người dùng là quản trị viên thì chuyển qua trang admin
+						response.sendRedirect(response.encodeRedirectURL("manager/admin"));
+					} else {
+						//Nếu người dùng không là quản trị viên thì chuyển qua trang home
+						response.sendRedirect(response.encodeRedirectURL("home"));
+					}
+				} else {
+					//Nếu sai thì chuyển hướng về trang login và thông báo lỗi
+					String text = "email or password is invalid";
+					account.setErrorCheckAccount(text);
+					session.setAttribute("vlogin", account);
+					response.sendRedirect(response.encodeRedirectURL("login"));
 				}
 			}
 			

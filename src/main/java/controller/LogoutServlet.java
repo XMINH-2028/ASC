@@ -29,10 +29,10 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//Khi người dùng chọn đăng xuất xóa session lưu email đã đăng nhập và chuyển sang trang chủ
+		//Khi người dùng chọn đăng xuất xóa session lưu account đã đăng nhập và chuyển sang trang chủ
 		try {
 			HttpSession session = request.getSession();
-			session.removeAttribute("mail");
+			session.removeAttribute("user");
 			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception

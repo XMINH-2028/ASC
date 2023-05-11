@@ -2,7 +2,7 @@ body {
 	background: silver;
 }
 
-.login {
+.register {
 	width: 100vw;
 	height: 100vh;
 	position: fixed;
@@ -13,87 +13,68 @@ body {
     align-items: center;
     flex-wrap: wrap;
 	overflow-y: scroll;
-	min-width: 280px;
 }
 
-.login .container {
+.register .container {
 	display: flex;
 	min-width: 900px;
+	padding: 30px 0;
 }
 
-.login form {
+.register form {
 	width: 50%;
 	padding: 20px 0;
 	background: white;
 	padding: 40px;
 }
 
-.login form h1 {
+.register form h1 {
 	font-size: 36px;
     text-align: center;
     margin-bottom: 10px;
 }
 
-.login form p {
+.register form p {
 	display: flex;
 	flex-direction: column;
 }
 
-.login label {
+.register label {
 	font-size: 17px;
 	font-weight: bold;
-	margin: 10px 0;
+	margin: 7px 0;
 	display: flex;
 	align-items: flex-end;
 }
 
-.login label span {
+.register label span {
 	color: red;
 	margin-left: 10px;
 	font-size: 13px;
     white-space: nowrap;
 }
 
-.login .wrap input {
+.register .wrap input {
 	height: 40px;
 	font-size: 15px;
 	border: 1px solid #d3d3d3;
 	padding: 0 15px;
 }
 
-.login form button[id="sub"] {
-	width: 100%;
-	padding: 10px;
-	margin: 20px 0 0;
+.register form button[id="sub"] {
+	padding: 10px 30px;
 	font-size: 18px;
 	background: black;
 	border: none;
 	color: white;
 }
 
-.login form button:hover {
+.register form button:hover {
 	cursor: pointer;
 	color: gold;
 }
 
-.login form>p:last-of-type {
-	flex-direction: row;
-	margin-bottom: 15px;
-}
-
-.login input[type="checkbox"] {
-	margin-right: 5px;
-}
-
-.login form>p:last-of-type input:hover {
-	cursor: pointer;
-}
-
-.login form>p:last-of-type label:hover {
-	cursor: pointer;
-}
-
-.login .close {
+.register .close {
 	display: block;
 	position: absolute;
 	top: 5px;
@@ -101,42 +82,45 @@ body {
 	transform: rotate(45deg);
 }
 
-.login .close:hover {
+.register .close:hover {
 	cursor: pointer;
 }
 
-.login .close:hover a {
+.register .close:hover a {
 	color: gold;
 }
 
-.login .close a {
+.register .close a {
 	font-weight: bold;
 	font-size: 30px;
 	color: white;
 }
 
-.login .footer {
+.register .footer {
 	display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
 }
 
-.login .footer #reset {
-	padding: 8px 12px;
+.register .footer #reset {
+	padding: 10px 30px;
 	color: white;
 	background: red;
 	border: none;
+	font-size: 18px;
 }
 
-.login .footer p {
+.register .footer p {
 	flex-direction: row;
 }
 
-.login .footer p a {
+.register .footer p a {
 	margin-left: 3px;
 }
 
-.login .welcome {
+.register .welcome {
 	position: relative;
     width: 50%;
     background: #0f1230;
@@ -149,59 +133,51 @@ body {
     text-align: center;
 }
 
-.login .welcome h1 {
+.register .welcome h1 {
     font-size: 36px;
     line-height: 33px;
     margin-bottom: 10px;
 }
 
-.login .welcome p {
+.register .welcome p {
     font-size: 18px;
 }
 
 
 @media screen and (max-width: 992px) {
-	.login .container {
-		min-width: auto;
+	.register .container {
+		min-width: 700px;
 	}
 }
 
 
 @media screen and (max-width: 768px) {
-	.login .container {
+	.register .container {
 		flex-direction: column;
 		flex-wrap: wrap;
-		padding: 30px;
+		width: 280px;
+		min-width: 280px;
 	}
 	
-	.login .welcome {
+	.register .welcome {
 		order: 1;
 		width: 100%;
 		padding: 15px;
 	}
 	
-	.login .welcome h1 {
+	.register .welcome h1 {
 		font-size: 28px;
 	}
 	
-	.login form {
+	.register form {
 		order: 2;
 		width: 100%;
 		padding: 15px;
 	}
 	
-	.login .close {
+	.register .close {
 	    top: 0px;
 	    right: 10px;
 	}
 }
 
-@media screen and (max-width: 360px) {
-	.login {
-		padding: 0;
-	}
-	
-	.login .container {
-		padding: 5px;
-	}
-}

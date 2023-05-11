@@ -6,8 +6,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" type="text/css" href="css/style.css">
-<link rel="stylesheet" type="text/css" href="css/login.css">
-<title>Login</title>
+<link rel="stylesheet" type="text/css" href="css/register.css">
+<title>Register</title>
 <script src="https://kit.fontawesome.com/72f1026e9f.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
@@ -24,57 +24,69 @@
 		}
 		
 	}
-	//Lấy dữ liệu phản hồi từ LoginServlet qua session "vlogin"
-	Account v = (Account)session.getAttribute("vlogin");
+	//Lấy dữ liệu phản hồi từ registerServlet qua session "vregister"
+	Account v = (Account)session.getAttribute("register");
+	String firstname="";
+	String lastname="";
 	String email = "";
 	String password = ""; 
+	String repass = "";
+	String fnamealert="";
+	String lnamealert="";
 	String mailalert = "";
 	String passalert = "";
+	String repalert = "";
 	if (v != null) {
+		firstname= v.getFirstname();
+		lastname = v.getLastname();
 		email = v.getEmail();
 		password = v.getPassword();
+		repass = v.getRepass();
+		fnamealert = v.getFnamealert();
+		lnamealert = v.getLnamealert();
 		mailalert = v.getMailalert();
 		passalert = v.getPassalert();
+		repalert = v.getRepalert();
 	}
-	//Khi chuyển đến trang login kiểm tra cookie nếu có lưu thông tin đăng nhập thì lấy email từ cookie và điền vào form 
-	if (email.equals("")) {
-		Cookie ck[] = request.getCookies();
-		if (ck != null) {
-			for (Cookie i : ck) {
-				if (i.getName().equals("email")) {
-					email = i.getValue();					
-				}
-			}
-		}
-	}
-
 %>
-<div class="login">
+<div class="register">
 	<div class="container">
 		<form action="<%= response.encodeURL("Controller")%>" method="POST">
-			<h1>Sign in</h1>
-		    <input type="hidden" name="action" value="dologin">
+			<h1>Register</h1>
+		    <input type="hidden" name="action" value="doregister">
+		    <p class="wrap">
+				<label for="firstname">Firstname<span class="erorrAlert"><%= fnamealert == null ? "" : fnamealert%></span></label>
+				<input id="firstname" type="text" name="firstname" placeholder="Enter your firstname" value="<%= firstname == null ? "" : firstname%>">
+				
+			</p>
+			<p class="wrap">
+				<label for="lastname">Lastname<span class="erorrAlert"><%= lnamealert == null ? "" : lnamealert%></span></label>
+				<input id="lastname" type="text" name="lastname" placeholder="Enter your lastname" value="<%= lastname == null ? "" : lastname%>">
+				
+			</p>
 			<p class="wrap">
 				<label for="Email">Email<span class="erorrAlert"><%= mailalert == null ? "" : mailalert%></span></label>
 				<input id="Email" type="text" name="email" placeholder="Enter Email" value="<%= email == null ? "" : email%>">
+				
 			</p>
 			<p class="wrap">
 				<label for="Password">Password<span class="erorrAlert"><%= passalert == null ? "" : passalert%></span></label>
 				<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password == null ? "" : password %>">
+				
 			</p>
-			<button type="submit" id="sub">Login</button>
-			<p>
-				<input type="checkbox" id="Remember" name="remember">
-				<label for="Remember">Remember me</label>
+			<p class="wrap">
+				<label for="Password">Repassword<span class="erorrAlert"><%= repalert == null ? "" : repalert%></span></label>
+				<input id="Password" type="password" name="repass" placeholder="Enter Repassword" value="<%= repass == null ? "" : repass %>">
+				
 			</p>
-			<div class="footer">
-				<a id="reset" href="<%= response.encodeURL("Controller?action=loginreset")%>">Reset</a>
-				<p>Forgot<a href="<%= response.encodeURL("Controller?action=forget")%>"> password?</a></p>
-			</div>
+			<p class="footer">
+				<a id="reset" href="<%= response.encodeURL("Controller?action=registerreset")%>">Reset</a>
+				<button type="submit" id="sub">Create</button>
+			</p>
 		</form>
 		<div class="welcome">
 			<h1>Welcome to <br>Smart World</h1>
-			<p>To keep connected  with us<br>please login with your personal info</p>
+			<p>Let's create new account here</p>
 			<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>
 		</div>
 	</div>

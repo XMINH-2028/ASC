@@ -1,5 +1,5 @@
-<%@ page import="jakarta.servlet.http.Cookie" pageEncoding="utf-8"%>
-<% String user = (String)session.getAttribute("mail"); %>
+<%@ page import="jakarta.servlet.http.Cookie" pageEncoding="utf-8" import="database.*"%>
+<% Account user = (Account)session.getAttribute("user"); %>
 <header>
 	<div class="top">
 		<img alt="logo" src="images/logo.png" class="logo">
@@ -26,11 +26,12 @@
 		<ul class="right">
 		<!-- Khi người dùng đã đăng nhập -->
 			<% if (user != null) { %>
-			<li class='admin'><span><%=user.substring(0, 1).toUpperCase()%></span>
+			<li class='admin'><span><%= (user.getEmail()).substring(0, 1).toUpperCase()%></span>
 				<ul class='content unvisible'>
-					<li><span><%=user.substring(0, 1).toUpperCase()%></span><%= user%></li>
-					<li><a class='logout' href="Controller?action=logout">Logout</a></li>
-				</ul></li>
+					<li><span><%= (user.getEmail()).substring(0, 1).toUpperCase()%></span><%=user.getEmail()%></li>
+					<li><a class='logout' href="<%= response.encodeURL("Controller?action=logout")%>">Logout</a></li>
+				</ul>
+			</li>
 			<script>
 			//Ẩn hiện thông tin khi người dùng click vào biểu tượng tên của mình khi đã đăng nhập
 			$(document).ready(function() {
@@ -45,7 +46,8 @@
 			</script>
 			<!-- Khi người dùng chưa đăng nhập -->
 			<% } else { %>
-			<li><a href='login' class="loginform">Login</a></li>
+			<li><a href='<%= response.encodeURL("Controller?action=login") %>'>Login</a></li>
+			<li><a href='<%= response.encodeURL("Controller?action=register") %>'>Register</a></li>
 			<% } %>
 		</ul>
 	</div>
@@ -53,11 +55,11 @@
 	<script>
 		//Ẩn hiện menu chuyển trang với các thiết bị di động
 		$(document).ready(function(){
-		  	$("header .menu").click(function(){
-		    	$(this).siblings(".item").children().toggle("fast");
+		  	$("header .menu i").click(function(){
+		    	$(this).parent().siblings(".item").children().toggle("fast");
 		    	$(document).on("click",(e)=> {
 			    if (e.target.closest(".left") == null)
-				    	$(this).siblings(".item").children().css("display","none");
+				    	$(this).parent().siblings(".item").children().css("display","none");
 				})
 		  	});
 		});

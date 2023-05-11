@@ -59,6 +59,7 @@ header .topnav {
 	color: white;
 	padding: 5px 30px;
 	font-size: 18px;
+	height: 54px;
 }
 
 header .topnav ul {
@@ -114,7 +115,7 @@ header .right .admin>span:hover {
 
 header .admin .content {
 	position: absolute;
-	top: 46px;
+	top: 47px;
 	right: -30px;
 	display: flex;
 	flex-direction: column;
@@ -177,10 +178,13 @@ header .admin .logout:hover {
 	
 	header .left .menu {
 		display: block;
-		padding: 0;
 	}	
 	
-	header .left .menu:hover {
+	header .left .menu i {
+		font-size: 18px;
+	}
+	
+	header .left .menu i:hover {
 		cursor: pointer;
 		color: #ffc107;
 	}	
@@ -188,7 +192,7 @@ header .admin .logout:hover {
 	header .left .item > ul {
 	    display: none;
 	    position: absolute;
-	    top: 46px;
+	    top: 50px;
 	    left: -20px;
 	    background: black;
 	    padding: 0 20px;

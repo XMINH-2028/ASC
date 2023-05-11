@@ -2,11 +2,15 @@ package controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import sendemail.SendEmail;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -17,7 +21,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import bean.User;
+import database.Account;
 
 /**
  * Servlet implementation class Controller
@@ -52,26 +56,48 @@ public class Controller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		
 		//Lấy yêu cầu từ người dùng
 		String action = request.getParameter("action");
 		try {
-			if (action.equals("logout")) {
+			if (action.equals("login")) {
+				//Khi người dùng chọn đăng nhập chuyển qua trang login
+				response.sendRedirect(response.encodeRedirectURL("login"));
+			} else if (action.equals("register")) {
+				//Khi người dùng chọn đăng kí chuyển qua trang register
+				response.sendRedirect(response.encodeRedirectURL("register"));
+			} else if (action.equals("logout")) {
 				//Khi người dùng chọn đăng xuất chuyển yêu cầu qua LogoutServlet 
 				request.getRequestDispatcher("LogoutServlet").forward(request, response);
-			} else if (action.equals("closelogin")) {
+			} else if (action.equals("closeform")) {
+				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập, khi người dùng quên mật khẩu, khi đăng kí
+				session.removeAttribute("vlogin");
+				session.removeAttribute("forget");
+				session.removeAttribute("register");
 				//Khi người dùng chọn thoát trình đăng nhập
-				response.sendRedirect("home");
+				response.sendRedirect(response.encodeRedirectURL("home"));
+			} else if (action.equals("loginreset")) {
+				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
+				session.removeAttribute("vlogin");
+				response.sendRedirect(response.encodeRedirectURL("login"));
+			} else if (action.equals("registerreset")) {
+				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
+				session.removeAttribute("register");
+				response.sendRedirect(response.encodeRedirectURL("register"));
+			} else if (action.equals("forget")) {
+				//Khi người dùng quên mật khẩu đăng nhập tạo session forget với action = getcode và chuyển tới trang lấy mã xác thực
+				Account account = new Account("getcode");
+				session.setAttribute("forget",account);
+				response.sendRedirect(response.encodeRedirectURL("getcode"));
 			}
 		} catch (NullPointerException e) {
-			response.sendRedirect("index");
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		} 
 		catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
-		
-		
-		
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -79,29 +105,34 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		session.setAttribute("ds", ds);
+		
 		//Lấy yêu cầu từ người dùng
 		String action = request.getParameter("action");
-		//Kết nối tới database
-		Connection con = null;
-		try {
-			con = ds.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			out.print("Can't connect to database");
-			return;
-		}
-		request.setAttribute("con", con);
 		
 		try {
-			if (action.equals("login")) {
-				//Khi người dùng chọn đăng nhập chuyển yêu cầu qua LoginServlet 
+			if (action.equals("dologin")) {
+				//Khi người dùng submit form đăng nhập chuyển yêu cầu qua LoginServlet 
 				request.getRequestDispatcher("LoginServlet").forward(request, response);
+			} else if (action.equals("doregister")) {
+				//Khi người dùng submit form tạo session register với action = register và chuyển tới RegisterServlet
+				Account account = new Account("register");
+				session.setAttribute("register",account); 
+				request.getRequestDispatcher("RegisterServlet").forward(request, response);
+			} else if ("getcodeforgetverifyreset".contains(action)) {
+				//Khi người dùng quên mật khẩu cần đặt lại chuyển qua ResetServlet
+				request.getRequestDispatcher("ResetServlet").forward(request, response);
+			} else if (action.equals("registerverify")) {
+				//Khi người dùng xác thực email đăng kí chuyển qua RegisterServlet
+				request.getRequestDispatcher("RegisterServlet").forward(request, response);
 			}
 		} catch (NullPointerException e) {
-			response.sendRedirect("index");
+			out.print(e);
 		} 
 		catch (Exception e) {
 			// TODO: handle exception
+			out.print(e);
 		}
 	}
 
