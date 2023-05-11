@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="controller.*,java.util.*,database.*,javax.sql.DataSource,beans.*"%>
-
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,22 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:useBean id="admin" class="beans.Testbean" scope="application"></jsp:useBean>
-<jsp:setProperty name="admin" property="age" value="20"/>
-<%--
-	Account forget = (Account)session.getAttribute("register");
- 	out.print(forget.getAction());
-	out.print(new Date());
---%>
-
-
-<p>User: <%= admin.getAge() %></p>
-
-
-
-<% Testbean a = new Testbean(); out.print(a.age);%>
-
-
-
+<jsp:useBean id="user" class="beans.Testbean" scope="session"></jsp:useBean>
+<jsp:setProperty property="age" name="user" value = "123"/>
+<jsp:getProperty property="age" name="user"/>
 </body>
 </html>
