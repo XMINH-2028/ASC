@@ -17,10 +17,10 @@
 		Account user = (Account)session.getAttribute("user");
 		if (user.getRole() == 1) {
 			//Nếu người dùng là quản trị viên thì chuyển qua trang admin
-			response.sendRedirect(response.encodeRedirectURL("manager/admin"));
+			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/manager/admin"));
 		} else {
 			//Nếu người dùng không là quản trị viên thì chuyển qua trang home
-			response.sendRedirect(response.encodeRedirectURL("home"));
+			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 		}
 		
 	}
@@ -51,7 +51,7 @@
 %>
 <div class="login">
 	<div class="container">
-		<form action="<%= response.encodeURL("Controller")%>" method="POST">
+		<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
 			<h1>Sign in</h1>
 		    <input type="hidden" name="action" value="dologin">
 			<p class="wrap">
@@ -68,14 +68,14 @@
 				<label for="Remember">Remember me</label>
 			</p>
 			<div class="footer">
-				<a id="reset" href="<%= response.encodeURL("Controller?action=loginreset")%>">Reset</a>
-				<p>Forgot<a href="<%= response.encodeURL("Controller?action=forget")%>"> password?</a></p>
+				<a id="reset" href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=loginreset")%>">Reset</a>
+				<p>Forgot<a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=forget")%>"> password?</a></p>
 			</div>
 		</form>
 		<div class="welcome">
 			<h1>Welcome to <br>Smart World</h1>
 			<p>To keep connected  with us<br>please login with your personal info</p>
-			<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>
+			<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>
 		</div>
 	</div>
 </div>

@@ -17,10 +17,10 @@
 		Account user = (Account)session.getAttribute("user");
 		if (user.getRole() == 1) {
 			//Nếu người dùng là quản trị viên thì chuyển qua trang admin
-			response.sendRedirect(response.encodeRedirectURL("manager/admin"));
+			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/manager/admin"));
 		} else {
 			//Nếu người dùng không là quản trị viên thì chuyển qua trang home
-			response.sendRedirect(response.encodeRedirectURL("home"));
+			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 		}
 		
 	}
@@ -51,7 +51,7 @@
 %>
 <div class="register">
 	<div class="container">
-		<form action="<%= response.encodeURL("Controller")%>" method="POST">
+		<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
 			<h1>Register</h1>
 		    <input type="hidden" name="action" value="doregister">
 		    <p class="wrap">
@@ -80,14 +80,14 @@
 				
 			</p>
 			<p class="footer">
-				<a id="reset" href="<%= response.encodeURL("Controller?action=registerreset")%>">Reset</a>
+				<a id="reset" href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=registerreset")%>">Reset</a>
 				<button type="submit" id="sub">Create</button>
 			</p>
 		</form>
 		<div class="welcome">
 			<h1>Welcome to <br>Smart World</h1>
 			<p>Let's create new account here</p>
-			<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>
+			<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>
 		</div>
 	</div>
 </div>

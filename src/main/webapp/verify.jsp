@@ -14,7 +14,7 @@
 </head>
 <body>
 <% if (session.getAttribute("forget") == null && session.getAttribute("register") == null) { 
-	response.sendRedirect(response.encodeRedirectURL("home"));
+	response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 } else {
 	String action = "";
 	Account getSession;
@@ -26,13 +26,15 @@
 		getSession = (Account)session.getAttribute("register");
 	}
 	if (getSession.getAction().equals("getcode")) {
-		response.sendRedirect(response.encodeRedirectURL("getcode"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/getcode"));
 	} else if (getSession.getAction().equals("reset")) {
-		response.sendRedirect(response.encodeRedirectURL("reset"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/reset"));
+	} else if (getSession.getAction().equals("register")) {
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 	} else { %>
 		<!-- Hiển thị form để người dùng nhập mã xác thực  -->
 		<div class="verify">
-			<form action="<%= response.encodeURL("Controller")%>" method="POST">
+			<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
 				<input type="hidden" name="action" value="<%= action%>">
 				<p class="wrap">
 					<input id="code" type="text" name="code" placeholder="Enter verify code">
@@ -42,7 +44,7 @@
 						request.getParameter("error")%></span>
 				</p>
 				<button type="submit" id="sub">Verify</button>
-				<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>
+				<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>
 			</form>
 		</div>
 	<% } %>

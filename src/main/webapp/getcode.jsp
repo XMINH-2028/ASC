@@ -14,18 +14,18 @@
 </head>
 <body>	
 <% if (session.getAttribute("forget") == null ) { 
-	response.sendRedirect(response.encodeRedirectURL("home"));
+	response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 } else { 
 	Account forget = (Account)session.getAttribute("forget"); 
 	String email = request.getParameter("email");
 	if (forget.getAction().equals("verify")) {
-		response.sendRedirect(response.encodeRedirectURL("verify"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/verify"));
 	} else if (forget.getAction().equals("reset")) {
-		response.sendRedirect(response.encodeRedirectURL("reset"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/reset"));
 	} else { %>
 		<!-- Hiển thị form khi người dùng quên mật khẩu -->
 		<div class="getcode">
-			<form action="<%= response.encodeURL("Controller")%>" method="POST">
+			<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
 			    <input type="hidden" name="action" value="getcode">
 				<p class="wrap">
 					<input id="email" type="text" name="email" placeholder="Enter your email" value="<%= email == null ? "" : email%>">
@@ -35,7 +35,7 @@
 						request.getParameter("alert")%></span>
 				</p>
 				<button type="submit" id="sub">Get verify code</button>
-				<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>
+				<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>
 			</form>
 		</div>
 	<% } %>

@@ -1,22 +1,18 @@
 <%@ page language="java"
 	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<link rel="stylesheet" type="text/css" href="css/header.css">
-<link rel="stylesheet" type="text/css" href="css/home.css">
-<link rel="stylesheet" type="text/css" href="css/footer.css">
-<title>Home</title>
-<script src="https://kit.fontawesome.com/72f1026e9f.js" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-</head>
-<body>
-	<!-- Chèn file header.jsp vào trang chủ -->
-	<%@ include file="header.jsp"%>
-	<!-- Nội dung trang chủ -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	<%--
+	Chèn file header.jsp vào trang chủ
+	 <%@ include file="header.jsp"%>
+	<jsp:include page="header.jsp"></jsp:include>
+	--%>
+	
+	<c:import url="header.jsp">
+		<c:param name="title" value="Home"></c:param>
+		<c:param name="style" value="home.css"></c:param>
+	</c:import>
+	
+	<%-- Nội dung trang chủ --%>
 	<div class="grid-container content">
 		<div class="grid-item main">
 			<div class="home_wrap">
@@ -217,15 +213,6 @@
 				
 			</div>
 		</div>
-		<script>
-			//Tạo hiệu ứng khi click vào tên nhãn hàng ở side bar
-			$(document).ready(function(){
-			  $(".side ul > li > span").click(function(){
-			    $(this).parents("ul").children(".home_wrap").fadeToggle("fast");
-			     $(this).children(".control").toggleClass("rotate90deg");
-			  });
-			});
-		</script>
 		<div class="pagination">
 			<a href="#">&laquo;</a>
 		  	<a href="#">1</a>
@@ -236,9 +223,13 @@
 		  	<a href="#">6</a>
 		  	<a href="#">&raquo;</a>
 		</div>
+		<script type="text/javascript" src="js/home.js"></script>
 	</div>
-	<!-- Chèn file footer.jsp vào trang chủ -->
-	<%@ include file="footer.jsp" %>
+	
+	<%-- Chèn file footer.jsp vào trang chủ --%>
+	
+	<c:import url="footer.jsp"></c:import>
+	
 	
 </body>
 </html>

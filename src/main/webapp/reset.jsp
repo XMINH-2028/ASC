@@ -14,7 +14,7 @@
 </head>
 <body>	
 <% if (session.getAttribute("forget") == null ) { 
-	response.sendRedirect(response.encodeRedirectURL("home"));
+	response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
 } else {
 	//Lấy dữ liệu phản hồi từ Servlet qua session "forget" khi đặt lại mật khẩu
 	Account v = (Account)session.getAttribute("forget");
@@ -30,13 +30,13 @@
 	}
 	
 	if (v.getAction().equals("getcode")) {
-		response.sendRedirect(response.encodeRedirectURL("getcode"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/getcode"));
 	} else if (v.getAction().equals("verify")) {
-		response.sendRedirect(response.encodeRedirectURL("verify"));
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/verify"));
 	} else { %>
 		<!-- Hiển thị form khi người dùng quên mật khẩu -->
 		<div class="reset">
-			<form action="<%= response.encodeURL("Controller")%>" method="POST">
+			<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
 				<input type="hidden" name="action" value="reset">
 				<p class="wrap">
 					<input class="password" type="password" name="password" placeholder="Enter Password" 
@@ -49,7 +49,7 @@
 					<span class="errorAlert"><%= repalert == null ? "" : repalert%></span>
 				</p>
 				<button type="submit" id="sub">Reset</button>
-				<span class="close"><a href="<%= response.encodeURL("Controller?action=closeform")%>">+</a></span>	
+				<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>	
 			</form>
 		</div>
 	<% } %>
