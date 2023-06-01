@@ -163,6 +163,7 @@ body {
 @media screen and (max-width: 992px) {
 	.login .container {
 		min-width: auto;
+		padding: 30px;
 	}
 }
 
@@ -171,7 +172,6 @@ body {
 	.login .container {
 		flex-direction: column;
 		flex-wrap: wrap;
-		padding: 30px;
 	}
 	
 	.login .welcome {

@@ -1,6 +1,7 @@
 footer {
 	background: white;
 	text-align: center;
+	align-self: flex-end;
 }
 
 
@@ -30,10 +31,13 @@ footer address p {
 }
 
 footer > p {
-	font-size: 20px;
-	color: white;
-	padding: 20px;
-	background: black;
+	display: flex;
+    font-size: 18px;
+    color: white;
+    background: black;
+    height: 54px;
+    justify-content: center;
+    align-items: center;
 }
 
 @media only screen and (max-width:600px) {

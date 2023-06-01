@@ -7,7 +7,7 @@
 			<h1>SMARTPHONE WORLD</h1>
 			<address>
 				<p>Phone: <a href="tel:0975146213">0975146213</a></p>
-				<p>Email: <a href="mailto:minhnguyenx28@gmail.com">minhnguyenx28@gmail.com</a></p>
+				<p>Email: <a href="mailto:minhnguyenx28@gmail.com">smartworldemail@gmail.com</a></p>
 				<p>Address: <a href="https://goo.gl/maps/8pz6iCuNwXtdDMFx9">Hung Yen</a></p>
 			</address>
 		</div>

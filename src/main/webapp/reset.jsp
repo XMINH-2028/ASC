@@ -1,6 +1,7 @@
 <%@ page language="java"
 	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8" 
-	import="database.*, sendemail.*"%>
+	import="database.*"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,46 +14,52 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>	
-<% if (session.getAttribute("forget") == null ) { 
-	response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
-} else {
-	//Lấy dữ liệu phản hồi từ Servlet qua session "forget" khi đặt lại mật khẩu
-	Account v = (Account)session.getAttribute("forget");
-	String repass = "";
-	String password = ""; 
-	String repalert = "";
-	String passalert = "";
-	if (v != null) {
-		repass = v.getRepass();
-		password = v.getPassword();
-		repalert = v.getRepalert();
-		passalert = v.getPassalert();
-	}
-	
-	if (v.getAction().equals("getcode")) {
-		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/getcode"));
-	} else if (v.getAction().equals("verify")) {
-		response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/verify"));
-	} else { %>
-		<!-- Hiển thị form khi người dùng quên mật khẩu -->
-		<div class="reset">
-			<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
-				<input type="hidden" name="action" value="reset">
-				<p class="wrap">
-					<input class="password" type="password" name="password" placeholder="Enter Password" 
-					value="<%= password == null ? "" : password %>">
-					<span class="errorAlert"><%= passalert == null ? "" : passalert%></span>
-				</p>
-				<p class="wrap">
-					<input class="repass" type="password" name="repass" placeholder="Repeat Password" 
-					value="<%= repass == null ? "" : repass %>">
-					<span class="errorAlert"><%= repalert == null ? "" : repalert%></span>
-				</p>
-				<button type="submit" id="sub">Reset</button>
-				<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>	
-			</form>
-		</div>
-	<% } %>
-<% } %>
+<%--Lấy session lưu yêu cầu và thông tin người dùng nhập khi quên mật khẩu--%>
+<c:set var="forget" value="${sessionScope.forget}"></c:set>
+<c:choose>
+	<%--Khi người dùng không yêu cầu đặt lại mật khẩu chuyển qua trang chủ --%>
+	<c:when test="${forget == null}">
+		<c:redirect url="/home"></c:redirect>
+	</c:when>
+	<%--Khi người dùng quên mật khẩu và yêu cầu đặt lại mật khẩu --%>
+	<c:otherwise>
+		<c:choose>
+			<%--Khi người dùng chưa lấy code chuyển qua trang lấy code --%>
+			<c:when test="${forget.action == 'getcode'}">
+				<c:redirect url="/getcode"></c:redirect>
+			</c:when>
+			<%--Khi người dùng chưa xác thực code chuyển qua xác thực code --%>
+			<c:when test="${forget.action == 'verify'}">
+				<c:redirect url="/verify"></c:redirect>
+			</c:when>
+			<%--Khi người dùng đã xác thực code hiển thị form đặt lại mật khẩu --%>
+			<c:otherwise>
+				<%--Lấy các tham số phản hồi từ servlet qua session forget --%>
+				<c:set var="password" value="${forget.password}" ></c:set>
+				<c:set var="passalert" value="${forget.passalert}" ></c:set>
+				<c:set var="repass" value="${forget.repass}" ></c:set>
+				<c:set var="repalert" value="${forget.repalert}" ></c:set>
+				
+				<div class="reset">
+					<form action="<c:url value='/Controller'></c:url>" method="POST">
+						<input type="hidden" name="action" value="reset">
+						<p class="wrap">
+							<input class="password" type="password" name="password" placeholder="Enter Password" 
+							value="${password == null ? '' : password}">
+							<span class="errorAlert">${passalert == null ? '' : passalert}</span>
+						</p>
+						<p class="wrap">
+							<input class="repass" type="password" name="repass" placeholder="Repeat Password" 
+							value="${repass == null ? '' : repass}">
+							<span class="errorAlert">${repalert == null ? '' : repalert}</span>
+						</p>
+						<button type="submit" id="sub">Reset</button>
+						<span class="close"><a href="<c:url value='/Controller?action=closeform'></c:url>">+</a></span>	
+					</form>
+				</div>
+			</c:otherwise>
+		</c:choose>
+	</c:otherwise>
+</c:choose>
 </body>
 </html>

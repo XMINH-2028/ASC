@@ -115,4 +115,17 @@ I am Minh
 
 <c:out value="${fn:substring('Minh',0,1)}"></c:out>
 
+<c:out value="${ 6 == 3 ? 2 : 1 }"></c:out>
+
+<c:out value="${cookie.email }"></c:out>
+
+<c:forEach begin="1" end="5" varStatus="v">
+ <p>${v.index }</p>
+</c:forEach>
+
+<c:out value="${sessionScope.forget.getAction() }"></c:out>
+
+<%= request.getServletPath() %>
+
+<c:out value="${sessionScope.filterMap.brand}"></c:out>
 </html>

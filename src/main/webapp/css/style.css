@@ -17,3 +17,15 @@ a {
 button:hover {
 	cursor: pointer;
 }
+
+.griddisplay {
+	display: grid!important;
+}
+
+.flexdisplay {
+	display: flex!important;
+}
+
+.blockdisplay {
+	display: block!important;
+}

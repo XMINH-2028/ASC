@@ -1,5 +1,6 @@
 <%@ page language="java"
-	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8" import="database.*"%>
+	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,55 +13,46 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>	
-<%	//Kiểm tra nếu người dùng đã đăng nhập chưa 
-	if (session.getAttribute("user") != null) {
-		Account user = (Account)session.getAttribute("user");
-		if (user.getRole() == 1) {
-			//Nếu người dùng là quản trị viên thì chuyển qua trang admin
-			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/manager/admin"));
-		} else {
-			//Nếu người dùng không là quản trị viên thì chuyển qua trang home
-			response.sendRedirect(response.encodeRedirectURL(request.getContextPath()+"/home"));
-		}
-		
-	}
-	//Lấy dữ liệu phản hồi từ LoginServlet qua session "vlogin"
-	Account v = (Account)session.getAttribute("vlogin");
-	String email = "";
-	String password = ""; 
-	String mailalert = "";
-	String passalert = "";
-	if (v != null) {
-		email = v.getEmail();
-		password = v.getPassword();
-		mailalert = v.getMailalert();
-		passalert = v.getPassalert();
-	}
-	//Khi chuyển đến trang login kiểm tra cookie nếu có lưu thông tin đăng nhập thì lấy email từ cookie và điền vào form 
-	if (email.equals("")) {
-		Cookie ck[] = request.getCookies();
-		if (ck != null) {
-			for (Cookie i : ck) {
-				if (i.getName().equals("email")) {
-					email = i.getValue();					
-				}
-			}
-		}
-	}
+<%-- Lấy session lưu thông tin người dùng --%>
+<c:set var="user" value="${sessionScope.user}"></c:set>
 
-%>
+<%--Nếu người dùng đã đăng nhập chuyển qua trang chủ với role = 2 và trang admin với role = 1--%>
+<c:if test="${user != null}">
+	<c:choose>
+		<c:when test="${user.role == 1}">
+			<c:redirect url="/manager/admin"></c:redirect>
+		</c:when>
+		<c:otherwise>
+			<c:redirect url="/home"></c:redirect>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+
+<%--Nếu người dùng chưa đăng nhập hiển thị form đăng nhập--%>
+<%-- Lấy session lưu thông tin người dùng nhập và phản hồi từ servlet --%>
+<c:set var="v" value="${sessionScope.login}"></c:set>
+<c:set var="email" value="${v.email}"></c:set>
+<c:set var="password" value="${v.password}"></c:set>
+<c:set var="mailalert" value="${v.mailalert}"></c:set>
+<c:set var="passalert" value="${v.passalert}"></c:set>
+
+<%--Khi chuyển đến trang login kiểm tra cookie nếu có lưu thông tin đăng nhập thì lấy email từ cookie và điền vào form --%>
+<c:if test="${cookie.email != null && v == null}">
+	<c:set var="email" value="${cookie.email.value}"></c:set>
+</c:if>
+
 <div class="login">
 	<div class="container">
-		<form action="<%= response.encodeURL(request.getContextPath()+"/Controller")%>" method="POST">
+		<form action='<c:url value="/Controller"></c:url>' method="POST">
 			<h1>Sign in</h1>
 		    <input type="hidden" name="action" value="dologin">
 			<p class="wrap">
-				<label for="Email">Email<span class="erorrAlert"><%= mailalert == null ? "" : mailalert%></span></label>
-				<input id="Email" type="text" name="email" placeholder="Enter Email" value="<%= email == null ? "" : email%>">
+				<label for="Email">Email<span class="erorrAlert">${mailalert == null ? '' : mailalert}</span></label>
+				<input id="Email" type="text" name="email" placeholder="Enter Email" value="${email == null ? '' : email}">
 			</p>
 			<p class="wrap">
-				<label for="Password">Password<span class="erorrAlert"><%= passalert == null ? "" : passalert%></span></label>
-				<input id="Password" type="password" name="password" placeholder="Enter Password" value="<%= password == null ? "" : password %>">
+				<label for="Password">Password<span class="erorrAlert">${passalert == null ? '' : passalert}</span></label>
+				<input id="Password" type="password" name="password" placeholder="Enter Password" value="${password == null ? '' : password}">
 			</p>
 			<button type="submit" id="sub">Login</button>
 			<p>
@@ -68,14 +60,14 @@
 				<label for="Remember">Remember me</label>
 			</p>
 			<div class="footer">
-				<a id="reset" href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=loginreset")%>">Reset</a>
-				<p>Forgot<a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=forget")%>"> password?</a></p>
+				<a id="reset" href='<c:url value="/Controller?action=loginreset"></c:url>'>Reset</a>
+				<p>Forgot<a href='<c:url value="/Controller?action=forget"></c:url>'> password?</a></p>
 			</div>
 		</form>
 		<div class="welcome">
 			<h1>Welcome to <br>Smart World</h1>
 			<p>To keep connected  with us<br>please login with your personal info</p>
-			<span class="close"><a href="<%= response.encodeURL(request.getContextPath()+"/Controller?action=closeform")%>">+</a></span>
+			<span class="close"><a href='<c:url value="/Controller?action=closeform"></c:url>'>+</a></span>
 		</div>
 	</div>
 </div>

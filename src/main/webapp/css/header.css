@@ -1,5 +1,6 @@
 header {
 	background: white;
+	align-self: flex-start;
 }
 
 header .top {
@@ -98,6 +99,10 @@ header .right li {
 	margin-left: 20px;
 }
 
+header .right .cart {
+	font-size: 26px;
+}
+
 header .right .admin>span {
 	border: 2px solid white;
 	border-radius: 100%;
@@ -121,6 +126,7 @@ header .admin .content {
 	flex-direction: column;
 	align-items: flex-start;
 	background-color: black;
+	z-index: 999;
 }
 
 header .admin .content li {
@@ -197,6 +203,7 @@ header .admin .logout:hover {
 	    background: black;
 	    padding: 0 20px;
 	    width: 200px;
+	    z-index: 999;
 	}	
 }
 
@@ -220,5 +227,9 @@ header .admin .logout:hover {
 	
 	header .admin .content {
 		right: -10px;
+	}
+	
+	header .topnav {
+		padding: 5px 10px;
 	}
 }

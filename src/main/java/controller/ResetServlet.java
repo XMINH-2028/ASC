@@ -50,6 +50,7 @@ public class ResetServlet extends HttpServlet {
 			if (forget == null) {
 				forget = new Account("getcode");
 				session.setAttribute("forget", forget);
+				session.setMaxInactiveInterval(60*10);
 				response.sendRedirect(response.encodeRedirectURL("getcode?alert=session is over, re-enter email"));
 			} else {
 				if (action.equals("getcode")) {
@@ -78,6 +79,7 @@ public class ResetServlet extends HttpServlet {
 						}
 						//Tạo session forget với địa chỉ email hợp lê, thay đổi action, lưu mã xác thực và chuyển tới trang xác thực
 						forget = new Account(email, "verify", randomNum + "");
+						session.setMaxInactiveInterval(60*2);
 						session.setAttribute("forget", forget);
 						String text = "We have sent the verification code to " + email;
 						response.sendRedirect(response.encodeRedirectURL("verify?alert=" + text));
@@ -90,7 +92,7 @@ public class ResetServlet extends HttpServlet {
 				} else if (action.equals("forgetverify")) {
 					// Kiểm tra code xác thực người dùng đã nhận
 					if (forget.getAction().equals("verify")) {
-						//Nếu chưa kiểm tra hợp lệ
+						//Nếu chưa kiểm tra code xác thực
 						//Lấy mã xác thực người dùng nhập
 						String code = request.getParameter("code");
 						if (code != null && code.equals(forget.getCode())) {
@@ -106,12 +108,12 @@ public class ResetServlet extends HttpServlet {
 						}
 					} else {
 						//Nếu đã kiểm tra hợp lệ và chuyển tới bước tiếp theo
-						response.sendRedirect(response.encodeRedirectURL("getcode?alert=session is over, re-enter email"));
+						response.sendRedirect(response.encodeRedirectURL(forget.getAction()));
 					}
 				} else if (action.equals("reset")) {
 					// Kiểm tra mật khẩu người dùng đặt lại
 					if (forget.getAction().equals("reset")) {
-						//Nếu chưa kiểm tra hợp lệ
+						//Nếu chưa đổi mật khẩu
 						//Lấy tham số người dùng nhập
 						String pass = request.getParameter("password");
 						String repass = request.getParameter("repass");
@@ -135,20 +137,21 @@ public class ResetServlet extends HttpServlet {
 							}
 							//Đặt lại mật khẩu xóa session forget, tạo session vlogin và quay về trang login
 							forget.setPass(con,pass);
-							Account vlogin = new Account();
-							vlogin.setEmail(forget.getEmail());
-							session.setAttribute("vlogin",vlogin);
+							Account login = new Account();
+							login.setEmail(forget.getEmail());
+							session.setAttribute("login",login);
 							session.removeAttribute("forget");
+							session.setMaxInactiveInterval(60*10);
 							response.sendRedirect(response.encodeRedirectURL("login"));
 						}
 					} else {
-						//Nếu đã kiểm tra hợp lệ và chuyển tới bước tiếp theo
-						response.sendRedirect(response.encodeRedirectURL("getcode?alert=session is over, re-enter email"));
+						//Nếu đã đặt lại mật khẩu
+						response.sendRedirect(response.encodeRedirectURL(forget.getAction()));
 					}
 				}
 			}
 		} catch (NullPointerException e) {
-			response.sendRedirect(response.encodeRedirectURL("home"));
+			out.print(e);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

@@ -92,6 +92,7 @@ public class RegisterServlet extends HttpServlet {
 						register.setEmail(email);
 						register.setPassword(password);
 						session.setAttribute("register", register);
+						session.setMaxInactiveInterval(60*2);
 						String text = "We have sent the verification code to " + email;
 						response.sendRedirect(response.encodeRedirectURL("verify?alert=" + text));
 					}
@@ -112,10 +113,11 @@ public class RegisterServlet extends HttpServlet {
 							return;
 						}
 						register.creatAccount(con);
-						Account vlogin = new Account();
-						vlogin.setEmail(register.getEmail());
-						session.setAttribute("vlogin",vlogin);
+						Account login = new Account();
+						login.setEmail(register.getEmail());
+						session.setAttribute("login",login);
 						session.removeAttribute("register");
+						session.setMaxInactiveInterval(60*10);
 						response.sendRedirect(response.encodeRedirectURL("login"));
 					} else {
 						//Nếu code người dùng nhập không đúng

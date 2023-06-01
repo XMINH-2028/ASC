@@ -65,34 +65,42 @@ public class Controller extends HttpServlet {
 				//Khi người dùng chọn đăng nhập chuyển qua trang login
 				response.sendRedirect(response.encodeRedirectURL("login"));
 			} else if (action.equals("register")) {
+				//Xóa session lưu thông tin  khi người dùng quên mật khẩu
+				session.removeAttribute("forget");
 				//Khi người dùng chọn đăng kí chuyển qua trang register
-				response.sendRedirect(response.encodeRedirectURL("register"));
+				response.sendRedirect(response.encodeRedirectURL("register"));	
 			} else if (action.equals("logout")) {
 				//Khi người dùng chọn đăng xuất chuyển yêu cầu qua LogoutServlet 
 				request.getRequestDispatcher("LogoutServlet").forward(request, response);
 			} else if (action.equals("closeform")) {
 				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập, khi người dùng quên mật khẩu, khi đăng kí
-				session.removeAttribute("vlogin");
+				session.removeAttribute("login");
 				session.removeAttribute("forget");
 				session.removeAttribute("register");
 				//Khi người dùng chọn thoát trình đăng nhập
 				response.sendRedirect(response.encodeRedirectURL("home"));
 			} else if (action.equals("loginreset")) {
 				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
-				session.removeAttribute("vlogin");
+				session.removeAttribute("login");
 				response.sendRedirect(response.encodeRedirectURL("login"));
 			} else if (action.equals("registerreset")) {
 				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
 				session.removeAttribute("register");
 				response.sendRedirect(response.encodeRedirectURL("register"));
 			} else if (action.equals("forget")) {
+				//Xóa session lưu thông tin  khi người dùng đăng kí
+				session.removeAttribute("register");
 				//Khi người dùng quên mật khẩu đăng nhập tạo session forget với action = getcode và chuyển tới trang lấy mã xác thực
 				Account account = new Account("getcode");
 				session.setAttribute("forget",account);
+				session.setMaxInactiveInterval(60*10);
 				response.sendRedirect(response.encodeRedirectURL("getcode"));
+			} else if (action.equals("search")) {
+				//Khi người dùng submit nội dung tìm kiếm
+				request.getRequestDispatcher("SearchServlet").forward(request, response);
 			}
 		} catch (NullPointerException e) {
-			response.sendRedirect(response.encodeRedirectURL("home"));
+			out.print(e);
 		} 
 		catch (Exception e) {
 			// TODO: handle exception
@@ -119,6 +127,7 @@ public class Controller extends HttpServlet {
 				//Khi người dùng submit form tạo session register với action = register và chuyển tới RegisterServlet
 				Account account = new Account("register");
 				session.setAttribute("register",account); 
+				session.setMaxInactiveInterval(60*10);
 				request.getRequestDispatcher("RegisterServlet").forward(request, response);
 			} else if ("getcodeforgetverifyreset".contains(action)) {
 				//Khi người dùng quên mật khẩu cần đặt lại chuyển qua ResetServlet

@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 			
 			if (!account.vlogin(email, password)) {
 				//Kiểm tra email hoặc password không hợp lệ thì chuyển hướng về trang login và thông báo lỗi
-				session.setAttribute("vlogin", account);
+				session.setAttribute("login", account);
 				response.sendRedirect(response.encodeRedirectURL("login"));
 			} else {
 				//Nếu email và password hợp lệ thì kiểm tra xem có khớp với dữ liệu đã lưu hay không
@@ -71,9 +71,10 @@ public class LoginServlet extends HttpServlet {
 				int loginnumber = account.login(con,email,password);
 				if (loginnumber != 0) {
 					//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
-					session.removeAttribute("vlogin");
+					session.removeAttribute("login");
 					//Nếu đúng thì lưu thông tin vào session và cookie nếu người dùng chọn remember
 					session.setAttribute("user", account);
+					session.setMaxInactiveInterval(60*10);
 					String remember = request.getParameter("remember");
 					if (remember != null) {
 						Cookie mailCookie = new Cookie("email",email);
@@ -91,7 +92,7 @@ public class LoginServlet extends HttpServlet {
 					//Nếu sai thì chuyển hướng về trang login và thông báo lỗi
 					String text = "email or password is invalid";
 					account.setErrorCheckAccount(text);
-					session.setAttribute("vlogin", account);
+					session.setAttribute("login", account);
 					response.sendRedirect(response.encodeRedirectURL("login"));
 				}
 			}
