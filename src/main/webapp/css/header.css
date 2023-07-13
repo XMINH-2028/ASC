@@ -103,6 +103,11 @@ header .right .cart {
 	font-size: 26px;
 }
 
+header .right .cart:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
 header .right .admin>span {
 	border: 2px solid white;
 	border-radius: 100%;
@@ -120,8 +125,8 @@ header .right .admin>span:hover {
 
 header .admin .content {
 	position: absolute;
-	top: 47px;
-	right: -30px;
+	top: 46px;
+	right: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -157,6 +162,19 @@ header .admin .logout:hover {
 	color: #ffc107;
 }
 
+header .shopping_cart {
+	position: relative;
+}
+
+header .total_quantity {
+	position: absolute;
+    top: -2px;
+    left: 50%;
+    color: #ffc107;
+    font-weight: bold;
+    transform: translateX(-30%);
+}
+
 @media screen and (max-width: 992px) {
   	header .top {
 	    padding: 0 20px;
@@ -166,9 +184,6 @@ header .admin .logout:hover {
 	    padding: 5px 20px;
 	}
 	
-	header .admin .content {
-		right: -20px;
-	}
 } 
 
 @media only screen and (min-width:601px) {
@@ -198,7 +213,7 @@ header .admin .logout:hover {
 	header .left .item > ul {
 	    display: none;
 	    position: absolute;
-	    top: 50px;
+	    top: 49px;
 	    left: -20px;
 	    background: black;
 	    padding: 0 20px;
@@ -226,7 +241,7 @@ header .admin .logout:hover {
 	}
 	
 	header .admin .content {
-		right: -10px;
+		right: -59px;
 	}
 	
 	header .topnav {

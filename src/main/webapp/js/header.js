@@ -31,3 +31,25 @@ $(document).ready(function() {
 		}
 	});
 });
+
+//Tạo sticky navbar
+$(document).ready(function() {
+	$(window).scroll(function() {
+		if (window.scrollY > $('.top').innerHeight()) {
+			$('.top').css("margin-bottom",$('.topnav').innerHeight()+"px");
+			$('.topnav').addClass("sticky_nav");
+		} else {
+			$('.topnav').removeClass("sticky_nav");
+			$('.top').css("margin-bottom",0);
+		}
+	})
+	$(window).resize(function() {
+		if (window.scrollY > $('.top').innerHeight()) {
+			$('.top').css("margin-bottom",$('.topnav').innerHeight()+"px");
+			$('.topnav').addClass("sticky_nav");
+		} else {
+			$('.topnav').removeClass("sticky_nav");
+			$('.top').css("margin-bottom",0);
+		}
+	})
+});

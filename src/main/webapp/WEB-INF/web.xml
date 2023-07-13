@@ -36,6 +36,14 @@
     <url-pattern>/home</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>Product</servlet-name>
+    <jsp-file>/product.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Product</servlet-name>
+    <url-pattern>/product</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>Login</servlet-name>
     <jsp-file>/login.jsp</jsp-file>
   </servlet>
@@ -82,6 +90,14 @@
   <servlet-mapping>
     <servlet-name>Search</servlet-name>
     <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Cart</servlet-name>
+    <jsp-file>/cart.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Cart</servlet-name>
+    <url-pattern>/cart</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
@@ -169,5 +185,15 @@
   <servlet-mapping>
     <servlet-name>SearchServlet</servlet-name>
     <url-pattern>/SearchServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CartServlet</display-name>
+    <servlet-name>CartServlet</servlet-name>
+    <servlet-class>controller.CartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CartServlet</servlet-name>
+    <url-pattern>/CartServlet</url-pattern>
   </servlet-mapping>
 </web-app>

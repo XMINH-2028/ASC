@@ -68,15 +68,23 @@ public class Search {
 		return id;
 	}
 	
+	/**
+	 * Hàm tìm kiếm các sản phẩm theo giá
+	 * @param key dãy các nội dung filter
+	 * @param value giá trị nội dung filter tương ứng
+	 * @return dãy id các sản phẩm phù hợp với yêu cầu tìm kiếm
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public List priceFilter(List<String> key, List<String> value) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		List<Double> price = new ArrayList<>();
 		List<Integer> id = new ArrayList<>();
-		List<Integer> count = new ArrayList<>();
 		int[] priceLevel = {2,4,7,13,20};
 		
+		//Loại bỏ các giá trị filter khác chỉ giữ lại các giá trị về giá
 		for (int i = 0; i < key.size();) {
-			if (key.get(i).equals("action") || key.get(i).equals("type") || key.get(i).equals("url")) {
+			if (!key.get(i).substring(0,1).equals("p")) {
 				key.remove(i);
 				value.remove(i);
 				continue;
@@ -84,10 +92,12 @@ public class Search {
 			i++;
 		}
 		
+		//Nếu không có giá trị tìm kiếm trả về list rỗng
 		if (key.size() == 0) {
 			return new ArrayList<>();
 		}
 		
+		//Tạo câu truy vấn database theo các giá trị tìm kiếm đầu vào
 		String sql = "select product_id, product_price from products where ";
 		if (value.size() == 1) {
 			int v = Integer.parseInt(value.get(0));
@@ -120,7 +130,7 @@ public class Search {
 		PreparedStatement stmt = con.prepareStatement(sql);
 		
 		ResultSet rs = stmt.executeQuery();
-		//Lưu dữ liệu product_id và product_name của tất cả sản phẩm vào 2 list id và name
+		//Lưu dữ liệu product_id và product_price của tất cả sản phẩm vào 2 list id và price
 		while (rs.next()) {
 			id.add(rs.getInt(1));
 			price.add(rs.getDouble(2));
@@ -131,6 +141,14 @@ public class Search {
 		return id;
 	}
 	
+	/**
+	 * Hàm tìm kiếm các sản phẩm theo thương hiệu
+	 * @param key dãy các nội dung filter
+	 * @param value giá trị nội dung filter tương ứng
+	 * @return dãy id các sản phẩm phù hợp với yêu cầu tìm kiếm
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public List brandFilter(List<String> key, List<String> value) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		List<String> brand = new ArrayList<>();
@@ -138,8 +156,9 @@ public class Search {
 		List<Integer> count = new ArrayList<>();
 		List<String> copyValue = new ArrayList<>();
 		
+		//Loại bỏ các giá trị filter khác chỉ giữ lại các giá trị về thương hiệu
 		for (int i = 0; i < key.size();) {
-			if (key.get(i).equals("action") || key.get(i).equals("type") || key.get(i).equals("url")) {
+			if (!key.get(i).substring(0,1).equals("b")) {
 				key.remove(i);
 				value.remove(i);
 				continue;
@@ -147,10 +166,12 @@ public class Search {
 			i++;
 		}
 		
+		//Nếu không có giá trị tìm kiếm trả về list rỗng
 		if (key.size() == 0) {
 			return new ArrayList<>();
 		}
 		
+		//Tạo câu truy vấn database theo các giá trị tìm kiếm đầu vào
 		String sql = "select product_id, product_brand from products where ";
 	
 		for (int i = 0; i < value.size();i++) {
@@ -163,7 +184,7 @@ public class Search {
 		PreparedStatement stmt = con.prepareStatement(sql);
 		
 		ResultSet rs = stmt.executeQuery();
-		//Lưu dữ liệu product_id và product_name của tất cả sản phẩm vào 2 list id và name
+		//Lưu dữ liệu product_id và product_brand của tất cả sản phẩm vào 2 list id và brand
 		while (rs.next()) {
 			id.add(rs.getInt(1));
 			brand.add(rs.getString(2));
@@ -171,8 +192,7 @@ public class Search {
 		
 		con.close();
 		
-		
-		
 		return id;
 	}
+	
 }

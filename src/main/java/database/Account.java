@@ -143,7 +143,7 @@ public class Account {
      * @return true nếu khớp với database, false nếu không khớp
      * @throws SQLException
      */
-	public int login(Connection con, String email, String password) throws SQLException {
+	public int getRole(Connection con, String email, String password) throws SQLException {
 		String sql = "select account_role from account where user_mail=? and password=?";
 		PreparedStatement stmt = con.prepareStatement(sql);
 		int result = 0;
@@ -154,9 +154,7 @@ public class Account {
 		
 		if (rs.next()) {
 			result = rs.getInt(1);
-			this.role = result;
-			this.email = email;
-			this.password = password;
+			role = result;
 		}
 		con.close();
 		return result;
@@ -198,7 +196,7 @@ public class Account {
 		
 		//Regex kiểm tra password và email
 		String regex="[a-z0-9_-]{6,12}+";
-		String regexmail="^[\\w_]+@[\\w\\.]+\\.[A-Za-z]{2,6}$";
+		String regexmail="^[\\w]+@[\\w]+\\.?[\\w]+\\.[A-Za-z]{2,6}$";
 		
 		//Kiểm tra email có để trống không
 		if (mail.equals("")) {

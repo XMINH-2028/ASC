@@ -1,0 +1,163 @@
+.top {
+	width: 100%;
+	display: flex;
+	list-style-type: none;
+	position: fixed;
+	height: 50px;
+	align-items: center;
+	justify-content: center;
+	background: black;
+	z-index: 100;
+}
+
+.top li {
+	font-size: 18px;
+	color: white;
+	margin: 0 20px;
+	font-weight: bold;
+}
+
+.top li:first-child {
+	text-decoration: underline;
+	text-decoration-thickness: 3px;
+}
+
+.top li a {
+	color: white;
+	font-size: 18px;
+}
+
+.top li a:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
+.active {
+	color: #ffc107 !important;
+}
+
+.cart {
+	margin: 50px 0 70px 0;
+}
+
+.pay {
+	position: fixed;
+	height: 70px;
+	top: calc(100vh - 70px);
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: black;
+	color: white;
+	font-weight: bold;
+	padding: 0 10%;
+}
+
+.pay p {
+	margin-right: 100px;
+	display: flex;
+	align-items: center;
+	font-size: 18px;
+	color: #ffc107;
+}
+
+.pay .total {
+	margin-left: 15px;
+}
+
+.pay button {
+	font-size: 18px;
+	font-weight: bold;
+	padding: 5px 20px;
+}
+
+.cart_product {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: center;
+	margin: 10px 0;
+	padding: 30px 0;
+	background: white;
+	min-width: 360px;
+}
+
+.cart_product label {
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	width: 20px;
+	height: 20px;
+	border: 1px solid black;
+}
+
+
+.cart_product .checkmark:before {
+	content: "";
+  	position: absolute;
+	left: 5px;
+	top: 0px;
+	width: 5px;
+	height: 10px;
+	border: solid black;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.cart_product .link {
+	display: block;
+	margin: auto;
+	width: 50%;
+}
+
+.cart_product img {
+	width: 100%;
+}
+
+.cart_product .close {
+	position: absolute;
+	top: 3px;
+	right: 10px;
+	font-size: 25px;
+	font-weight: bold;
+	transform: rotate(45deg);
+}
+
+.cart_product .close:hover {
+	cursor: pointer;
+}
+
+.cart_product .name {
+	font-weight: bold;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.cart_product .price {
+	font-weight: bold;
+	color: #d0021c;
+	font-size: 18px;
+}
+
+.cart_product .quantity {
+	margin-right: 20px;
+}
+
+@media screen and (max-width: 768px) {
+	.cart_product {
+		grid-template-columns: 1fr 1fr;
+		grid-row-gap: 20px;
+	}
+	.cart_product .quantity {
+		grid-column: 1/span 2;
+	}
+}
+
+@media screen and (max-width: 360px) {
+	body {
+		overflow-x: scroll;
+	}
+}

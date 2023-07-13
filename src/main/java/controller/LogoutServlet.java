@@ -33,6 +33,10 @@ public class LogoutServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			session.removeAttribute("user");
+			session.removeAttribute("cart");
+			response.sendRedirect(response.encodeRedirectURL(session.getAttribute("currentPage").toString()));
+		} catch (NullPointerException e) {
+			// TODO: handle exception
 			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception

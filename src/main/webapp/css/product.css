@@ -1,0 +1,127 @@
+body {
+	background: white;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+.product_wrap {
+	display: grid;
+	grid-template-columns: 1fr;
+	padding: 10px 30px;
+}
+
+.product_wrap .name {
+	padding-bottom: 10px;
+	border-bottom: 3px solid #ffc107;
+	color: #009688;
+}
+
+.product_wrap .content {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	padding: 20px 0;
+}
+
+.product_wrap .content img {
+	display: block;
+	max-width: 80%;
+	margin: auto;
+}
+
+.product_wrap ins, del {
+	font-size: 24px;
+	margin-right: 20px;
+	color: red;
+	font-weight: bold;
+}
+
+.product_wrap ins {
+	text-decoration: none;
+    color: #3F51B5;
+}
+
+.product_wrap .info {
+	display: grid;
+	grid-template-columns: auto;
+}
+
+.product_wrap .info .price {
+	margin-bottom: 10px;
+}
+
+.product_wrap .info .more {
+	margin-bottom: 10px;
+	line-height: 24px;
+}
+
+.product_wrap .info > p:last-child {
+	align-self: flex-end;
+	padding: 10px 0;
+}
+
+.product_wrap .addcart {
+	padding: 10px;
+	color: #FFC107;
+	border: 2px solid #9C27B0;
+	font-weight: bold;
+	white-space: nowrap;
+	font-size: 18px;
+}
+
+.product_wrap .addcart:hover {
+	cursor: pointer;
+	background: #9C27B0; 
+}
+
+.product_wrap .buynow:hover {
+	cursor: pointer;
+	background: #9C27B0;
+}
+
+.product_wrap .buynow {
+	padding: 10px;
+	color: #FFC107;
+	border: 2px solid #9C27B0;
+	font-weight: bold;
+	white-space: nowrap;
+	margin-right: 5px;
+	font-size: 18px;
+}
+
+@media screen and (max-width: 1200px) {
+	.product_wrap .content img {
+	    max-width: 90%;
+	}
+}
+
+@media screen and (max-width: 992px) {
+	.product_wrap .content {
+	    grid-template-columns: 1fr 1.5fr;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.product_wrap .content {
+	    grid-template-columns: 1fr 1fr;
+	}
+	
+	.product_wrap .content img {
+	    max-width: 100%;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.product_wrap .content {
+	    grid-template-columns: 1fr;
+	}
+	
+	.product_wrap .content img {
+	    max-width: 60%;
+	    position: relative;
+	    left: -20%;
+	    margin-bottom: 20px;
+	}
+}

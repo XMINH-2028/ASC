@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import database.Account;
+import database.ShoppingCart;
 
 /**
  * Servlet implementation class LoginServlet
@@ -68,25 +69,27 @@ public class LoginServlet extends HttpServlet {
 					out.print("Can't connect to database");
 					return;
 				}
-				int loginnumber = account.login(con,email,password);
-				if (loginnumber != 0) {
+				int role = account.getRole(con,email,password);
+				if (role != 0) {
 					//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
 					session.removeAttribute("login");
 					//Nếu đúng thì lưu thông tin vào session và cookie nếu người dùng chọn remember
 					session.setAttribute("user", account);
-					session.setMaxInactiveInterval(60*10);
+					ShoppingCart cart = new ShoppingCart(account.getEmail());
+					cart.getCart();
+					session.setAttribute("cart", cart);
 					String remember = request.getParameter("remember");
 					if (remember != null) {
 						Cookie mailCookie = new Cookie("email",email);
 						mailCookie.setMaxAge(60 * 60 * 24);
 						response.addCookie(mailCookie);
 					}
-					if (loginnumber == 1) {
+					if (role == 1) {
 						//Nếu người dùng là quản trị viên thì chuyển qua trang admin
 						response.sendRedirect(response.encodeRedirectURL("manager/admin"));
 					} else {
 						//Nếu người dùng không là quản trị viên thì chuyển qua trang home
-						response.sendRedirect(response.encodeRedirectURL("home"));
+						response.sendRedirect(response.encodeRedirectURL(session.getAttribute("currentPage").toString()));
 					}
 				} else {
 					//Nếu sai thì chuyển hướng về trang login và thông báo lỗi
@@ -96,7 +99,9 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect(response.encodeRedirectURL("login"));
 				}
 			}
-			
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

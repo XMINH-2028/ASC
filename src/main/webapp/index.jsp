@@ -1,8 +1,17 @@
 <%@ page language="java"
-	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
+	contentType="text/html; charset=utf-8; text/css; text/javascript" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:if test="${sessionScope.currentPage == null}">
+	<c:redirect url="/Controller?action=home"></c:redirect>
+</c:if>
+
+<%--Xóa các session không sử dụng --%>
+<c:remove var="text" scope="session"/>
+<c:remove var="search" scope="session"/>
+<c:remove var="filterMap" scope="session"/>
 
 <%-- Chèn header với tham số title và đường dẫn css--%>
 <c:import url="header.jsp">
@@ -15,35 +24,62 @@
 	<div class="grid-item main">
 		<h1>All products</h1>
 		<%--Tạo biến lưu thông tin trang hiện tại --%>
-		<c:set var="page" value="${param.page == null ? 1 :  param.page}"></c:set>
+		<c:choose>
+			<c:when test="${param.page == null || !applicationScope.ft.checkInt(param.page)}">
+				<c:set var="page" value="1"></c:set>
+			</c:when>
+			<c:otherwise>
+				<c:set var="page" value="${param.page}"></c:set>
+			</c:otherwise>
+		</c:choose>
 		<%--Tạo biến lưu số lượng sản phẩm xuất hiện tối đa mỗi trang --%>
-		<c:set var="pagesize" value="12"></c:set>
+		<c:set var="pagesize" value="10"></c:set>
 		<sql:transaction dataSource="jdbc/shoppingdb">
 			<%--Lấy data tất cả sản phẩm --%>
 			<sql:query var="rs" sql="select * from products"></sql:query>
+			<%--Tính tổng số trang theo số lượng sản phẩm  --%>
+			<c:choose>
+				<c:when test="${fn:length(rs.rows) % pagesize == 0}">
+					<c:set var="total" value="${fn:substringBefore(fn:length(rs.rows) / pagesize, '.')}"></c:set>
+				</c:when>
+				<c:otherwise>
+					<c:set var="total" value="${fn:substringBefore(fn:length(rs.rows) / pagesize, '.') + 1}"></c:set>
+				</c:otherwise>
+			</c:choose>
+			<c:if test="${page > total}">
+				<c:set var="page" value="1"></c:set>
+			</c:if>
 			<%--Lặp qua tất cả các sản phẩm --%>
 			<c:forEach items="${rs.rows}" var="row" varStatus="vs">
+				
 				<%--Hiển thị sản phẩm theo số trang hiện tại--%>
 				<c:if test="${(vs.index >= (page - 1) * pagesize) && (vs.index <= (page * pagesize - 1))}">
 					<%--Định dạng đơn vị tiền tệ --%>
-					<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN'),'đ') as value">
+					<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN')) as value">
 						<sql:param value="${row.product_price * 1000000}"></sql:param>
 					</sql:query>
 					<%--Hiển thị thông tin sản phẩm --%>
 					<div class="home_wrap">
-						<img alt="${row.product_name}"
+						<div class="content">
+							<img alt="${row.product_name}"
 							src="${row.product_img_source}">
-						<div class="info">
-							<p class="name">${row.product_name}</p>
-							<p class="price">
-								${price.rows[0].value}<span class="discount">-50%</span>
-							</p>
-							<p class="more">
-								5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
-							</p>
+							<div class="info">
+								<p class="name">${row.product_name}</p>
+								<p class="price">
+									${price.rows[0].value}đ<span class="discount">-50%</span>
+								</p>
+								<p class="more">
+									5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
+								</p>
+							</div>
+							<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
 						</div>
-						<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
-						<a href='<c:url value="#"></c:url>' class="addcart">Add to Cart</a>
+						<div class="buy_action">
+							<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+							data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Buy now</span>
+							<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+							data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Add to Cart</span>
+						</div>
 					</div>
 				</c:if>
 			</c:forEach>	
@@ -67,22 +103,31 @@
 								<c:forEach var="row" items="${brand.rows}" varStatus="vs">
 									<%--Hiển thị nhiều nhất 5 sản phẩm --%>
 									<c:if test="${vs.index <= 4}">
-										<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN'),'đ') as value">
+										<%--Định dạng đơn vị tiền tệ --%>
+										<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN')) as value">
 											<sql:param value="${row.product_price * 1000000}"></sql:param>
 										</sql:query>
 										<li class="home_wrap">
-											<img alt="${row.product_name}" src="${row.product_img_source}">
-											<div class="info">
-												<p class="name">${row.product_name}</p>
-												<p class="price">
-													${price.rows[0].value}<span class="discount">-50%</span>
-												</p>
-												<p class="more">
-													5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
-												</p>
+											<div class="content">
+												<img alt="${row.product_name}"
+													src="${row.product_img_source}">
+												<div class="info">
+													<p class="name">${row.product_name}</p>
+													<p class="price">
+														${price.rows[0].value}đ<span class="discount">-50%</span>
+													</p>
+													<p class="more">
+														5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
+													</p>
+												</div>
+												<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
 											</div>
-											<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
-											<a href='<c:url value="#"></c:url>' class="addcart">Add to Cart</a>
+											<div class="buy_action">
+												<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+												data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Buy now</span>
+												<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+												data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Add to Cart</span>
+											</div>
 										</li>
 									</c:if>
 								</c:forEach>
@@ -94,11 +139,10 @@
 		</div>
 		
 		<div class="filter">
-			<h1><i class='fas fa-filter'></i><span>Filter</span></h1>
+			<h1><i class='fas fa-filter'><span></span></i><span>Filter</span></h1>
 			<form action="<c:url value='/Controller'></c:url>">
 				<input type="hidden" name="url" value="<%= request.getServletPath()%>">
 				<input type="hidden" name="action" value="search">
-				<input type="hidden" name="type" value="1">
 				<div class="price filter_child">
 					<p class="title">Price</p>
 					<div class="content">
@@ -111,10 +155,6 @@
 						<p><button type="submit">See result</button></p>
 					</div>
 				</div>
-			</form>
-			<form action="<c:url value='/Controller'></c:url>">
-				<input type="hidden" name="action" value="search">
-				<input type="hidden" name="type" value="2">
 				<div class="price filter_child">
 					<p class="title">Brand</p>
 					<div class="content">
@@ -126,44 +166,28 @@
 			</form>
 		</div>
 	</div>
-	<sql:transaction dataSource="jdbc/shoppingdb">
-		<%--Đếm tổng số lượng sản phẩm  --%>
-		<sql:query var="rs" sql="select count(*) as num from products"></sql:query>
-		<%--Nếu số lượng sản phẩm lớn hơn pagesize thì hiện pagination --%>
-		<c:if test="${rs.rows[0].num > pagesize }">
-			<div class="pagination">
-				<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang trước --%>
-				<a href="<c:url value="/home?page=${page == 1 ? 1 : page - 1}"></c:url>" class="prev">&laquo;</a>
-					<%--Tính tổng số trang theo số lượng sản phẩm  --%>
+	<%--Kiểm tra nếu số lượng trang lớn hơn 1 thì tạo pagination --%>
+	<c:if test="${total > 1}">
+		<div class="pagination">
+			<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang trước --%>
+			<a href="<c:url value="/home?page=${page == 1 ? 1 : page - 1}"></c:url>" class="prev">&laquo;</a>
+				<%--Hiển thị danh sách trang--%>
+				<c:forEach begin="1" end="${total}" step="1" varStatus="v">
 					<c:choose>
-						<c:when test="${rs.rows[0].num % pagesize == 0}">
-							<c:set var="total" value="${fn:substringBefore(rs.rows[0].num / pagesize, '.')}"></c:set>
+						<c:when test="${page == v.index}">
+							<a href="<c:url value="/home?page=${v.index}"></c:url>" class="page active">${v.index}</a>
 						</c:when>
 						<c:otherwise>
-							<c:set var="total" value="${fn:substringBefore(rs.rows[0].num / pagesize, '.') + 1}"></c:set>
+							<a href="<c:url value="/home?page=${v.index}"></c:url>" class="page">${v.index}</a>
 						</c:otherwise>
 					</c:choose>
-					<%--Hiển thị danh sách trang--%>
-					<c:forEach begin="1" end="${total}" step="1" varStatus="v">
-						<c:choose>
-							<c:when test="${page == v.index}">
-								<a href="<c:url value="/home?page=${v.index}"></c:url>" class="page active">${v.index}</a>
-							</c:when>
-							<c:otherwise>
-								<a href="<c:url value="/home?page=${v.index}"></c:url>" class="page">${v.index}</a>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang tiếp theo --%>
-			  	<a href="<c:url value="/home?page=${page == total ? total : page + 1}"></c:url>" class="next">&raquo;</a>
-			</div>
-		</c:if>
-	</sql:transaction>
+				</c:forEach>
+			<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang tiếp theo --%>
+		  	<a href="<c:url value="/home?page=${page == total ? total : page + 1}"></c:url>" class="next">&raquo;</a>
+		</div>
+	</c:if>
 	<script type="text/javascript" src='<c:url value="/js/home.js"></c:url>'></script>
 </div>
 
 <%-- Chèn file footer.jsp vào trang chủ --%>
 <c:import url="footer.jsp"></c:import>
-	
-</body>
-</html>

@@ -93,22 +93,52 @@ $(document).ready(function() {
 	});
 });
 
-//Hàm lấy vị trí của phần tử so với document
-function getOffset(el) {
-  const rect = el.getBoundingClientRect();
-  return {
-    left: rect.left + window.scrollX,
-    top: rect.top + window.scrollY
-  };
-}
-
+//Hàm hiển thị số lượng nội dung filter và đánh dấu những mục filter đã chọn
 $(document).ready(function() {
 	let list = $$(".filter_child input:checked");
+	let number = $$(".filter_child input:checked").length == 0 ? "" : $$(".filter_child input:checked").length;
+	$(".filter .fa-filter span").html(number);
 	if (list.length != 0) {
 		list.forEach((x) => {
 			$(x).parents(".filter_child").css("border","2px solid #3F51B5");
 		});
 	}
 });
+
+//Hàm thêm param thể hiện mục filter đã lựa chọn
+$(document).ready(function() {
+	$(".filter_child button").click(function() {
+		let list = $$(".filter_child");
+		for(let i = 0; i < list.length; i++) {
+			let y = list[i].querySelectorAll("input:checked");
+			if (y.length != 0) {
+				let html = `<input type='hidden' name='type${i+1}' value='${i+1}'>`;
+				list[i].insertAdjacentHTML("afterbegin", html);
+			}
+		}
+	});
+});
+
+//Hàm tăng giảm số lượng nội dung filter khi người dùng chọn và bỏ chọn
+$(document).ready(function() {
+	let list = $$(".filter_child input");
+	let number = $(".filter .fa-filter span").html() == "" ? 0 : parseInt($(".filter .fa-filter span").html());
+	list.forEach((x) => {
+		$(x).click(function() {
+			if (x.checked == true) {
+				number += 1;
+			} else {
+				number -= 1;
+			}
+			if (number == 0) {
+				$(".filter .fa-filter span").html("");
+			} else {
+				$(".filter .fa-filter span").html(number);
+			}
+		});
+	})
+});
+
+
 
 

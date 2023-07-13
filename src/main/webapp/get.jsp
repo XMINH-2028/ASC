@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+    pageEncoding="utf-8" import="database.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
- <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -127,5 +127,33 @@ I am Minh
 
 <%= request.getServletPath() %>
 
-<c:out value="${sessionScope.filterMap.brand}"></c:out>
+<c:out value="${sessionScope.filterMap.price}"></c:out>
+
+
+<c:out value="${sessionScope.currentPage}"></c:out>
+
+
+<c:set var="j" value="4,3,2,1"/>
+<c:forEach items="${j}" var="item" varStatus="status">
+<c:if test="${status.first}">
+<c:out value="${status.index}" default="abc"/>
+</c:if>
+</c:forEach>
+
+<c:out value="${sessionScope.search == null ? '123' : sessionScope.search}"></c:out>
+
+<c:out value="${fn:length(search)}"></c:out>
+
+<c:out value="${sessionScope.currentPage}"></c:out>
+
+<c:out value="${pageContext.session.maxInactiveInterval}"></c:out>
+
+<c:out value="${pageContext.servletContext.contextPath}"></c:out>
+
+
+<c:out value="${sessionScope.cart.isCheck()}"></c:out>
+
+<c:out value="${sessionScope.cart.setCheck(false)}" ></c:out>
+
+<c:out value="${sessionScope.cart.isCheck()}"></c:out>
 </html>

@@ -22,6 +22,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import database.Account;
+import database.Function;
+import database.ShoppingCart;
 
 /**
  * Servlet implementation class Controller
@@ -41,12 +43,16 @@ public class Controller extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     
-    public void init(ServletConfig config) throws ServletException {
+    public void init() throws ServletException {
     	//Khởi tạo kết nối tới Database 
 		try {
 			InitialContext initContext = new InitialContext();
 			Context env = (Context) initContext.lookup("java:comp/env");
 			ds = (DataSource)env.lookup("jdbc/shoppingdb");
+			ServletContext context = getServletContext();
+			Function ft = new Function();
+			context.setAttribute("ds", ds);
+			context.setAttribute("ft", ft);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,8 +83,8 @@ public class Controller extends HttpServlet {
 				session.removeAttribute("login");
 				session.removeAttribute("forget");
 				session.removeAttribute("register");
-				//Khi người dùng chọn thoát trình đăng nhập
-				response.sendRedirect(response.encodeRedirectURL("home"));
+				//Khi người dùng chọn thoát trình đăng nhập, đăng kí
+				response.sendRedirect(response.encodeRedirectURL(session.getAttribute("currentPage").toString()));
 			} else if (action.equals("loginreset")) {
 				//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
 				session.removeAttribute("login");
@@ -93,16 +99,34 @@ public class Controller extends HttpServlet {
 				//Khi người dùng quên mật khẩu đăng nhập tạo session forget với action = getcode và chuyển tới trang lấy mã xác thực
 				Account account = new Account("getcode");
 				session.setAttribute("forget",account);
-				session.setMaxInactiveInterval(60*10);
 				response.sendRedirect(response.encodeRedirectURL("getcode"));
 			} else if (action.equals("search")) {
 				//Khi người dùng submit nội dung tìm kiếm
+				session.setAttribute("currentPage", "search");
 				request.getRequestDispatcher("SearchServlet").forward(request, response);
-			}
+			} else if (action.equals("product")) {
+				//Khi người dùng click vào navbar hoặc sản phẩm
+				session.setAttribute("currentPage", "product");
+				response.sendRedirect(response.encodeRedirectURL("product" + 
+				(request.getParameter("id") == null ? "" : "?id=" + request.getParameter("id"))));
+			} else if (action.equals("home")) {
+				//Khi người dùng click vào navlink
+				session.setAttribute("currentPage", "home");
+				response.sendRedirect(response.encodeRedirectURL("home"));
+			} else if (action.equals("addbuy")) {
+				if (session.getAttribute("user") != null) {
+					out.print("success");
+				} else {
+					out.print("false");
+				}
+			} else if (action.equals("addcart") || action.equals("changecart") || action.equals("deletecart")
+				|| action.equals("checked") || action.equals("cart")) {
+				request.getRequestDispatcher("CartServlet").forward(request, response);
+			} 
 		} catch (NullPointerException e) {
-			out.print(e);
-		} 
-		catch (Exception e) {
+			session.setAttribute("currentPage", "home");
+			response.sendRedirect(response.encodeRedirectURL("home"));
+		} catch (Exception e) {
 			// TODO: handle exception
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -115,7 +139,6 @@ public class Controller extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
 		session.setAttribute("ds", ds);
-		
 		//Lấy yêu cầu từ người dùng
 		String action = request.getParameter("action");
 		
@@ -127,7 +150,6 @@ public class Controller extends HttpServlet {
 				//Khi người dùng submit form tạo session register với action = register và chuyển tới RegisterServlet
 				Account account = new Account("register");
 				session.setAttribute("register",account); 
-				session.setMaxInactiveInterval(60*10);
 				request.getRequestDispatcher("RegisterServlet").forward(request, response);
 			} else if ("getcodeforgetverifyreset".contains(action)) {
 				//Khi người dùng quên mật khẩu cần đặt lại chuyển qua ResetServlet

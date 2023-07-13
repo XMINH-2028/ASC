@@ -50,7 +50,6 @@ public class ResetServlet extends HttpServlet {
 			if (forget == null) {
 				forget = new Account("getcode");
 				session.setAttribute("forget", forget);
-				session.setMaxInactiveInterval(60*10);
 				response.sendRedirect(response.encodeRedirectURL("getcode?alert=session is over, re-enter email"));
 			} else {
 				if (action.equals("getcode")) {
@@ -79,7 +78,6 @@ public class ResetServlet extends HttpServlet {
 						}
 						//Tạo session forget với địa chỉ email hợp lê, thay đổi action, lưu mã xác thực và chuyển tới trang xác thực
 						forget = new Account(email, "verify", randomNum + "");
-						session.setMaxInactiveInterval(60*2);
 						session.setAttribute("forget", forget);
 						String text = "We have sent the verification code to " + email;
 						response.sendRedirect(response.encodeRedirectURL("verify?alert=" + text));
@@ -141,7 +139,6 @@ public class ResetServlet extends HttpServlet {
 							login.setEmail(forget.getEmail());
 							session.setAttribute("login",login);
 							session.removeAttribute("forget");
-							session.setMaxInactiveInterval(60*10);
 							response.sendRedirect(response.encodeRedirectURL("login"));
 						}
 					} else {

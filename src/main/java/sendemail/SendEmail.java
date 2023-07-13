@@ -14,7 +14,7 @@ public class SendEmail {
 	public static void send(String to, String sub, String msg) {
 		//Email và password nơi gửi email
 		String user = "smartworldemail@gmail.com";
-		String password = "tyoeilebysvdwuwc";
+		String password = "rvoewvayodaekwxg";
 		//Cấu hình gửi email
 		Properties pro = new Properties();
 		pro.put("mail.smtp.host","smtp.gmail.com");

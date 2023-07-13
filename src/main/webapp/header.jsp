@@ -17,6 +17,7 @@
 <body>
 <%-- Lấy session lưu thông tin người dùng --%>
 <c:set var="user" value="${sessionScope.user}"></c:set>
+
 <header>
 	<div class="top">
 		<img alt="logo" src="<c:url value='/images/logo.png'></c:url>" class="logo">
@@ -35,8 +36,10 @@
 			<li class="menu"><i class='fas fa-bars'></i></li>
 			<li class="item">
 				<ul>
-					<li ><a href='<c:url value="/home"></c:url>'>Home</a></li>
-					<li><a href="#">Products</a></li>
+					<li><a href='<c:url value="/Controller?action=home"></c:url>'
+						<c:if test="${sessionScope.currentPage == 'home'}">style="color: #ffc107;"</c:if>>Home</a></li>
+					<li><a href='<c:url value="/Controller?action=product"></c:url>'
+						<c:if test="${sessionScope.currentPage == 'product'}">style="color: #ffc107;"</c:if>>Products</a></li>
 					<li><a href="#">About us</a></li>
 				</ul>
 			</li>
@@ -53,17 +56,21 @@
 							<li><a class='logout' href="<c:url value='/Controller?action=logout'></c:url>">Logout</a></li>
 						</ul>
 					</li>
+					<c:set var="cart" value="${sessionScope.cart.productList}"></c:set>
+					<li class="shopping_cart"><a href='<c:url value="/Controller?action=cart&page=selected"></c:url>'><i class='fas fa-cart-plus cart'></i>
+					<span class="total_quantity">${fn:length(cart) == 0 ? "" : fn:length(cart)}</span></a></li>
 				</c:when>
-				
 				<%-- Khi người dùng chưa đăng nhập --%>
 				<c:otherwise>
 					<li><a href="<c:url value='/Controller?action=login'></c:url>">Login</a></li>
 					<li><a href="<c:url value='/Controller?action=register'></c:url>">Register</a></li>
+					<li class="shopping_cart"><a href='<c:url value="login"></c:url>'><i class='fas fa-cart-plus cart'></i>
+					<span class="total_quantity"></span></a></li>
 				</c:otherwise>
 			</c:choose>
-			<li><a href="#"><i class='fas fa-cart-plus cart'></i><span></span></a></li>
 		</ul>
 	</div>
+	<script type="text/javascript" src="<c:url value='/js/script.js'></c:url>"></script>
 	<script type="text/javascript" src="<c:url value='/js/header.js'></c:url>"></script>
 </header>
 

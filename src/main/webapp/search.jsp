@@ -1,8 +1,12 @@
 <%@ page language="java"
-	contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
+	contentType="text/html; charset=utf-8; text/css; text/javascript" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:if test="${sessionScope.currentPage == null || sessionScope.currentPage != 'search'}">
+	<c:redirect url="/Controller?action=home"></c:redirect>
+</c:if>
 
 <%-- Chèn header với tham số title và đường dẫn css--%>
 <c:import url="header.jsp">
@@ -16,10 +20,21 @@
 	<c:set var="search" value="${sessionScope.search}"></c:set>
 	<c:set var="text" value="${sessionScope.text}"></c:set>
 	<%--Tạo biến lưu thông tin trang hiện tại --%>
-	<c:set var="page" value="${param.page == null ? 1 :  param.page}"></c:set>
+	<c:choose>
+		<c:when test="${param.page == null || !applicationScope.ft.checkInt(param.page)}">
+			<c:set var="page" value="1"></c:set>
+		</c:when>
+		<c:otherwise>
+			<c:set var="page" value="${param.page}"></c:set>
+		</c:otherwise>
+	</c:choose>
 	<%--Tạo biến lưu số lượng sản phẩm xuất hiện tối đa mỗi trang --%>
 	<c:set var="pagesize" value="10"></c:set>
 	<c:choose>
+		<%--Nếu kết quả trả về là null thì chuyển qua trang chủ --%>
+		<c:when test="${search == null}">
+			<c:redirect url="/home"></c:redirect>
+		</c:when>
 		<%--Nếu kết quả trả về là dãy không có giá trị thì in thông báo --%>
 		<c:when test="${fn:length(search) == 0}">
 			<p>No products were found.</p>
@@ -30,6 +45,18 @@
 			<sql:transaction dataSource="jdbc/shoppingdb">
 				<%--Lấy data tất cả sản phẩm --%>
 				<sql:query var="rs" sql="select * from products"></sql:query>
+				<%--Tính tổng số trang theo số lượng sản phẩm  --%>
+				<c:choose>
+					<c:when test="${fn:length(search) % pagesize == 0}">
+						<c:set var="total" value="${fn:substringBefore(fn:length(search) / pagesize, '.')}"></c:set>
+					</c:when>
+					<c:otherwise>
+						<c:set var="total" value="${fn:substringBefore(fn:length(search) / pagesize, '.') + 1}"></c:set>
+					</c:otherwise>
+				</c:choose>
+				<c:if test="${page > total}">
+					<c:set var="page" value="1"></c:set>
+				</c:if>
 				<%--Lặp qua tất cả các sản phẩm --%>
 				<c:forEach items="${search}" var="id" varStatus="v">
 					<c:forEach items="${rs.rows}" var="row" varStatus="vs">
@@ -42,19 +69,26 @@
 								</sql:query>
 								<%--Hiển thị thông tin sản phẩm --%>
 								<div class="home_wrap">
-									<img alt="${row.product_name}"
+									<div class="content">
+										<img alt="${row.product_name}"
 										src="${row.product_img_source}">
-									<div class="info">
-										<p class="name">${row.product_name}</p>
-										<p class="price">
-											${price.rows[0].value}<span class="discount">-50%</span>
-										</p>
-										<p class="more">
-											5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
-										</p>
+										<div class="info">
+											<p class="name">${row.product_name}</p>
+											<p class="price">
+												${price.rows[0].value}<span class="discount">-50%</span>
+											</p>
+											<p class="more">
+												5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
+											</p>
+										</div>
+										<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
 									</div>
-									<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
-									<a href='<c:url value="#"></c:url>' class="addcart">Add to Cart</a>
+									<div class="buy_action">
+										<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+										data-img="${row.product_img_source}" data-name="${row.product_name}" data-url="${pageContext.servletContext.contextPath}">Buy now</span>
+										<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
+										data-img="${row.product_img_source}" data-name="${row.product_name}" data-url="${pageContext.servletContext.contextPath}">Add to Cart</span>
+									</div>
 								</div>
 							</c:if>
 						</c:if>
@@ -66,13 +100,14 @@
 	</c:choose>
 	
 	<div class="grid-item side">
+	<%--Lấy session lưu các nội dung cần lọc đã lựa chọn --%>
 	<c:set var="fm" value="${sessionScope.filterMap}"></c:set>
 		<div class="filter">
-			<h1><i class='fas fa-filter'></i><span>Filter</span></h1>
+			<h1><i class='fas fa-filter'><span></span></i><span>Filter</span></h1>
 			<form action="<c:url value='/Controller'></c:url>">
 				<input type="hidden" name="url" value="<%= request.getServletPath()%>">
 				<input type="hidden" name="action" value="search">
-				<input type="hidden" name="type" value="1">
+				<%--Nếu nội dung đã lọc thêm thuộc tính checked --%>
 				<div class="price filter_child">
 					<p class="title">Price</p>
 					<div class="content">
@@ -91,10 +126,6 @@
 						<p><button type="submit">See result</button></p>
 					</div>
 				</div>
-			</form>
-			<form action="<c:url value='/Controller'></c:url>">
-				<input type="hidden" name="action" value="search">
-				<input type="hidden" name="type" value="2">
 				<div class="price filter_child">
 					<p class="title">Brand</p>
 					<div class="content">
@@ -109,33 +140,24 @@
 		</div>
 	</div>
 	
-	<%--Kiểm tra nếu số lượng kết quả trả về lớn hơn pagesize thì tạo pagination --%>
-	<c:if test="${fn:length(search) > pagesize}">
+	<%--Kiểm tra nếu số lượng trang lớn hơn 1 thì tạo pagination --%>
+	<c:if test="${total > 1}">
 		<div class="pagination">
 			<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang trước --%>
-			<a href="<c:url value="/search?page=${page == 1 ? 1 : page - 1}&text=${param.text}"></c:url>" class="prev">&laquo;</a>
-				<%--Tính tổng số trang theo số lượng sản phẩm  --%>
-				<c:choose>
-					<c:when test="${fn:length(search) % pagesize == 0}">
-						<c:set var="total" value="${fn:substringBefore(fn:length(search) / pagesize, '.')}"></c:set>
-					</c:when>
-					<c:otherwise>
-						<c:set var="total" value="${fn:substringBefore(fn:length(search) / pagesize, '.') + 1}"></c:set>
-					</c:otherwise>
-				</c:choose>
+			<a href="<c:url value="/search?page=${page == 1 ? 1 : page - 1}"></c:url>" class="prev">&laquo;</a>
 				<%--Hiển thị danh sách trang--%>
 				<c:forEach begin="1" end="${total}" step="1" varStatus="v">
 					<c:choose>
 						<c:when test="${page == v.index}">
-							<a href="<c:url value="/search?page=${v.index}&text=${param.text}"></c:url>" class="page active">${v.index}</a>
+							<a href="<c:url value="/search?page=${v.index}"></c:url>" class="page active">${v.index}</a>
 						</c:when>
 						<c:otherwise>
-							<a href="<c:url value="/search?page=${v.index}&text=${param.text}"></c:url>" class="page">${v.index}</a>
+							<a href="<c:url value="/search?page=${v.index}"></c:url>" class="page">${v.index}</a>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 			<%--Thay đổi biến lưu trang khi ấn nút chuyển tới trang tiếp theo --%>
-		  	<a href="<c:url value="/search?page=${page == total ? total : page + 1}&text=${param.text}"></c:url>" class="next">&raquo;</a>
+		  	<a href="<c:url value="/search?page=${page == total ? total : page + 1}"></c:url>" class="next">&raquo;</a>
 		</div>
 	</c:if>
 	<script type="text/javascript" src='<c:url value="/js/home.js"></c:url>'></script>
@@ -143,6 +165,3 @@
 
 <%-- Chèn file footer.jsp vào trang chủ --%>
 <c:import url="footer.jsp"></c:import>
-
-</body>
-</html>
