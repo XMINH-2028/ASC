@@ -24,11 +24,11 @@
 	<c:otherwise>
 		<c:choose>
 			<%--Khi người dùng đã lấy code chuyển qua trang xác thực code --%>
-			<c:when test="${forget.action == 'verify'}">
+			<c:when test="${forget.info.action == 'verify'}">
 				<c:redirect url="/verify"></c:redirect>
 			</c:when>
 			<%--Khi người dùng đã xác thực code chuyển qua trang đặt lại mật khẩu --%>
-			<c:when test="${forget.action == 'reset'}">
+			<c:when test="${forget.info.action == 'reset'}">
 				<c:redirect url="/reset"></c:redirect>
 			</c:when>
 			<%--Khi người dùng cần lấy code xác thực hiển thị form lấy code --%>

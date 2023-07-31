@@ -42,28 +42,12 @@ public class ShoppingCart {
 		this.check = check;
 	}
 
-	public Product getProduct(int id, int quality) throws ClassNotFoundException, SQLException  {
-		Connection con = new ConnectDB().getConnection();
-		String sql = "select * from products where product_id = ?";
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setInt(1, id);
-		
-		Product pr = new Product();
-		
-		ResultSet rs = stmt.executeQuery();
-		
-		if (rs.next()) {
-			pr = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getString(5), rs.getString(6), rs.getString(7), quality, false);
-		}
-		con.close();
-		return pr;
-	}
 
 	public void getCart() throws ClassNotFoundException, SQLException  {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select x.product_id, product_name, product_des, product_price, product_img_source, "
 				+ "product_type, product_brand, quantity from (select * from carts where user_mail = ? ) as x "
-				+ "left join products p on x.product_id = p.product_id";
+				+ "join products p on x.product_id = p.product_id order by date desc";
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setString(1, email);
 		
@@ -92,11 +76,14 @@ public class ShoppingCart {
 	
 	public void addCart(int id, int quantity) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
-		Product pr = getProduct(id, quantity);
+		Product pr = new Product();
+		pr = pr.getProduct(id, quantity);
+		pr.setChecked(true);
 		for (Product x : productList) {
 			if (pr.getId() == x.getId()) {
 				x.setQuantity(x.getQuantity() + pr.getQuantity());
-				String sql = "update carts set quantity = ? where user_mail = ? and product_id = ?";
+				x.setChecked(true);
+				String sql = "update carts set quantity = ?, date = now() where user_mail = ? and product_id = ?";
 				PreparedStatement stmt = con.prepareStatement(sql);
 				stmt.setInt(1, x.getQuantity());
 				stmt.setString(2, email);
@@ -107,7 +94,7 @@ public class ShoppingCart {
 			}
 		}
 		productList.add(pr);
-		String sql = "insert into carts value (?, ?, ?);";
+		String sql = "insert into carts (user_mail, product_id, quantity) value (?, ?, ?);";
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setString(1, email);
 		stmt.setInt(2, id);
@@ -159,10 +146,14 @@ public class ShoppingCart {
 		return sum;
 	}
 	
-	public void checked(int id){
+	public void checked(int id, int checkNumber){
 		for (Product x : productList) {
-			if (x.getId() == id) {
-				x.setChecked(x.isChecked() == true ? false : true);
+			if (x.getId() == id ) {
+				if (checkNumber == 0) {
+					x.setChecked(false);
+				} else if (checkNumber == 1) {
+					x.setChecked(true);
+				}
 			}
 		}
 	}

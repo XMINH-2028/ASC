@@ -40,15 +40,15 @@
 	
 <c:choose>
 	<%--Khi người dùng chưa lấy code chuyển qua trang lấy code --%>
-	<c:when test="${v.action == 'getcode'}">
+	<c:when test="${v.info.action == 'getcode'}">
 		<c:redirect url="/getcode"></c:redirect>
 	</c:when>
 	<%--Khi người dùng đã xác thực code chuyển qua trang đặt lại mật khẩu --%>
-	<c:when test="${v.action == 'reset'}">
+	<c:when test="${v.info.action == 'reset'}">
 		<c:redirect url="/reset"></c:redirect>
 	</c:when>
 	<%--Khi người dùng chưa submit form đăng kí tài khoản mới --%>
-	<c:when test="${v.action == 'register'}">
+	<c:when test="${v.info.action == 'register'}">
 		<c:redirect url="/register"></c:redirect>
 	</c:when>
 	<%--Khi người dùng đã lấy code hiển thị form xác thực --%>

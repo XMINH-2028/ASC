@@ -7,6 +7,18 @@ function getOffset(el) {
   };
 }
 
+function setUrl(page,action, id, quantity) {
+	let a = window.location.href;
+	let b = a.replace(page,"/Controller");
+	if (a.includes("?")) {
+		b += "&action="+ action + "&id=" + id + "&quantity=" + quantity;
+	} else {
+		b += "?action="+ action + "&id=" + id + "&quantity=" + quantity;
+	}
+	return b;
+}
+
+
 function vnd(value) {
 	let b = value.split("");
 	let c = "";
@@ -20,72 +32,66 @@ function vnd(value) {
 }
 
 $(document).ready(function() {
-	$('.addcart').click(function(e) {
+	$('.addcart').click(function() {
 		let id = $(this).attr("data-id");
 		let url = $(this).attr("data-url");
 		let img = $(this).attr("data-img");
 		let name = $(this).attr("data-name");
 		let price = $(this).attr("data-price");
-		$.get('Controller?action=addbuy', function(data) {
-	        if (data == "false") {
-				window.location.replace(url);
-			} else {
-				let text = `<div class="addcart_form">
-					<div class="addcart_main">
-						<img src="` + img + `">
-						<div class="addcart_info">
-							<p class="name">` + name + `</p>
-							<p class="price">` + price + `đ</p>
-						</div>
-						<div class="quantity">
-							<p>Quantity: <span class="reduce">-</span><input class="number" type="text" value="1">
-							<span class="increase">+</span>
-							</p>
-							<button>Add to Cart</button>
-						</div>
-						<span class="close">+</span>
-					</div>
-				</div>`;
-				$('body').append(text);
-				$(".addcart_main .number").keydown(function(e) {
-					let key = e.key;
-					let code = key.charCodeAt(0);
-					if(code < 48 || (code > 57 && code != 66 && code != 68)) {
-						e.preventDefault();
-					}
-				});
-				$(".addcart_main .number").focusout(function() {
-					if ($(this).val() == "" || $(this).val() == 0) {
-						$(this).val(1);
-					}
-					let value = $(this).val();
-					$(this).val(parseInt(value));
-				});
-				$(".addcart_main .reduce").click(function() {
-					let value = $(".number").val();
-					if (value > 1) {
-						$(".number").val(value - 1);
-					}
-				});
-				$(".addcart_main .increase").click(function() {
-					let value = $(".number").val();
-					$(".number").val(parseInt(value) + 1);
-				});
-				$(".addcart_main .close").click(function() {
-					$(".addcart_form").remove();
-				});
-				$(".addcart_main button").click(function() {
-					$.get('Controller?action=addcart&id=' + id + "&quantity=" + $(".number").val(), function(data) {
-						$(".shopping_cart .total_quantity").html("");
-						setTimeout(()=>{
-							$(".shopping_cart .total_quantity").html(data);
-						},100);
-						
-						$(".addcart_form").remove();
-					});
-				});
+		let text = `<div class="addcart_form">
+			<div class="addcart_main">
+				<img src="` + img + `">
+				<div class="addcart_info">
+					<p class="name">` + name + `</p>
+					<p class="price">` + price + `đ</p>
+				</div>
+				<div class="quantity">
+					<p>Quantity: <span class="reduce">-</span><input class="number" type="text" value="1">
+					<span class="increase">+</span>
+					</p>
+					<button>Add to Cart</button>
+				</div>
+				<span class="close">+</span>
+			</div>
+		</div>`;
+		$('body').append(text);
+		$(".addcart_main .number").keydown(function(e) {
+			let key = e.key;
+			let code = key.charCodeAt(0);
+			if(code < 48 || (code > 57 && code != 66 && code != 68)) {
+				e.preventDefault();
 			}
-	    });
-			
+		});
+		$(".addcart_main .number").focusout(function() {
+			if ($(this).val() == "" || $(this).val() == 0) {
+				$(this).val(1);
+			}
+			let value = $(this).val();
+			$(this).val(parseInt(value));
+		});
+		$(".addcart_main .reduce").click(function() {
+			let value = $(".number").val();
+			if (value > 1) {
+				$(".number").val(value - 1);
+			}
+		});
+		$(".addcart_main .increase").click(function() {
+			let value = $(".number").val();
+			$(".number").val(parseInt(value) + 1);
+		});
+		$(".addcart_main .close").click(function() {
+			$(".addcart_form").remove();
+		});
+		$(".addcart_main button").click(function() {
+			$.get(setUrl(url,"addcart",id,$(".number").val()), function(data) {
+				console.log(setUrl(url,"addcart",id,$(".number").val()));
+				$(".shopping_cart .total_quantity").html("");
+				setTimeout(()=>{
+					$(".shopping_cart .total_quantity").html(data);
+				},100);
+				
+				$(".addcart_form").remove();
+			});
+		});
 	});
 });

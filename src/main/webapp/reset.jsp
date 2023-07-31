@@ -25,20 +25,20 @@
 	<c:otherwise>
 		<c:choose>
 			<%--Khi người dùng chưa lấy code chuyển qua trang lấy code --%>
-			<c:when test="${forget.action == 'getcode'}">
+			<c:when test="${forget.info.action == 'getcode'}">
 				<c:redirect url="/getcode"></c:redirect>
 			</c:when>
 			<%--Khi người dùng chưa xác thực code chuyển qua xác thực code --%>
-			<c:when test="${forget.action == 'verify'}">
+			<c:when test="${forget.info.action == 'verify'}">
 				<c:redirect url="/verify"></c:redirect>
 			</c:when>
 			<%--Khi người dùng đã xác thực code hiển thị form đặt lại mật khẩu --%>
 			<c:otherwise>
 				<%--Lấy các tham số phản hồi từ servlet qua session forget --%>
-				<c:set var="password" value="${forget.password}" ></c:set>
-				<c:set var="passalert" value="${forget.passalert}" ></c:set>
-				<c:set var="repass" value="${forget.repass}" ></c:set>
-				<c:set var="repalert" value="${forget.repalert}" ></c:set>
+				<c:set var="password" value="${forget.info.password}" ></c:set>
+				<c:set var="checkPass" value="${forget.checkInfo.password}" ></c:set>
+				<c:set var="repass" value="${forget.info.repass}" ></c:set>
+				<c:set var="checkRepass" value="${forget.checkInfo.repass}" ></c:set>
 				
 				<div class="reset">
 					<form action="<c:url value='/Controller'></c:url>" method="POST">
@@ -46,12 +46,12 @@
 						<p class="wrap">
 							<input class="password" type="password" name="password" placeholder="Enter Password" 
 							value="${password == null ? '' : password}">
-							<span class="errorAlert">${passalert == null ? '' : passalert}</span>
+							<span class="errorAlert">${checkPass == null ? '' : checkPass}</span>
 						</p>
 						<p class="wrap">
 							<input class="repass" type="password" name="repass" placeholder="Repeat Password" 
 							value="${repass == null ? '' : repass}">
-							<span class="errorAlert">${repalert == null ? '' : repalert}</span>
+							<span class="errorAlert">${checkRepass == null ? '' : checkRepass}</span>
 						</p>
 						<button type="submit" id="sub">Reset</button>
 						<span class="close"><a href="<c:url value='/Controller?action=closeform'></c:url>">+</a></span>	

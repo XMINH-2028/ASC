@@ -8,6 +8,10 @@
 	<c:redirect url="/Controller?action=home"></c:redirect>
 </c:if>
 
+<%--Tạo biến lưu kết quả tìm kiếm trả về từ servlet --%>
+	<c:set var="search" value="${sessionScope.search}"></c:set>
+	<c:set var="text" value="${sessionScope.text}"></c:set>
+
 <%-- Chèn header với tham số title và đường dẫn css--%>
 <c:import url="header.jsp">
 	<c:param name="title" value="Search"></c:param>
@@ -16,12 +20,10 @@
 
 <%-- Nội dung trang tìm kiếm --%>
 <div class="grid-container content search">
-	<%--Tạo biến lưu kết quả tìm kiếm trả về từ servlet --%>
-	<c:set var="search" value="${sessionScope.search}"></c:set>
-	<c:set var="text" value="${sessionScope.text}"></c:set>
+	<c:set var="ft" value="${applicationScope.ft}"></c:set>
 	<%--Tạo biến lưu thông tin trang hiện tại --%>
 	<c:choose>
-		<c:when test="${param.page == null || !applicationScope.ft.checkInt(param.page)}">
+		<c:when test="${param.page == null || !ft.checkInt(param.page)}">
 			<c:set var="page" value="1"></c:set>
 		</c:when>
 		<c:otherwise>
@@ -42,9 +44,6 @@
 		<%--Nếu kết quả trả về là dãy có giá trị thì in thông tin tìm kiếm được --%>
 		<c:otherwise>
 			<div class="grid-item main">
-			<sql:transaction dataSource="jdbc/shoppingdb">
-				<%--Lấy data tất cả sản phẩm --%>
-				<sql:query var="rs" sql="select * from products"></sql:query>
 				<%--Tính tổng số trang theo số lượng sản phẩm  --%>
 				<c:choose>
 					<c:when test="${fn:length(search) % pagesize == 0}">
@@ -55,46 +54,44 @@
 					</c:otherwise>
 				</c:choose>
 				<c:if test="${page > total}">
-					<c:set var="page" value="1"></c:set>
+					<c:set var="page" value="${total}"></c:set>
 				</c:if>
 				<%--Lặp qua tất cả các sản phẩm --%>
-				<c:forEach items="${search}" var="id" varStatus="v">
-					<c:forEach items="${rs.rows}" var="row" varStatus="vs">
-						<c:if test="${row.product_id == id}">
-							<%--Hiển thị sản phẩm theo số trang hiện tại--%>
-							<c:if test="${(v.index >= (page - 1) * pagesize) && (v.index <= (page * pagesize - 1))}">
-								<%--Định dạng đơn vị tiền tệ --%>
-								<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN'),'đ') as value">
-									<sql:param value="${row.product_price * 1000000}"></sql:param>
-								</sql:query>
-								<%--Hiển thị thông tin sản phẩm --%>
-								<div class="home_wrap">
-									<div class="content">
-										<img alt="${row.product_name}"
-										src="${row.product_img_source}">
-										<div class="info">
-											<p class="name">${row.product_name}</p>
-											<p class="price">
-												${price.rows[0].value}<span class="discount">-50%</span>
-											</p>
-											<p class="more">
-												5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
-											</p>
-										</div>
-										<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
-									</div>
-									<div class="buy_action">
-										<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-										data-img="${row.product_img_source}" data-name="${row.product_name}" data-url="${pageContext.servletContext.contextPath}">Buy now</span>
-										<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-										data-img="${row.product_img_source}" data-name="${row.product_name}" data-url="${pageContext.servletContext.contextPath}">Add to Cart</span>
-									</div>
+				<c:forEach items="${search}" var="list" varStatus="v">
+					<%--Hiển thị sản phẩm theo số trang hiện tại--%>
+					<c:if test="${(v.index >= (page - 1) * pagesize) && (v.index <= (page * pagesize - 1))}">
+						<%--Hiển thị thông tin sản phẩm --%>
+						<div class="home_wrap">
+							<div class="content">
+								<img alt="${list.name}"
+								src="${list.img}">
+								<div class="info">
+									<p class="name">${list.name}</p>
+									<p class="price">
+										${ft.vnd(list.price * 1000000)}đ
+									</p>
+									<p class="more">
+										5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
+									</p>
 								</div>
-							</c:if>
-						</c:if>
-					</c:forEach>
+								<a href='<c:url value="/Controller?action=product&id=${list.id}"></c:url>' class="productinfo"></a>
+							</div>
+							<div class="buy_action">
+								<c:choose>
+									<c:when test="${sessionScope.user == null }">
+										<a href='<c:url value="login"></c:url>'>Buy now</a>
+										<a href='<c:url value="login"></c:url>'>Add to Cart</a>
+									</c:when>
+									<c:otherwise>
+										<a class="buynow" href='<c:url value="/Controller?action=buynow&id=${list.id}"></c:url>'>Buy now</a>
+										<span class="addcart" data-id="${list.id}" data-price="${ft.vnd(list.price * 1000000)}"
+										data-img="${list.img}" data-name="${list.name}" data-url="<%=request.getServletPath()%>">Add to Cart</span>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</c:if>
 				</c:forEach>	
-			</sql:transaction>
 			</div>
 		</c:otherwise>
 	</c:choose>
@@ -105,8 +102,8 @@
 		<div class="filter">
 			<h1><i class='fas fa-filter'><span></span></i><span>Filter</span></h1>
 			<form action="<c:url value='/Controller'></c:url>">
-				<input type="hidden" name="url" value="<%= request.getServletPath()%>">
-				<input type="hidden" name="action" value="search">
+				<input type="hidden" name="hiddenText" class="hiddenText">
+				<input type="hidden" name="action" value="filter">
 				<%--Nếu nội dung đã lọc thêm thuộc tính checked --%>
 				<div class="price filter_child">
 					<p class="title">Price</p>

@@ -100,6 +100,14 @@
     <url-pattern>/cart</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>Pay</servlet-name>
+    <jsp-file>/pay.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Pay</servlet-name>
+    <url-pattern>/pay</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>controller.LoginServlet</servlet-class>
   </servlet>
@@ -195,5 +203,25 @@
   <servlet-mapping>
     <servlet-name>CartServlet</servlet-name>
     <url-pattern>/CartServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PayServlet</display-name>
+    <servlet-name>PayServlet</servlet-name>
+    <servlet-class>controller.PayServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PayServlet</servlet-name>
+    <url-pattern>/PayServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OrderServlet</display-name>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>controller.OrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OrderServlet</servlet-name>
+    <url-pattern>/OrderServlet</url-pattern>
   </servlet-mapping>
 </web-app>

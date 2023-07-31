@@ -95,43 +95,6 @@
 	color: grey;
 }
 
-.home_wrap .buy_action {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    justify-content: space-around;
-}
-
-.home_wrap .addcart {
-	padding: 10px;
-	color: #FFC107;
-	border: 2px solid #9C27B0;
-	font-weight: bold;
-	white-space: nowrap;
-	font-size: 18px; 
-	align-self: flex-start;  
-}
-
-.home_wrap .buynow {
-	padding: 10px;
-	color: #FFC107;
-	border: 2px solid #9C27B0;
-	font-weight: bold;
-	white-space: nowrap;
-	font-size: 18px;
-	margin-bottom: 10px;
-}
-
-.addcart:hover {
-	cursor: pointer;
-	background: #9C27B0;
-}
-
-.buynow:hover {
-	cursor: pointer;
-	background: #9C27B0;
-}
-
 .side {
 	grid-area: 1/1/2/2;
 }

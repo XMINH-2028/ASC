@@ -18,11 +18,13 @@ public class Search {
 	 * @throws SQLException
 	 */
 	public List userSearch(String text) throws ClassNotFoundException, SQLException {
+		List<Integer> id = new ArrayList<>();
+		if (text == null || text.trim().equals("")) return id;
+		
 		Connection con = new ConnectDB().getConnection();
 		//Chia chuỗi thông tin tìm kiếm thành các đơn vị
 		List<String> textSearch = new ArrayList<>(Arrays.asList(text.split(" ")));
 		List<String> name = new ArrayList<>();
-		List<Integer> id = new ArrayList<>();
 		List<Integer> count = new ArrayList<>();
 		String sql = "select product_id, product_name from products";
 		PreparedStatement stmt = con.prepareStatement(sql);

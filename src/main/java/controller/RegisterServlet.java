@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import sendemail.SendEmail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +16,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import database.Account;
+import database.SendEmail;
+import database.Validate;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -49,31 +50,21 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			//Lấy thuộc tính forget khi người dùng quên mật khẩu từ session
-			Account register = (Account) session.getAttribute("register");
+			Validate v = (Validate) session.getAttribute("register");
 			
-			if (register == null) {
+			if (v == null) {
 				response.sendRedirect(response.encodeRedirectURL("register"));
 			} else {
-				if (register.getAction().equals("register")) {
+				if (v.getInfo().get("action").equals("register")) {
 					//Lấy dữ liệu từ form login
 					String firstname = request.getParameter("firstname");
 					String lastname = request.getParameter("lastname");
 					String email = request.getParameter("email");
 					String password = request.getParameter("password");
 					String repass = request.getParameter("repass");
-					//Kết nối tới database
-					Connection con = null;
-					DataSource ds = (DataSource)session.getAttribute("ds");
-					try {
-						con = ds.getConnection();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						out.print("Can't connect to database");
-						return;
-					}
-					if (!register.vregister(con, firstname, lastname, email, password,repass)) {
+					if (!v.vregister(firstname, lastname, email, password,repass)) {
 						//Kiểm tra email, password, repass không hợp lệ thì chuyển hướng về trang register và thông báo lỗi
-						session.setAttribute("register", register);
+						session.setAttribute("register", v);
 						response.sendRedirect(response.encodeRedirectURL("register"));
 					} else {
 						//Nếu email, password và repass hợp lệ thì gửi mail xác nhận và chuyển tới trang verify
@@ -87,33 +78,25 @@ public class RegisterServlet extends HttpServlet {
 							out.print(e);
 						}
 						//Tạo session register lưu thông tin và chuyển tới trang xác thực
-						register.setCode(randomNum+"");
-						register.setAction("verify");
-						register.setEmail(email);
-						register.setPassword(password);
-						session.setAttribute("register", register);
+						v.getInfo().put("code", randomNum+"");
+						v.getInfo().put("action", "verify");
+						v.getInfo().put("email", email);
+						v.getInfo().put("password", password);
+						session.setAttribute("register", v);
 						String text = "We have sent the verification code to " + email;
 						response.sendRedirect(response.encodeRedirectURL("verify?alert=" + text));
 					}
-				} else if (register.getAction().equals("verify")) {
+				} else if (v.getInfo().get("action").equals("verify")) {
 					// Kiểm tra code xác thực người dùng đã nhận
 					//Lấy mã xác thực người dùng nhập
 					String code = request.getParameter("code");
-					if (code != null && code.equals(register.getCode())) {
+					if (code != null && code.equals(v.getInfo().get("code"))) {
 						//Nếu code người dùng nhập bằng code đã gửi
-						//Kết nối tới database
-						Connection con = null;
-						DataSource ds = (DataSource)session.getAttribute("ds");
-						try {
-							con = ds.getConnection();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							out.print("Can't connect to database");
-							return;
-						}
-						register.creatAccount(con);
-						Account login = new Account();
-						login.setEmail(register.getEmail());
+						Account account = new Account();
+						account.creatAccount(v.getInfo().get("email"), v.getInfo().get("password"),
+								v.getInfo().get("firstname"), v.getInfo().get("lastname"));
+						Validate login = new Validate();
+						login.getInfo().put("email",v.getInfo().get("email"));
 						session.setAttribute("login",login);
 						session.removeAttribute("register");
 						response.sendRedirect(response.encodeRedirectURL("login"));

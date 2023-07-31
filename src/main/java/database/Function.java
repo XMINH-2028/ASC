@@ -2,6 +2,7 @@ package database;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ public class Function {
 	 */
 	public static List<Integer> mergeList(List<Integer>...x) {
 		List<Integer> mergeList = new ArrayList<>();
+		if (x.length == 0) return mergeList;
 		mergeList = x[0];
 		for (int i = 1; i < x.length; i++) {
 			for (int j = 0; j < mergeList.size();) {
@@ -41,7 +43,6 @@ public class Function {
 				} else {
 					 j++;
 				}
-				System.out.print(mergeList);
 			}
 		}
 		return mergeList;
@@ -63,7 +64,6 @@ public class Function {
 				} else {
 					 j++;
 				}
-				System.out.print(mergeList);
 			}
 		}
 		return mergeList;
@@ -80,6 +80,46 @@ public class Function {
 			copyList.add(list.get(i));
 		}
 		return copyList;
+	}
+	
+	public String getAddress(String text) {
+		if (text == null || text.equals("")) return "";
+		List<String> arr = Arrays.asList(text.split(","));
+		String rs = "";
+		for (int i = 0 ; i < arr.size() - 3; i++) {
+			rs += arr.get(i);
+			if (i < arr.size() - 4) rs += ",";
+		}
+		return rs;
+	}
+	
+	public String getAddressId(String text) {
+		if (text == null || text.equals("")) return "";
+		List<String> arr = Arrays.asList(text.split(","));
+		String rs = arr.get(0) + ",";
+		for (int i = arr.size() - 1 ; i > arr.size() - 4 ; i--) {
+			rs += arr.get(i); 
+			if (i > arr.size() - 3) rs += ",";
+		}
+		return rs;
+	}
+	
+	public String getId(String text, int number) {
+		if (text == "") return "";
+		String[] arr = text.split(",");
+		String rs = "";
+		if (number == 1) {
+			for (int i = 0; i < arr.length - 3; i++) {
+				rs += arr[i];
+			}
+		} else if (number == 2) {
+			rs += arr[arr.length - 3].trim();
+		} else if (number == 3) {
+			rs += arr[arr.length - 2].trim();
+		} else if (number == 4) {
+			rs += arr[arr.length - 1].trim();
+		}
+		return rs;
 	}
 
 }

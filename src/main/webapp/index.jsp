@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<c:if test="${sessionScope.currentPage == null}">
+<c:if test="${sessionScope.currentPage == null || sessionScope.currentPage != 'home'}">
 	<c:redirect url="/Controller?action=home"></c:redirect>
 </c:if>
 
@@ -22,10 +22,11 @@
 <%-- Nội dung trang chủ --%>
 <div class="grid-container content">
 	<div class="grid-item main">
+		<c:set var="ft" value="${applicationScope.ft}"></c:set>
 		<h1>All products</h1>
 		<%--Tạo biến lưu thông tin trang hiện tại --%>
 		<c:choose>
-			<c:when test="${param.page == null || !applicationScope.ft.checkInt(param.page)}">
+			<c:when test="${param.page == null || !ft.checkInt(param.page)}">
 				<c:set var="page" value="1"></c:set>
 			</c:when>
 			<c:otherwise>
@@ -50,38 +51,40 @@
 				<c:set var="page" value="1"></c:set>
 			</c:if>
 			<%--Lặp qua tất cả các sản phẩm --%>
-			<c:forEach items="${rs.rows}" var="row" varStatus="vs">
-				
+			<c:forEach items="${rs.rows}" var="list" varStatus="v">
 				<%--Hiển thị sản phẩm theo số trang hiện tại--%>
-				<c:if test="${(vs.index >= (page - 1) * pagesize) && (vs.index <= (page * pagesize - 1))}">
-					<%--Định dạng đơn vị tiền tệ --%>
-					<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN')) as value">
-						<sql:param value="${row.product_price * 1000000}"></sql:param>
-					</sql:query>
-					<%--Hiển thị thông tin sản phẩm --%>
-					<div class="home_wrap">
-						<div class="content">
-							<img alt="${row.product_name}"
-							src="${row.product_img_source}">
-							<div class="info">
-								<p class="name">${row.product_name}</p>
-								<p class="price">
-									${price.rows[0].value}đ<span class="discount">-50%</span>
-								</p>
-								<p class="more">
-									5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
-								</p>
+					<c:if test="${(v.index >= (page - 1) * pagesize) && (v.index <= (page * pagesize - 1))}">
+						<%--Hiển thị thông tin sản phẩm --%>
+						<div class="home_wrap">
+							<div class="content">
+								<img alt="${list.product_name}"
+								src="${list.product_img_source}">
+								<div class="info">
+									<p class="name">${list.product_name}</p>
+									<p class="price">
+										${ft.vnd(list.product_price * 1000000)}đ<!--<span class="discount">-50%</span>-->
+									</p>
+									<p class="more">
+										5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
+									</p>
+								</div>
+								<a href='<c:url value="/Controller?action=product&id=${list.product_id}"></c:url>' class="productinfo"></a>
 							</div>
-							<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
+							<div class="buy_action">
+								<c:choose>
+									<c:when test="${sessionScope.user == null }">
+										<a href='<c:url value="login"></c:url>'>Buy now</a>
+										<a href='<c:url value="login"></c:url>'>Add to Cart</a>
+									</c:when>
+									<c:otherwise>
+										<a class="buynow" href='<c:url value="/Controller?action=buynow&id=${list.product_id}"></c:url>'>Buy now</a>
+										<span class="addcart" data-id="${list.product_id}" data-price="${ft.vnd(list.product_price * 1000000)}"
+										data-img="${list.product_img_source}" data-name="${list.product_name}" data-url="<%=request.getServletPath()%>">Add to Cart</span>
+									</c:otherwise>
+								</c:choose>
+							</div>
 						</div>
-						<div class="buy_action">
-							<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-							data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Buy now</span>
-							<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-							data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Add to Cart</span>
-						</div>
-					</div>
-				</c:if>
+					</c:if>
 			</c:forEach>	
 		</sql:transaction>
 	</div>
@@ -100,33 +103,36 @@
 								<sql:query var="brand" sql="select * from products where product_brand = ?">
 									<sql:param>${row.product_brand}</sql:param>
 								</sql:query>
-								<c:forEach var="row" items="${brand.rows}" varStatus="vs">
+								<c:forEach var="list" items="${brand.rows}" varStatus="v">
 									<%--Hiển thị nhiều nhất 5 sản phẩm --%>
-									<c:if test="${vs.index <= 4}">
-										<%--Định dạng đơn vị tiền tệ --%>
-										<sql:query var="price" sql="select concat(FORMAT(?, 0, 'vi-VN')) as value">
-											<sql:param value="${row.product_price * 1000000}"></sql:param>
-										</sql:query>
+									<c:if test="${v.index <= 4}">
 										<li class="home_wrap">
 											<div class="content">
-												<img alt="${row.product_name}"
-													src="${row.product_img_source}">
+												<img alt="${list.product_name}"
+												src="${list.product_img_source}">
 												<div class="info">
-													<p class="name">${row.product_name}</p>
+													<p class="name">${list.product_name}</p>
 													<p class="price">
-														${price.rows[0].value}đ<span class="discount">-50%</span>
+														${ft.vnd(list.product_price * 1000000)}đ
 													</p>
 													<p class="more">
 														5 <i class='fas fa-star star'></i><span class="sold">(1000)</span>
 													</p>
 												</div>
-												<a href='<c:url value="/Controller?action=product&id=${row.product_id}"></c:url>' class="productinfo"></a>
+												<a href='<c:url value="/Controller?action=product&id=${list.product_id}"></c:url>' class="productinfo"></a>
 											</div>
 											<div class="buy_action">
-												<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-												data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Buy now</span>
-												<span class="addcart" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-												data-img="${row.product_img_source}" data-name="${row.product_name}" data-url='<c:url value="login"></c:url>'>Add to Cart</span>
+												<c:choose>
+													<c:when test="${sessionScope.user == null }">
+														<a href='<c:url value="login"></c:url>'>Buy now</a>
+														<a href='<c:url value="login"></c:url>'>Add to Cart</a>
+													</c:when>
+													<c:otherwise>
+														<a class="buynow" href='<c:url value="/Controller?action=buynow&id=${list.product_id}"></c:url>'>Buy now</a>
+														<span class="addcart" data-id="${list.product_id}" data-price="${ft.vnd(list.product_price * 1000000)}"
+														data-img="${list.product_img_source}" data-name="${list.product_name}" data-url="<%=request.getServletPath()%>">Add to Cart</span>
+													</c:otherwise>
+												</c:choose>
 											</div>
 										</li>
 									</c:if>
@@ -141,8 +147,8 @@
 		<div class="filter">
 			<h1><i class='fas fa-filter'><span></span></i><span>Filter</span></h1>
 			<form action="<c:url value='/Controller'></c:url>">
-				<input type="hidden" name="url" value="<%= request.getServletPath()%>">
-				<input type="hidden" name="action" value="search">
+				<input type="hidden" name="hiddenText" class="hiddenText">
+				<input type="hidden" name="action" value="filter">
 				<div class="price filter_child">
 					<p class="title">Price</p>
 					<div class="content">

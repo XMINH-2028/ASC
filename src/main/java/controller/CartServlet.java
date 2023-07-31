@@ -54,7 +54,7 @@ public class CartServlet extends HttpServlet {
 				session.setAttribute("cart", cart);
 			}  else if (action.equals("checked")) {
 				//Khi người dùng chọn sản phẩm trong giỏ hàng
-				cart.checked(id);
+				cart.checked(id,quantity);
 				session.setAttribute("cart", cart);
 			} else if (action.equals("cart")) {
 				String page = request.getParameter("page");
@@ -65,6 +65,13 @@ public class CartServlet extends HttpServlet {
 					session.setAttribute("cart", cart);
 					response.sendRedirect(response.encodeRedirectURL("cart"));
 				}
+			} else if (action.equals("buynow")) {
+				cart.addCart(id, 1);
+				cart.getCart();
+				cart.setPage("selected");
+				cart.setCheck(true);
+				session.setAttribute("cart", cart);
+				response.sendRedirect(response.encodeRedirectURL("cart"));
 			}
 		} catch (NullPointerException e) {
 			response.sendRedirect(response.encodeRedirectURL("login"));

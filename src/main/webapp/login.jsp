@@ -31,10 +31,10 @@
 <%--Nếu người dùng chưa đăng nhập hiển thị form đăng nhập--%>
 <%-- Lấy session lưu thông tin người dùng nhập và phản hồi từ servlet --%>
 <c:set var="v" value="${sessionScope.login}"></c:set>
-<c:set var="email" value="${v.email}"></c:set>
-<c:set var="password" value="${v.password}"></c:set>
-<c:set var="mailalert" value="${v.mailalert}"></c:set>
-<c:set var="passalert" value="${v.passalert}"></c:set>
+<c:set var="email" value="${v.info.email}"></c:set>
+<c:set var="password" value="${v.info.password}"></c:set>
+<c:set var="checkMail" value="${v.checkInfo.email}"></c:set>
+<c:set var="checkPass" value="${v.checkInfo.password}"></c:set>
 
 <%--Khi chuyển đến trang login kiểm tra cookie nếu có lưu thông tin đăng nhập thì lấy email từ cookie và điền vào form --%>
 <c:if test="${cookie.email != null && v == null}">
@@ -47,11 +47,11 @@
 			<h1>Sign in</h1>
 		    <input type="hidden" name="action" value="dologin">
 			<p class="wrap">
-				<label for="Email">Email<span class="erorrAlert">${mailalert == null ? '' : mailalert}</span></label>
+				<label for="Email">Email<span class="erorrAlert">${checkMail == null ? '' : checkMail}</span></label>
 				<input id="Email" type="text" name="email" placeholder="Enter Email" value="${email == null ? '' : email}">
 			</p>
 			<p class="wrap">
-				<label for="Password">Password<span class="erorrAlert">${passalert == null ? '' : passalert}</span></label>
+				<label for="Password">Password<span class="erorrAlert">${checkPass == null ? '' : checkPass}</span></label>
 				<input id="Password" type="password" name="password" placeholder="Enter Password" value="${password == null ? '' : password}">
 			</p>
 			<button type="submit" id="sub">Login</button>

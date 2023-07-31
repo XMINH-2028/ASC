@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<c:if test="${sessionScope.currentPage == null}">
+<c:if test="${sessionScope.currentPage == null || sessionScope.currentPage != 'product'}">
 	<c:redirect url="/Controller?action=product"></c:redirect>
 </c:if>
 
@@ -14,49 +14,50 @@
 </c:import>
 
 <div class="grid-container content">
+	<c:set var="ft" value="${applicationScope.ft}"></c:set>
 	<sql:transaction dataSource="jdbc/shoppingdb">
 		<c:choose>
-			<c:when test="${param.id == null || !applicationScope.ft.checkInt(param.id)}">
-				<sql:query var="list" sql="select * from products"></sql:query>
+			<c:when test="${param.id == null || !ft.checkInt(param.id)}">
+				<sql:query var="rs" sql="select * from products"></sql:query>
 			</c:when>
 			<c:otherwise>
-				<sql:query var="list" sql="select * from products where product_id = ${param.id}"></sql:query>
-				<c:if test="${fn:length(list.rows) == 0 }">
-					<sql:query var="list" sql="select * from products"></sql:query>
+				<sql:query var="rs" sql="select * from products where product_id = ${param.id}"></sql:query>
+				<c:if test="${fn:length(rs.rows) == 0 }">
+					<sql:query var="rs" sql="select * from products"></sql:query>
 				</c:if>
 			</c:otherwise>
 		</c:choose>	
 	</sql:transaction>
 
-	<c:forEach items="${list.rows}" var="x" varStatus="st">
+	<c:forEach items="${rs.rows}" var="list" varStatus="v">
 		<div class="product_wrap">
-			<h1 class="name">${x.product_name}</h1>
+			<h1 class="name">${list.product_name}</h1>
 			<div class="content">
-				<img alt="" src="${x.product_img_source}">
+				<img alt="" src="${list.product_img_source}">
 				<div class="info">
-				<sql:transaction dataSource="jdbc/shoppingdb">
-					<sql:query var="currentPrice" sql="select FORMAT(?, 0, 'vi-VN') as value">
-						<sql:param value="${x.product_price * 1000000}"></sql:param>
-					</sql:query>
-					<sql:query var="oldPrice" sql="select FORMAT(?, 0, 'vi-VN') as value">
-						<sql:param value="${x.product_price * 1000000 * 2}"></sql:param>
-					</sql:query>
-				</sql:transaction>
 					<div>
-						<p class="price"><ins>${currentPrice.rows[0].value}đ</ins><del>${oldPrice.rows[0].value}đ</del></p>
+						<p class="price"><ins>${ft.vnd(list.product_price * 1000000)}đ</ins>
+						<!-- <del>${ft.vnd(list.product_price * 2000000)}đ</del></p>-->
 						<p class="more">
-						<c:set var = "splitDes" value = "${fn:split(x.product_des,',')}"/>
+						<c:set var = "splitDes" value = "${fn:split(list.product_des,',')}"/>
 							<c:forEach items="${splitDes}" var="des">
 								<c:out value="${des}"></c:out>
 								<br>
 							</c:forEach>
 						</p>
 					</div>
-					<p>
-						<span class="buynow" data-id="${row.product_id}" data-price="${price.rows[0].value}"
-						data-img="${row.product_img_source}" data-name="${row.product_name}" data-url="${pageContext.servletContext.contextPath}">Buy now</span>
-						<span class="addcart" data-id="${x.product_id}" data-price="${currentPrice.rows[0].value}"
-						data-img="${x.product_img_source}" data-name="${x.product_name}" data-url="${pageContext.servletContext.contextPath}">Add to Cart</span>
+					<p class="buy_action">
+						<c:choose>
+							<c:when test="${sessionScope.user == null }">
+								<a href='<c:url value="login"></c:url>'>Buy now</a>
+								<a href='<c:url value="login"></c:url>'>Add to Cart</a>
+							</c:when>
+							<c:otherwise>
+								<a class="buynow" href='<c:url value="/Controller?action=buynow&id=${list.product_id}"></c:url>'>Buy now</a>
+								<span class="addcart" data-id="${list.product_id}" data-price="${ft.vnd(list.product_price * 1000000)}"
+								data-img="${list.product_img_source}" data-name="${list.product_name}" data-url="<%=request.getServletPath()%>">Add to Cart</span>
+							</c:otherwise>
+						</c:choose>
 					</p>
 				</div>
 			</div>

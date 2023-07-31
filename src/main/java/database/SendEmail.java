@@ -1,4 +1,4 @@
-package sendemail;
+package database;
 
 import java.util.Properties;
 import javax.mail.*;

@@ -9,10 +9,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import sendemail.SendEmail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+import database.SendEmail;
 
 /**
  * Servlet implementation class Set
@@ -20,6 +25,7 @@ import java.io.PrintWriter;
 public class Set extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      static int a = 0;
+     private DataSource ds;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -35,6 +41,20 @@ public class Set extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		/*
+	 	InitialContext initContext = new InitialContext();
+		Context env = (Context) initContext.lookup("java:comp/env");
+		ds = (DataSource)env.lookup("jdbc/shoppingdb");
+		Kết nối tới database
+		Connection con = null;
+		try {
+			con = ds.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			out.print("Can't connect to database");
+			return;
+		}
+		 
+		 
 		//Request scope
 		a++;
 		
@@ -62,9 +82,11 @@ public class Set extends HttpServlet {
 		out.print("\n");
 		out.print(hits);
 		
-		*/
+		
 		SendEmail.send("minhnguyenx28@gmail.com", "Verify code", "1234");
 		out.print("success");
+		*/
+		doPost(request, response);
 	}
 
 	/**
@@ -72,7 +94,7 @@ public class Set extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.sendRedirect("home?abc=5");
 	}
 
 }

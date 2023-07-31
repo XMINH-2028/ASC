@@ -1,5 +1,10 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Product {
 	private int id;
 	private String name;
@@ -83,6 +88,23 @@ public class Product {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+	
+	public Product getProduct(int id, int quality) throws ClassNotFoundException, SQLException  {
+		Connection con = new ConnectDB().getConnection();
+		String sql = "select * from products where product_id = ?";
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setInt(1, id);
+		
+		Product pr = new Product();
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		if (rs.next()) {
+			pr = new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getString(5), rs.getString(6), rs.getString(7), quality, false);
+		}
+		con.close();
+		return pr;
 	}
 	
 }

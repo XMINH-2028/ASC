@@ -1,0 +1,166 @@
+.top {
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    background: black;
+    height: 54px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.back {
+	color: white;
+    font-size: 18px;
+    margin-right: 20px;
+}
+
+.back:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
+.totalMoney {
+	color: #ffc107;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.top button {
+	padding: 5px 15px;
+    border-radius: 8%;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+}
+
+.top .total {
+	font-size: 18px;
+	margin-left: 10px;
+}
+
+form {
+	margin: 54px 0 0 0;
+	padding: 10px;
+}
+.contact {
+	display: flex;
+    justify-content: center;
+}
+
+.contact th {
+	font-size: 18px;
+}
+
+.contact td {
+    padding: 20px 5px 0 0;
+}
+
+.contact td:nth-child(even) {
+    display: flex;
+    position: relative;
+}
+
+.contact input {
+	border: none;
+    border-bottom: 1px solid black;
+    background: none;
+    outline: none;
+    min-width: 240px;
+}
+
+.contact .check {
+	position: absolute;
+    top: 100%;
+    left: 0;
+    color: red;
+    white-space: nowrap;
+}
+
+.contact button {
+    position: absolute;
+    right: 5px;
+    padding: 0 3px;
+}
+
+.contact #address {
+    height: 18px;
+    border-bottom: 1px solid black;
+    width: 200px;
+    text-decoration: underline;
+}
+
+.selectform {
+	position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: silver;
+    z-index: 200;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    padding: 5% 0;
+}
+
+.selectform select {
+	min-width: 240px;
+	outline: none;
+}
+
+.selectform .main {
+	padding: 5%;
+	background: white;
+	position: relative;
+}
+
+.selectform .select p {
+	margin-bottom: 5px;
+}
+
+.selectform .select {
+	padding-bottom: 30px;
+}
+
+.selectform .select:last-of-type {
+	padding-bottom: 0;
+}
+
+.selectform input {
+	display: block;
+	min-width: 240px;
+	outline: none;
+	padding: 0 3px;
+}
+
+.selectform .close {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    transform: rotate(45deg);
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.selectform .close:hover {
+   	cursor: pointer;
+}
+
+.selectform button {
+    display: block;
+    margin: auto;
+    margin-top: 30px;
+    padding: 5px 10px;
+}
+
+.selectform .checkDetail {
+    color: red;
+}

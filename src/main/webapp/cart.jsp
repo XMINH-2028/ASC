@@ -1,6 +1,16 @@
 <%@ page language="java" 
 contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:if test="${sessionScope.user == null}">
+	<c:redirect url="login"></c:redirect>
+</c:if>
+<c:if test="${!sessionScope.cart.check}">
+	<c:redirect url="Controller?action=cart&page=${sessionScope.cart.page}"></c:redirect>
+</c:if>
+<c:out value="${sessionScope.cart.setCheck(false)}" ></c:out>
+<c:set var="list" value="${sessionScope.cart.productList}"></c:set>
+<c:set var="ft" value="${applicationScope.ft}"></c:set>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,21 +23,25 @@ contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>
-<c:if test="${sessionScope.user == null}">
-	<c:redirect url="login"></c:redirect>
-</c:if>
-<c:if test="${!sessionScope.cart.check}">
-	<c:redirect url="/Controller?action=cart&page=${sessionScope.cart.page}"></c:redirect>
-</c:if>
-<c:out value="${sessionScope.cart.setCheck(false)}" ></c:out>
-<c:set var="list" value="${sessionScope.cart.productList}"></c:set>
-
 <ul class="top">
-	<li><a href='<c:url value="${sessionScope.currentPage}"></c:url>' class="back">Back</a></li>
-	<li><a class="${sessionScope.cart.page == 'selected' ? 'active' : ''}" 
-	href='<c:url value="/Controller?action=cart&page=selected"></c:url>'>Selected</a></li>
-	<li><a class="${sessionScope.cart.page == 'ordered' ? 'active' : ''}"
-	href='<c:url value="/Controller?action=cart&page=ordered"></c:url>'>Ordered</a></li>
+	<li class="left">
+		<ul class="menu">
+			<i class="fas fa-bars" aria-hidden="true"></i>
+		</ul>
+		<ul class="nav">
+			<li><a href='<c:url value="${sessionScope.currentPage}"></c:url>' class="back">Back</a></li>
+			<li><a class="${sessionScope.cart.page == 'selected' ? 'active' : ''}" 
+			href='<c:url value="Controller?action=cart&page=selected"></c:url>'>Selected</a></li>
+			<li><a class="${sessionScope.cart.page == 'ordered' ? 'active' : ''}"
+			href='<c:url value="Controller?action=cart&page=ordered"></c:url>'>Ordered</a></li>
+		</ul>
+	</li>
+	<li class="right">
+		<ul class="pay">
+			<li>Total: <span class="total">${ft.vnd(sessionScope.cart.totalCart() * 1000000)}đ</span></li>
+			<li><a href="<c:url value='Controller?action=pay'></c:url>">Pay</a></li>
+		</ul>
+	</li>
 </ul>
 <form class="cart">
 	<c:forEach var="item" items="${list}">
@@ -44,7 +58,6 @@ contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 					</label>
 				</c:otherwise>
 			</c:choose>
-			
 			<p><a href='<c:url value="/Controller?action=product&id=${item.id}"></c:url>' class="link">
 			<img src="${item.img}"></a></p>
 			<div class="product_info">
@@ -60,11 +73,6 @@ contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 			<span class="close" data-id="${item.id}">+</span>
 		</div>
 	</c:forEach>
-	
-	<div class="pay">
-		<p>Total: <span class="total">${applicationScope.ft.vnd(sessionScope.cart.totalCart() * 1000000)}đ</span></p>
-		<button type="submit">Pay</button>
-	</div>
 </form>
 <script type="text/javascript" src='<c:url value="/js/script.js"></c:url>'></script>
 <script type="text/javascript" src='<c:url value="/js/cart.js"></c:url>'></script>

@@ -23,9 +23,16 @@
 		<img alt="logo" src="<c:url value='/images/logo.png'></c:url>" class="logo">
 		<form action='<c:url value="/Controller"></c:url>' method="GET">
 			<div class="searchBox">
-				<input class="searchAction" type="hidden" name="action" value="search">
-				<input class="searchInput" type="text" name="text" value="${sessionScope.text == null ? '' : sessionScope.text}">
-				<button type="submit" class="submit">
+				<input type="hidden" name="action" value="search">
+				<c:choose>
+					<c:when test="${sessionScope.currentPage == 'search'}">
+						<input class="searchInput" type="text" name="text" value="${sessionScope.text == null ? '' : sessionScope.text}">
+					</c:when>
+					<c:otherwise>
+						<input class="searchInput" type="text" name="text">
+					</c:otherwise>
+				</c:choose>
+				<button type="submit" class="submit" data-url="${sessionScope.currentPage}">
 					<i class='fas fa-search'></i>
 				</button>
 			</div>

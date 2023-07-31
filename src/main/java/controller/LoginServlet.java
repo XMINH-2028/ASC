@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 
 import database.Account;
 import database.ShoppingCart;
+import database.Validate;
 
 /**
  * Servlet implementation class LoginServlet
@@ -51,26 +52,17 @@ public class LoginServlet extends HttpServlet {
 			String action = request. getParameter("action");
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
+			Validate v = new Validate();
 			Account account = new Account();
 			
-			if (!account.vlogin(email, password)) {
+			if (!v.vlogin(email, password)) {
 				//Kiểm tra email hoặc password không hợp lệ thì chuyển hướng về trang login và thông báo lỗi
-				session.setAttribute("login", account);
+				session.setAttribute("login", v);
 				response.sendRedirect(response.encodeRedirectURL("login"));
 			} else {
 				//Nếu email và password hợp lệ thì kiểm tra xem có khớp với dữ liệu đã lưu hay không
-				//Kết nối tới database
-				Connection con = null;
-				DataSource ds = (DataSource)session.getAttribute("ds");
-				try {
-					con = ds.getConnection();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					out.print("Can't connect to database");
-					return;
-				}
-				int role = account.getRole(con,email,password);
-				if (role != 0) {
+				account.getUser(email, password);
+				if (account.getRole() != 0) {
 					//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
 					session.removeAttribute("login");
 					//Nếu đúng thì lưu thông tin vào session và cookie nếu người dùng chọn remember
@@ -84,7 +76,7 @@ public class LoginServlet extends HttpServlet {
 						mailCookie.setMaxAge(60 * 60 * 24);
 						response.addCookie(mailCookie);
 					}
-					if (role == 1) {
+					if (account.getRole() == 1) {
 						//Nếu người dùng là quản trị viên thì chuyển qua trang admin
 						response.sendRedirect(response.encodeRedirectURL("manager/admin"));
 					} else {
@@ -93,9 +85,8 @@ public class LoginServlet extends HttpServlet {
 					}
 				} else {
 					//Nếu sai thì chuyển hướng về trang login và thông báo lỗi
-					String text = "email or password is invalid";
-					account.setErrorCheckAccount(text);
-					session.setAttribute("login", account);
+					v.setCheckInfo("email or password is invalid");
+					session.setAttribute("login", v);
 					response.sendRedirect(response.encodeRedirectURL("login"));
 				}
 			}

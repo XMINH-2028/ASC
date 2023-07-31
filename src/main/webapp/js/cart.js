@@ -1,10 +1,3 @@
-function setUrl(action, id, quantity) {
-	let a = window.location.href;
-	let b = a.replace("cart","Controller");
-	b += "?action="+ action + "&id=" + id + "&quantity=" + quantity;
-	return b;
-}
-
 function total() {
 	let a = [];
 	let n = 0;
@@ -19,6 +12,18 @@ function total() {
 	if (a.length == 0) return 0;
 	return a.reduce((total,value) => total += value);
 }
+
+//Ẩn hiện menu chuyển trang với các thiết bị di động
+
+$(document).ready(function(){
+  	$(".top .menu i").click(function(){
+    	$(".top .nav").toggle();	
+    	$(document).on("click",(e)=> {
+	    if (e.target.closest(".left") == null)
+		    	$(".top .nav").css("display","none");
+		})
+  	});
+});
 
 $(document).ready(function() {
 	let check = 0;
@@ -37,17 +42,18 @@ $(document).ready(function() {
 		let id = $(this).attr("data-id");
 		let value = $(this).val();
 		$(this).val(parseInt(value));
-		$.get(setUrl("changecart",id,value), function() {});
+		$.get(setUrl("/cart","changecart",id,value), function() {});
 	});
 	
 	$(".cart .reduce").click(function() {
 		let value = $(this).siblings(".number").val();
+		value = parseInt(value);
 		let id = $(this).siblings(".number").attr("data-id");
 		if (value > 1) {
 			value = parseInt(value) - 1;
-			$(this).siblings(".number").val(value);
-			$.get(setUrl("changecart",id,value), function() {});
 		}
+		$(this).siblings(".number").val(value);
+		$.get(setUrl("cart","changecart",id,value), function() {});
 	});
 	
 	$(".cart .increase").click(function() {
@@ -55,7 +61,7 @@ $(document).ready(function() {
 		value = parseInt(value) + 1;
 		let id = $(this).siblings(".number").attr("data-id");
 		$(this).siblings(".number").val(value);
-		$.get(setUrl("changecart",id,value), function() {});
+		$.get(setUrl("/cart","changecart",id,value), function() {});
 	});
 	
 	$(".cart_product").click(function(e){
@@ -71,13 +77,14 @@ $(document).ready(function() {
 					check = 0;
 				} else {
 					check = 0;
+					let id = $(this).find(".number").attr("data-id");
 					if (!$(this).children("label").hasClass('checkmark')) {
 						$(this).children("label").addClass('checkmark');
+						$.get(setUrl("/cart","checked",id,1), function() {});
 					} else {
 						$(this).children("label").removeClass('checkmark');
+						$.get(setUrl("/cart","checked",id,0), function() {});
 					}
-					let id = $(this).find(".number").attr("data-id");
-					$.get(setUrl("checked",id,0), function() {});
 				}
 			}
 			$(".pay .total").html(vnd(parseInt(total() * 1000000) + "") + "đ");
@@ -86,9 +93,13 @@ $(document).ready(function() {
 	
 	$(".cart_product .close").click(function(){
 		let id = $(this).attr("data-id");
-		$.get(setUrl("deletecart",id,0) , function() {});
+		$.get(setUrl("/cart","deletecart",id,0) , function() {});
 		$(this).parents(".cart_product").remove();
 		$(".pay .total").html(vnd(parseInt(total() * 1000000) + "") + "đ");
 	})
+	
+	$(".pay a").click(function(e) {
+		if (total() == 0) e.preventDefault();
+	});
 	
 });

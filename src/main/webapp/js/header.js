@@ -26,7 +26,8 @@ $(document).ready(function() {
 //Vô hiệu hóa nút tìm kiếm khi người dùng chưa nhập thông tin cần tìm
 $(document).ready(function() {
 	$(".top  .submit").on("click", function(e) {
-		if ($(".top .searchInput").val() == null || $(".top .searchInput").val().trim() == "") {
+		if (($(this).attr("data-url") == null || $(".top .searchInput").val().trim() == "") 
+		&& $(this).attr("data-url") != "search") {
 			e.preventDefault();
 		}
 	});

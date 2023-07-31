@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import sendemail.SendEmail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,14 +22,15 @@ import javax.sql.DataSource;
 
 import database.Account;
 import database.Function;
+import database.SendEmail;
 import database.ShoppingCart;
+import database.Validate;
 
 /**
  * Servlet implementation class Controller
  */
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private DataSource ds;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -44,19 +44,9 @@ public class Controller extends HttpServlet {
 	 */
     
     public void init() throws ServletException {
-    	//Khởi tạo kết nối tới Database 
-		try {
-			InitialContext initContext = new InitialContext();
-			Context env = (Context) initContext.lookup("java:comp/env");
-			ds = (DataSource)env.lookup("jdbc/shoppingdb");
-			ServletContext context = getServletContext();
-			Function ft = new Function();
-			context.setAttribute("ds", ds);
-			context.setAttribute("ft", ft);
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	ServletContext context = getServletContext();
+		Function ft = new Function();
+		context.setAttribute("ft", ft);
 	}
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -97,12 +87,11 @@ public class Controller extends HttpServlet {
 				//Xóa session lưu thông tin  khi người dùng đăng kí
 				session.removeAttribute("register");
 				//Khi người dùng quên mật khẩu đăng nhập tạo session forget với action = getcode và chuyển tới trang lấy mã xác thực
-				Account account = new Account("getcode");
-				session.setAttribute("forget",account);
+				Validate v = new Validate("getcode");
+				session.setAttribute("forget",v);
 				response.sendRedirect(response.encodeRedirectURL("getcode"));
-			} else if (action.equals("search")) {
+			} else if (action.equals("search") || action.equals("filter")) {
 				//Khi người dùng submit nội dung tìm kiếm
-				session.setAttribute("currentPage", "search");
 				request.getRequestDispatcher("SearchServlet").forward(request, response);
 			} else if (action.equals("product")) {
 				//Khi người dùng click vào navbar hoặc sản phẩm
@@ -113,15 +102,13 @@ public class Controller extends HttpServlet {
 				//Khi người dùng click vào navlink
 				session.setAttribute("currentPage", "home");
 				response.sendRedirect(response.encodeRedirectURL("home"));
-			} else if (action.equals("addbuy")) {
-				if (session.getAttribute("user") != null) {
-					out.print("success");
-				} else {
-					out.print("false");
-				}
 			} else if (action.equals("addcart") || action.equals("changecart") || action.equals("deletecart")
-				|| action.equals("checked") || action.equals("cart")) {
+				|| action.equals("checked") || action.equals("cart") || action.equals("buynow")) {
 				request.getRequestDispatcher("CartServlet").forward(request, response);
+			} else if (action.equals("pay") || action.equals("address")) {
+				request.getRequestDispatcher("PayServlet").forward(request, response);
+			} else if (action.equals("order")) {
+				request.getRequestDispatcher("OrderServlet").forward(request, response);
 			} 
 		} catch (NullPointerException e) {
 			session.setAttribute("currentPage", "home");
@@ -138,7 +125,6 @@ public class Controller extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		session.setAttribute("ds", ds);
 		//Lấy yêu cầu từ người dùng
 		String action = request.getParameter("action");
 		
@@ -148,8 +134,8 @@ public class Controller extends HttpServlet {
 				request.getRequestDispatcher("LoginServlet").forward(request, response);
 			} else if (action.equals("doregister")) {
 				//Khi người dùng submit form tạo session register với action = register và chuyển tới RegisterServlet
-				Account account = new Account("register");
-				session.setAttribute("register",account); 
+				Validate v = new Validate("register");
+				session.setAttribute("register",v); 
 				request.getRequestDispatcher("RegisterServlet").forward(request, response);
 			} else if ("getcodeforgetverifyreset".contains(action)) {
 				//Khi người dùng quên mật khẩu cần đặt lại chuyển qua ResetServlet

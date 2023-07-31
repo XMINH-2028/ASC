@@ -45,6 +45,8 @@ I am Minh
 
 <c:out value="${user2['Minh']}"></c:out>
 
+<c:out value="${user2.Minh}"></c:out>
+
 <c:out value="${link}"></c:out>
 
 <%= session.getAttribute("link") %>
@@ -156,4 +158,29 @@ I am Minh
 <c:out value="${sessionScope.cart.setCheck(false)}" ></c:out>
 
 <c:out value="${sessionScope.cart.isCheck()}"></c:out>
+
+
+
+<%=  request.getServletPath()%>
+
+<c:out value="${sessionScope.search}"></c:out>
+
+<sql:query var="rs" dataSource="${ds}" sql="select x.product_id, product_name, product_des, product_price, product_img_source, 
+product_type, product_brand, quantity from (select * from carts where user_mail = 'minhguyenx28@gmail.com' ) as x 
+left join products p on x.product_id = p.product_id order by date desc"></sql:query>
+
+<table style="border: 1px solid black">
+	<c:forEach var="i" items="${rs.rows}">
+	<tr>
+		<td style="border: 1px solid black">${i.product_id}</td>
+	</tr>
+	</c:forEach>
+</table>
+
+<c:out value="${fn:length(sessionScope.cart.productList)}"></c:out>
+
+<c:set var="ft" value="${applicationScope.ft}"></c:set>
+
+<c:out value="${ft.getId('1, 2, 3, 4', 1)}"></c:out>
+
 </html>

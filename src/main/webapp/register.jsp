@@ -31,16 +31,16 @@
 <%--Nếu người dùng chưa đăng nhập hiển thị form đăng kí--%>
 <%-- Lấy session lưu thông tin người dùng nhập và phản hồi từ servlet --%>
 <c:set var="v" value="${sessionScope.register}"></c:set>
-<c:set var="firstname" value="${v.firstname}"></c:set>
-<c:set var="lastname" value="${v.lastname}"></c:set>
-<c:set var="email" value="${v.email}"></c:set>
-<c:set var="password" value="${v.password}"></c:set>
-<c:set var="repass" value="${v.repass}"></c:set>
-<c:set var="fnamealert" value="${v.fnamealert}"></c:set>
-<c:set var="lnamealert" value="${v.lnamealert}"></c:set>
-<c:set var="mailalert" value="${v.mailalert}"></c:set>
-<c:set var="passalert" value="${v.passalert}"></c:set>
-<c:set var="repalert" value="${v.repalert}"></c:set>
+<c:set var="firstname" value="${v.info.firstname}"></c:set>
+<c:set var="lastname" value="${v.info.lastname}"></c:set>
+<c:set var="email" value="${v.info.email}"></c:set>
+<c:set var="password" value="${v.info.password}"></c:set>
+<c:set var="repass" value="${v.info.repass}"></c:set>
+<c:set var="checkFname" value="${v.checkInfo.firstname}"></c:set>
+<c:set var="checkLname" value="${v.checkInfo.lastname}"></c:set>
+<c:set var="checkMail" value="${v.checkInfo.email}"></c:set>
+<c:set var="checkPass" value="${v.checkInfo.password}"></c:set>
+<c:set var="checkRepass" value="${v.checkInfo.repass}"></c:set>
 
 <div class="register">
 	<div class="container">
@@ -48,27 +48,27 @@
 			<h1>Register</h1>
 		    <input type="hidden" name="action" value="doregister">
 		    <p class="wrap">
-				<label for="firstname">Firstname<span class="erorrAlert">${fnamealert == null ? '' : fnamealert}</span></label>
+				<label for="firstname">Firstname<span class="erorrAlert">${checkFname == null ? '' : checkFname}</span></label>
 				<input id="firstname" type="text" name="firstname" placeholder="Enter your firstname" value="${firstname == null ? '' : firstname}">
 				
 			</p>
 			<p class="wrap">
-				<label for="lastname">Lastname<span class="erorrAlert">${lnamealert == null ? '' : lnamealert}</span></label>
+				<label for="lastname">Lastname<span class="erorrAlert">${checkLname == null ? '' : checkLname}</span></label>
 				<input id="lastname" type="text" name="lastname" placeholder="Enter your lastname" value="${lastname == null ? '' : lastname}">
 				
 			</p>
 			<p class="wrap">
-				<label for="Email">Email<span class="erorrAlert">${mailalert == null ? '' : mailalert}</span></label>
+				<label for="Email">Email<span class="erorrAlert">${checkMail == null ? '' : checkMail}</span></label>
 				<input id="Email" type="text" name="email" placeholder="Enter Email" value="${email == null ? '' : email}">
 				
 			</p>
 			<p class="wrap">
-				<label for="Password">Password<span class="erorrAlert">${passalert == null ? '' : passalert}</span></label>
+				<label for="Password">Password<span class="erorrAlert">${checkPass == null ? '' : checkPass}</span></label>
 				<input id="Password" type="password" name="password" placeholder="Enter Password" value="${password == null ? '' : password}">
 				
 			</p>
 			<p class="wrap">
-				<label for="Password">Repassword<span class="erorrAlert">${repalert == null ? '' : repalert}</span></label>
+				<label for="Password">Repassword<span class="erorrAlert">${checkRepass == null ? '' : checkRepass}</span></label>
 				<input id="Password" type="password" name="repass" placeholder="Enter Repassword" value="${repass == null ? '' : repass}">
 				
 			</p>

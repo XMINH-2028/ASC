@@ -1,23 +1,25 @@
 .top {
 	width: 100%;
 	display: flex;
-	list-style-type: none;
 	position: fixed;
 	height: 50px;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	background: black;
 	z-index: 100;
+    padding: 0 5%;
+    height: 54px;
 }
+
 
 .top li {
 	font-size: 18px;
 	color: white;
-	margin: 0 20px;
 	font-weight: bold;
 }
 
-.top li:first-child {
+
+.top .nav li:first-child {
 	text-decoration: underline;
 	text-decoration-thickness: 3px;
 }
@@ -37,39 +39,40 @@
 }
 
 .cart {
-	margin: 50px 0 70px 0;
+	margin: 54px 0 0 0;
+}
+
+.nav li {
+	margin-right: 20%;
+	margin-bottom: 20px;
 }
 
 .pay {
-	position: fixed;
-	height: 70px;
-	top: calc(100vh - 70px);
-	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 	background: black;
 	color: white;
-	font-weight: bold;
-	padding: 0 10%;
 }
 
-.pay p {
-	margin-right: 100px;
+.pay li {
 	display: flex;
-	align-items: center;
-	font-size: 18px;
 	color: #ffc107;
 }
 
-.pay .total {
-	margin-left: 15px;
+.pay span {
+	font-size: 18px;
 }
 
-.pay button {
-	font-size: 18px;
+.pay .total {
+	margin: 0 15px;
+}
+
+.pay a {
 	font-weight: bold;
-	padding: 5px 20px;
+    padding: 5px 20px;
+    background: white;
+    color: black !important;
+    border-radius: 3%;
 }
 
 .cart_product {
@@ -146,6 +149,42 @@
 	margin-right: 20px;
 }
 
+@media screen and (max-width: 600px) {
+	.top .left .nav {
+		display: none;
+	    position: absolute;
+	    top: 50px;
+	    left: 0px;
+	    background: black;
+	    padding: 20px;
+	    width: 200px;
+	    z-index: 100;
+	}
+	
+	.top .left .menu {
+		    display: block;
+		    position: absolute;
+		    left: 20px;
+		    top: 50%;
+		    transform: translateY(-50%);
+	}
+}
+
+@media screen and (min-width: 601px) {
+	.top .left .nav {
+		display: flex !important;
+	}
+	
+	.top .nav li {
+		margin-bottom: 0;
+	}
+	
+	.top .left .menu {
+		display: none;
+	}
+}
+
+
 @media screen and (max-width: 768px) {
 	.cart_product {
 		grid-template-columns: 1fr 1fr;
@@ -153,11 +192,5 @@
 	}
 	.cart_product .quantity {
 		grid-column: 1/span 2;
-	}
-}
-
-@media screen and (max-width: 360px) {
-	body {
-		overflow-x: scroll;
 	}
 }

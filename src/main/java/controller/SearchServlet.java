@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import database.Function;
+import database.Product;
 import database.Search;
 
 /**
@@ -42,52 +43,75 @@ public class SearchServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
 		Function ft = new Function();
-		//Lấy thông tin người dùng tìm kiếm từ form
-		String text = request.getParameter("text");
-		//Nếu form rỗng lấy thông tin từ session
-		if (text == null) {
-			text = (String)session.getAttribute("text");
-		}
-		//Lấy địa chỉ trang hiện tại
-		String url = request.getParameter("url");
-		//Biến lưu các nội dung filter
-		HashMap<String, HashMap<String, String>> filterMap = new HashMap<>();
-		filterMap.put("price", new HashMap<>());
-		filterMap.put("brand", new HashMap<>());
+		
+		//Lấy yêu cầu từ người dùng
+		String action = request.getParameter("action");
+		
+		//Biến lưu kết quả tìm kiếm
+		List<Product> listSearch = new ArrayList<>(); 
+		
 		//Instance class Search chứa các hàm tìm kiếm, lọc thông tin
 		Search search = new Search();
-		//List lưu các kết kết quả lọc và tìm kiếm
-		List<List<Integer>> list = new ArrayList<>();
-		//Biến chứa tên tất cả các tham số từ form
-		Enumeration paramNames = request.getParameterNames();
-		//List lưu tên tham số
-		List<String> key = new ArrayList<>();
-		//List lưu giá trị tham số
-		List<String> value = new ArrayList<>();
-		//Lấy tên tất cả các tham số từ form
-		while (paramNames.hasMoreElements()) {
-			key.add((String) paramNames.nextElement());
-		}
-		//Lấy giá trị tất cả các tham số từ form
-		for (String j : key) {
-			value.add(request.getParameterValues(j)[0]);
-		}
-		//Biến đếm số mục tìm kiếm(search, filter price, filter branch)
-		int count = 0;
+		
+		Product pr = new Product();
 		
 		try {
-			//Nếu người dùng search 
-			if (text != null) {
-				count += 1;
+			if (action.equals("search")) {
+				//Lấy thông tin người dùng tìm kiếm từ form
+				String text = request.getParameter("text");
+				List<Integer> list = search.userSearch(text);
+				for (int i = 0; i < list.size(); i++) {
+					listSearch.add(pr.getProduct(list.get(i),0));
+				}
 				//Lưu kết quả tìm kiếm
-				list.add(search.userSearch(text));
+				session.setAttribute("search", listSearch);
 				//Lưu nội dung tìm kiếm vào session
 				session.setAttribute("text", text);
 				//Xóa tất các các nội dung filter
 				session.removeAttribute("filterMap");
-			} 
-			//Nếu người dùng filter 
-			if (key.size() != 0) {
+				//Chuyển tới trang hiển thị kết quả tìm kiếm
+				session.setAttribute("currentPage", "search");
+				response.sendRedirect(response.encodeRedirectURL("search"));
+			} else if (action.equals("filter")){
+				//Biến lưu các nội dung filter
+				HashMap<String, HashMap<String, String>> filterMap = new HashMap<>();
+				filterMap.put("price", new HashMap<>());
+				filterMap.put("brand", new HashMap<>());
+				
+				//List lưu các kết kết quả lọc và tìm kiếm
+				List<List<Integer>> list = new ArrayList<>();
+				
+				//Biến chứa tên tất cả các tham số từ form
+				Enumeration paramNames = request.getParameterNames();
+				
+				//List lưu tên tham số
+				List<String> key = new ArrayList<>();
+				
+				//List lưu giá trị tham số
+				List<String> value = new ArrayList<>();
+				
+				//Lấy tên tất cả các tham số từ form
+				while (paramNames.hasMoreElements()) {
+					key.add((String) paramNames.nextElement());
+				}
+				
+				//Lấy giá trị tất cả các tham số từ form
+				for (String j : key) {
+					value.add(request.getParameterValues(j)[0]);
+				}
+				
+				//Biến đếm số mục tìm kiếm(search, filter price, filter branch)
+				int count = 0;
+				
+				//Lấy thông tin người dùng tìm kiếm từ form
+				String text = (String) session.getAttribute("text");
+				
+				if (text != null && !text.trim().equals("")) {
+					count += 1;
+					//Lưu kết quả tìm kiếm
+					list.add(search.userSearch(text));
+				}
+				
 				//Tạo bản sao key và value
 				List<String> copyKey = new ArrayList<>();
 				List<String> copyValue = new ArrayList<>();
@@ -119,21 +143,33 @@ public class SearchServlet extends HttpServlet {
 						
 					} 
 				}
-			}
-			//Dãy lưu kết quả lọc và tìm kiếm
-			List<Integer>[] arr = new List[list.size()];
-			for (int i = 0; i < list.size(); i++) {
-				arr[i] = list.get(i);
-			}
-			
-			if (count == 0) {
-				//Nếu không có nội dung tìm kiếm và không lọc sản phẩm
-				response.sendRedirect(response.encodeRedirectURL("home"));
-			} else {
-				//Nếu có nội dung tìm kiếm hoặc lọc sản phẩm
-				session.setAttribute("search",ft.mergeList(arr));
-				session.setAttribute("filterMap",filterMap);
-				response.sendRedirect(response.encodeRedirectURL("search"));
+				
+				
+				if (count == 0) {
+					//Nếu không có nội dung tìm kiếm và không lọc sản phẩm
+					response.sendRedirect(response.encodeRedirectURL("home"));
+				} else {
+					//Dãy lưu kết quả lọc và tìm kiếm
+					List<Integer>[] arr = new List[list.size()];
+					
+					for (int i = 0; i < list.size(); i++) {
+						arr[i] = list.get(i);
+					}
+					
+					ft.mergeList(arr);
+					
+					for (int i = 0; i < arr[0].size(); i++) {
+						listSearch.add(pr.getProduct(arr[0].get(i),0));
+					}
+					
+					//Nếu có nội dung tìm kiếm hoặc lọc sản phẩm
+					session.setAttribute("search", listSearch);
+					session.setAttribute("filterMap",filterMap);
+					session.setAttribute("currentPage", "search");
+					response.sendRedirect(response.encodeRedirectURL("search"));
+				}
+
+				
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
