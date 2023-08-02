@@ -38,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.sendRedirect(response.encodeRedirectURL("home"));
 	}
 
 	/**
@@ -104,11 +104,12 @@ public class RegisterServlet extends HttpServlet {
 						//Nếu code người dùng nhập không đúng
 						response.sendRedirect(response.encodeRedirectURL("verify?error=Wrong code"));
 					}
+				} else {
+					response.sendRedirect(response.encodeRedirectURL("home"));
 				}
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 	}
 

@@ -90,12 +90,9 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect(response.encodeRedirectURL("login"));
 				}
 			}
-		} catch (NullPointerException e) {
-			// TODO: handle exception
-			response.sendRedirect("home");
 		} catch (Exception e) {
 			// TODO: handle exception
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 	}
 

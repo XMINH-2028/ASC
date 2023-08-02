@@ -10,6 +10,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import database.Function;
+import database.Order;
+import database.Product;
 import database.ShoppingCart;
 
 /**
@@ -32,6 +35,7 @@ public class CartServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
+		Function ft = new Function();
 		//Lấy yêu cầu từ người dùng
 		String action = request.getParameter("action");
 		
@@ -58,7 +62,30 @@ public class CartServlet extends HttpServlet {
 				session.setAttribute("cart", cart);
 			} else if (action.equals("cart")) {
 				String page = request.getParameter("page");
-				if (page.equals("selected")) {
+				if (page.equals("ordered")) {
+					cart.creatOrderList();
+					String text = "";
+					for (Order or : cart.getOrderList()) {
+						text += "<h3>Order No: " + or.getOrderId() + "<span>(" + or.getOrderDate() + ")</h3>";
+						text += "<h4>Total: " + ft.vnd(or.totalPay() * 1000000) + "đ</h4>";
+						for (int i = 0; i < or.getProductId().size(); i++) {
+							Product pr = new Product();
+							pr = pr.getProduct(or.getProductId().get(i), 0);
+							text += "<div class='cart_product'>"
+								+ "<p><img src='"+ pr.getImg() +"' class='link'></p>"
+								+ "<div class='product_info'>"
+									+ "<p class='name'>" + pr.getName() + "</p>"
+									+ "<p class='price'>" + ft.vnd(pr.getPrice() * 1000000) + "đ</p>"
+								+ "</div>"
+								+ "<div class='quantity'>"
+									+ "<p>Quantity: " + or.getAmountProduct().get(i) +"</p>"
+								+ "</div>"
+							+ "</div>";
+						}
+					}
+					
+					out.print(text);
+				} else {
 					cart.getCart();
 					cart.setPage("selected");
 					cart.setCheck(true);
@@ -73,10 +100,8 @@ public class CartServlet extends HttpServlet {
 				session.setAttribute("cart", cart);
 				response.sendRedirect(response.encodeRedirectURL("cart"));
 			}
-		} catch (NullPointerException e) {
-			response.sendRedirect(response.encodeRedirectURL("login"));
 		} catch (Exception e) {
-			// TODO: handle exception
+			response.sendRedirect(response.encodeRedirectURL("login"));
 		}
 		
 	}

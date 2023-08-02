@@ -12,22 +12,12 @@ public class Account {
 	private String name;
 	private String address;
 	private String phone;
-	
+	private boolean checkPay;
 
 	public Account() {
 		
 	}
 	
-	public Account(String email, String password, int role, String name, String address, String phone) {
-		super();
-		this.email = email;
-		this.password = password;
-		this.role = role;
-		this.name = name;
-		this.address = address;
-		this.phone = phone;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -80,6 +70,15 @@ public class Account {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+
+	public boolean isCheckPay() {
+		return checkPay;
+	}
+
+	public void setCheckPay(boolean checkPay) {
+		this.checkPay = checkPay;
+	}
 
 	public void getUser(String mail, String pass) throws SQLException, ClassNotFoundException {
 		Connection con = new ConnectDB().getConnection();
@@ -99,6 +98,21 @@ public class Account {
 			address = rs.getString(5);
 			phone = rs.getString(6);
 		}
+		con.close();
+	}
+	
+	public void setUser(String user_name, String user_phone) throws SQLException, ClassNotFoundException {
+		Connection con = new ConnectDB().getConnection();
+		String sql = "update account set user_name = ?, user_phone = ?, user_address = ? where user_mail = ?";
+		PreparedStatement stmt = con.prepareStatement(sql);
+		
+		stmt.setString(1, user_name);
+		stmt.setString(2, user_phone);
+		stmt.setString(3, address);
+		stmt.setString(4, email);
+		name = user_name;
+		phone = user_phone;
+		stmt.executeUpdate();
 		con.close();
 	}
 

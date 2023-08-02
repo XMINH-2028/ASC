@@ -127,12 +127,12 @@ public class ResetServlet extends HttpServlet {
 						//Nếu đã đặt lại mật khẩu
 						response.sendRedirect(response.encodeRedirectURL(v.getInfo().get("action")));
 					}
+				} else {
+					response.sendRedirect(response.encodeRedirectURL("home"));
 				}
 			}
-		} catch (NullPointerException e) {
-			out.print(e);
 		} catch (Exception e) {
-			// TODO: handle exception
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 
 	}

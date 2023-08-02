@@ -44,11 +44,9 @@
 	margin-left: 10px;
 }
 
-form {
+.contact {
 	margin: 54px 0 0 0;
 	padding: 10px;
-}
-.contact {
 	display: flex;
     justify-content: center;
 }
@@ -163,4 +161,28 @@ form {
 
 .selectform .checkDetail {
     color: red;
+}
+
+form.product {
+    width: 50%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+form.product .cart_product {
+   min-width: 300px;
+}
+
+@media screen and (max-width: 1020px) {
+	form.product {
+	    width: 70%;
+	    margin: auto;
+	    margin-top: 30px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	form.product {
+	    width: 90%;
+	}
 }

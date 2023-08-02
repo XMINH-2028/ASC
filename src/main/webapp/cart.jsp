@@ -30,10 +30,9 @@ contentType="text/html; charset=utf-8; text/css" pageEncoding="utf-8"%>
 		</ul>
 		<ul class="nav">
 			<li><a href='<c:url value="${sessionScope.currentPage}"></c:url>' class="back">Back</a></li>
-			<li><a class="${sessionScope.cart.page == 'selected' ? 'active' : ''}" 
+			<li><a class="${sessionScope.cart.page == 'selected' ? 'active' : ''} selected" 
 			href='<c:url value="Controller?action=cart&page=selected"></c:url>'>Selected</a></li>
-			<li><a class="${sessionScope.cart.page == 'ordered' ? 'active' : ''}"
-			href='<c:url value="Controller?action=cart&page=ordered"></c:url>'>Ordered</a></li>
+			<li class="${sessionScope.cart.page == 'ordered' ? 'active' : ''} ordered">Ordered</li>
 		</ul>
 	</li>
 	<li class="right">

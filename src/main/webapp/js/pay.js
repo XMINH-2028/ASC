@@ -18,7 +18,7 @@ $(document).ready(function() {
 	
 	$(".contact button").click(function(){
 		let a = window.location.href;
-		let b = a.replace("pay","/Controller");
+		let b = a.replace("/pay","/Controller");
 		if (b.includes("?")) {
 			b += "&action=address&type=get";
 		} else {
@@ -26,7 +26,6 @@ $(document).ready(function() {
 		}
 		
 		$.get(b, function(data) {
-			console.log(data)
 			getData(data);
 		});
 	});
@@ -39,16 +38,19 @@ $(document).ready(function() {
 			window.scrollTo(0, 0);
 		} else {
 			let a = window.location.href;
-			let b = a.replace("pay","/Controller");
+			let b = a.replace("/pay","/Controller");
 			if (b.includes("?")) {
 				b += "&action=order";
 			} else {
 				b += "?action=order";
 			}
-			b += "&name=" + $(".contact #name").val() + "&phone=" + $(".contact #phone").attr("data-phone") 
-				+ "&address=" + $(".contact #address").attr("data-address");
+			b += "&name=" + $(".contact #name").val() + "&phone=" + $(".contact #phone").val() ;
 			$.get(b, function(data) {
-				console.log(data);
+				if (data == 'true') {
+					a = window.location.href;
+					b = a.replace("/pay","/home");
+					location.replace(b);
+				}
 			});
 		}
 	});
@@ -69,16 +71,15 @@ function getData(data) {
 		} else {
 			let x = $("#detail").val() + ", " + $("#wards option:selected").html() + ", " 
 					+ $("#district option:selected").html() + ", " + $("#province option:selected").html();
-			let y = $("#wards").val() + ", " + $("#district").val() + ", " 
-				+ $("#province").val();
 			let a = window.location.href;
-			let b = a.replace("pay","/Controller");
+			let b = a.replace("/pay","/Controller");
 			if (b.includes("?")) {
 				b += "&action=address&type=save";
 			} else {
 				b += "?action=address&type=save";
 			}
-			b += "&address=" + x + ", " + y;
+			b += "&house=" + $("#detail").val() + "&wards=" + $("#wards").val() + "&district=" 
+			+ $("#district").val() + "&province=" + $("#province").val();
 			$.get(b, function() {});
 			$(".contact #address").html(x);
 			$(".contact #address").css("border", "none");
@@ -88,7 +89,7 @@ function getData(data) {
 	});
 	$(".selectform select").change(function(e){
 		let a = window.location.href;
-		let b = a.replace("pay","/Controller");
+		let b = a.replace("/pay","/Controller");
 		if (b.includes("?")) {
 			b += "&action=address&type=change";
 		} else {
@@ -151,12 +152,12 @@ function checkContact() {
 		$(".contact #phone").val().substring(5).trim().length == 10 &&
 		$(".contact #phone").val().substring(5).trim().match(regex)) {
 			$(".contact .checkPhone").text("");
-			$(".contact #phone").attr("data-phone", $(".contact #phone").val().substring(5).trim());
+			$(".contact #phone").val($(".contact #phone").val().substring(5).trim());
 		} else if ($(".contact #phone").val().substring(5).trim().match(/\d{9}/) &&
 		$(".contact #phone").val().substring(5).trim().length == 9 &&
 		$(".contact #phone").val().substring(5).trim().match(regex1)) {
 			$(".contact .checkPhone").text("");
-			$(".contact #phone").attr("data-phone", "0" + $(".contact #phone").val().substring(5).trim());
+			$(".contact #phone").val("0" + $(".contact #phone").val().substring(5).trim());
 		} else {
 			$(".contact .checkPhone").text("incorrect phone number");
 			rs++;
@@ -165,7 +166,7 @@ function checkContact() {
 		if ($(".contact #phone").val().trim().length == 10 && 
 		$(".contact #phone").val().trim().match(regex)) {
 			$(".contact .checkPhone").text("");
-			$(".contact #phone").attr("data-phone", $(".contact #phone").val().trim());
+			$(".contact #phone").val($(".contact #phone").val().trim());
 		} else {
 			$(".contact .checkPhone").text("incorrect phone number");
 			rs++;

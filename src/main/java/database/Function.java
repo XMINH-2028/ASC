@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class Function {
-	public static boolean checkInt(String text) {
+	public boolean checkInt(String text) {
 		String regex = "[0-9]+";
 		if (text.matches(regex)) return true;
 		else return false;
 	}
 	
-	public static String vnd(double price) { 
+	public String vnd(double price) { 
 		 NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);  
 		 String currency = formatter.format(price);  
 		 currency = currency.substring(1, currency.length() - 3);
@@ -26,7 +26,7 @@ public class Function {
 	 * @param x dãy các ArrayList đầu vào
 	 * @return ArrayList chứa các giá trị cùng xuất hiện ở tất cả các dãy đầu vào
 	 */
-	public static List<Integer> mergeList(List<Integer>...x) {
+	public List<Integer> mergeList(List<Integer>...x) {
 		List<Integer> mergeList = new ArrayList<>();
 		if (x.length == 0) return mergeList;
 		mergeList = x[0];
@@ -35,27 +35,6 @@ public class Function {
 				int count = 0;
 				for (int k : x[i]) {
 					if (mergeList.get(j) == k) {
-						count += 1;
-					}
-				}
-				if (count == 0) {
-					mergeList.remove(j);
-				} else {
-					 j++;
-				}
-			}
-		}
-		return mergeList;
-	}
-	
-	public static List<Product> mergeListP(List<Product>...x) {
-		List<Product> mergeList = new ArrayList<>();
-		mergeList = x[0];
-		for (int i = 1; i < x.length; i++) {
-			for (int j = 0; j < mergeList.size();) {
-				int count = 0;
-				for (Product k : x[i]) {
-					if (mergeList.get(j).getId() == k.getId()) {
 						count += 1;
 					}
 				}
@@ -105,21 +84,46 @@ public class Function {
 	}
 	
 	public String getId(String text, int number) {
-		if (text == "") return "";
-		String[] arr = text.split(",");
 		String rs = "";
-		if (number == 1) {
-			for (int i = 0; i < arr.length - 3; i++) {
-				rs += arr[i];
+		if (text != null && !text.equals("")) {
+			String[] arr = text.split(",");
+			
+			if (number == 1) {
+				for (int i = 0; i < arr.length - 6; i++) {
+					rs += arr[i].trim();
+					if (i < arr.length - 7) {rs += ", ";}
+				}
+			} else if (number == 2) {
+				rs += arr[arr.length - 3].trim();
+			} else if (number == 3) {
+				rs += arr[arr.length - 2].trim();
+			} else if (number == 4) {
+				rs += arr[arr.length - 1].trim();
 			}
-		} else if (number == 2) {
-			rs += arr[arr.length - 3].trim();
-		} else if (number == 3) {
-			rs += arr[arr.length - 2].trim();
-		} else if (number == 4) {
-			rs += arr[arr.length - 1].trim();
 		}
 		return rs;
 	}
-
+	
+	public static boolean checkPhone(String text) {
+		if (text == null) return false;
+		String[] arr = {"032","033","034","035","036","037","038","039","086","096","097","098",
+						"088","091","094","083","084","085","081","082",
+						"089","090","093","070","079","077","076","078",
+						"092","056","058","099","059"};
+		String regex= "";
+		for (int i = 0; i < arr.length; i++) {
+			if (i == 0) {
+				regex += "(^" + arr[i] + "|";
+				
+			} else if (i == arr.length - 1) {
+				regex += "^" + arr[i] + ")";
+				
+			} else {
+				regex += "^" + arr[i] + "|";
+				
+			}
+		}
+		regex += "[0-9]{7}+";
+		return text.matches(regex);
+	}
 }

@@ -12,6 +12,7 @@ public class ShoppingCart {
 	private String page;
 	private boolean check;
 	private List<Product> productList;
+	private List<Order> orderList;
 	
 	public ShoppingCart(String email) {
 		productList = new ArrayList<>();
@@ -34,6 +35,14 @@ public class ShoppingCart {
 		return productList;
 	}
 	
+	public void setOrderList(List<Order> orderList) {
+		this.orderList = orderList;
+	}
+	
+	public List<Order> getOrderList() {
+		return orderList;
+	}
+
 	public boolean isCheck() {
 		return check;
 	}
@@ -59,8 +68,6 @@ public class ShoppingCart {
 			list.add(pr);
 		}
 		if (productList.size() != 0) {
-			Function ft = new Function();
-			ft.mergeListP(productList, list);
 			for (Product x : list) {
 				for (Product y : productList) {
 					if (x.getId() == y.getId()) {
@@ -78,35 +85,37 @@ public class ShoppingCart {
 		Connection con = new ConnectDB().getConnection();
 		Product pr = new Product();
 		pr = pr.getProduct(id, quantity);
-		pr.setChecked(true);
-		for (Product x : productList) {
-			if (pr.getId() == x.getId()) {
-				x.setQuantity(x.getQuantity() + pr.getQuantity());
-				x.setChecked(true);
-				String sql = "update carts set quantity = ?, date = now() where user_mail = ? and product_id = ?";
-				PreparedStatement stmt = con.prepareStatement(sql);
-				stmt.setInt(1, x.getQuantity());
-				stmt.setString(2, email);
-				stmt.setInt(3, id);
-				stmt.executeUpdate();
-				con.close();
-				return;
+		if (pr.getId() != 0 && quantity >= 1) {
+			pr.setChecked(true);
+			for (Product x : productList) {
+				if (pr.getId() == x.getId()) {
+					x.setQuantity(x.getQuantity() + pr.getQuantity());
+					x.setChecked(true);
+					String sql = "update carts set quantity = ?, date = now() where user_mail = ? and product_id = ?";
+					PreparedStatement stmt = con.prepareStatement(sql);
+					stmt.setInt(1, x.getQuantity());
+					stmt.setString(2, email);
+					stmt.setInt(3, id);
+					stmt.executeUpdate();
+					con.close();
+					return;
+				}
 			}
+			productList.add(pr);
+			String sql = "insert into carts (user_mail, product_id, quantity) value (?, ?, ?);";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1, email);
+			stmt.setInt(2, id);
+			stmt.setInt(3, quantity);
+			stmt.executeUpdate();
+			con.close();
 		}
-		productList.add(pr);
-		String sql = "insert into carts (user_mail, product_id, quantity) value (?, ?, ?);";
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, email);
-		stmt.setInt(2, id);
-		stmt.setInt(3, quantity);
-		stmt.executeUpdate();
-		con.close();
 	}
 	
 	public void changeCart(int id, int quantity) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		for (Product x : productList) {
-			if (x.getId() == id) {
+			if (x.getId() == id && quantity >= 1) {
 				x.setQuantity(quantity);
 				x.setChecked(true);
 				String sql = "update carts set quantity = ? where user_mail = ? and product_id = ?";
@@ -146,6 +155,16 @@ public class ShoppingCart {
 		return sum;
 	}
 	
+	public int totalProduct() {
+		int sum = 0;
+		for (int i = 0; i < productList.size(); i++) {
+			if (productList.get(i).isChecked()) {
+				sum += 1;
+			}
+		}
+		return sum;
+	}
+	
 	public void checked(int id, int checkNumber){
 		for (Product x : productList) {
 			if (x.getId() == id ) {
@@ -156,6 +175,23 @@ public class ShoppingCart {
 				}
 			}
 		}
+	}
+	
+	public void creatOrderList() throws ClassNotFoundException, SQLException {
+		Connection con = new ConnectDB().getConnection();
+		String sql = "select * from orders where user_mail = ? order by order_date desc";
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, email);
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		orderList = new ArrayList<>();
+		while (rs.next()) {
+			Order order = new Order(rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6));
+			order.getOrderDetail();
+			orderList.add(order);
+		}
+		con.close();
 	}
 
 }

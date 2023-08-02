@@ -109,13 +109,13 @@ public class Controller extends HttpServlet {
 				request.getRequestDispatcher("PayServlet").forward(request, response);
 			} else if (action.equals("order")) {
 				request.getRequestDispatcher("OrderServlet").forward(request, response);
-			} 
-		} catch (NullPointerException e) {
+			} else {
+				session.setAttribute("currentPage", "home");
+				response.sendRedirect(response.encodeRedirectURL("home"));
+			}
+		} catch (Exception e) {
 			session.setAttribute("currentPage", "home");
 			response.sendRedirect(response.encodeRedirectURL("home"));
-		} catch (Exception e) {
-			// TODO: handle exception
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 	/**
@@ -144,12 +144,10 @@ public class Controller extends HttpServlet {
 				//Khi người dùng xác thực email đăng kí chuyển qua RegisterServlet
 				request.getRequestDispatcher("RegisterServlet").forward(request, response);
 			}
-		} catch (NullPointerException e) {
-			out.print(e);
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
-			out.print(e);
+			session.setAttribute("currentPage", "home");
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 	}
 

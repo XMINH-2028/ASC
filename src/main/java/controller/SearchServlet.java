@@ -72,7 +72,7 @@ public class SearchServlet extends HttpServlet {
 				//Chuyển tới trang hiển thị kết quả tìm kiếm
 				session.setAttribute("currentPage", "search");
 				response.sendRedirect(response.encodeRedirectURL("search"));
-			} else if (action.equals("filter")){
+			} else if (action.equals("filter")) {
 				//Biến lưu các nội dung filter
 				HashMap<String, HashMap<String, String>> filterMap = new HashMap<>();
 				filterMap.put("price", new HashMap<>());
@@ -168,13 +168,11 @@ public class SearchServlet extends HttpServlet {
 					session.setAttribute("currentPage", "search");
 					response.sendRedirect(response.encodeRedirectURL("search"));
 				}
-
-				
+			} else {
+				response.sendRedirect(response.encodeRedirectURL("home"));
 			}
-			
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 	}
 

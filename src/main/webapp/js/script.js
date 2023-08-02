@@ -84,7 +84,6 @@ $(document).ready(function() {
 		});
 		$(".addcart_main button").click(function() {
 			$.get(setUrl(url,"addcart",id,$(".number").val()), function(data) {
-				console.log(setUrl(url,"addcart",id,$(".number").val()));
 				$(".shopping_cart .total_quantity").html("");
 				setTimeout(()=>{
 					$(".shopping_cart .total_quantity").html(data);

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8" import="database.*"%>
+    pageEncoding="utf-8" import="database.*,java.util.*,java.sql.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -177,10 +177,29 @@ left join products p on x.product_id = p.product_id order by date desc"></sql:qu
 	</c:forEach>
 </table>
 
-<c:out value="${fn:length(sessionScope.cart.productList)}"></c:out>
 
-<c:set var="ft" value="${applicationScope.ft}"></c:set>
 
-<c:out value="${ft.getId('1, 2, 3, 4', 1)}"></c:out>
+
+
+
+<% 
+String text1 = "";
+ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+Function ft = new Function();
+cart.creatOrderList();
+for (Order or : cart.getOrderList()) {
+	text1 += "<h4>Order No: " + or.getOrderId() + "<span>(" + or.getOrderDate() + ")</h4>";
+	for (int i = 0; i < or.getProductId().size(); i++) {
+		out.print(or.getProductId().get(i));
+		Product pr = new Product();
+		pr.getProduct(1, 0);
+		out.print(pr.getName());
+	}
+	out.print("/"+ or.getOrderId() +"/");
+}
+
+
+%>
+
 
 </html>

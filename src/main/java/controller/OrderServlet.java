@@ -11,9 +11,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import database.Account;
 import database.ConnectDB;
+import database.Function;
+import database.Order;
+import database.Product;
+import database.ShoppingCart;
 
 /**
  * Servlet implementation class OrderServlet
@@ -36,24 +41,33 @@ public class OrderServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
+		Function ft = new Function();
 		
 		String name = request.getParameter("name");
 		String phone = request.getParameter("phone");
-		String address = request.getParameter("address");
 		Account user = (Account) session.getAttribute("user");
+		ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+		Order order = new Order();
 		
 		try {
-			Connection con = new ConnectDB().getConnection();
-			String sql = "update account set user_name = ?, user_phone = ?, user_address = ? where user_mail = ?";
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-			stmt.setString(2, phone);
-			stmt.setString(3, address);
-			stmt.setString(4, user.getEmail());
-			stmt.executeUpdate();
-			con.close();
+			if (cart != null && cart.totalCart() > 0) {
+				if (name != null && !name.trim().equals("") && Function.checkPhone(phone) && user.getAddress() != null
+						&& !user.getAddress().trim().equals("")) {
+					int key = order.creatOrder(user, cart.totalProduct(), "");
+					if ( key != 0) {
+						user.setUser(name, phone);
+						order.creatOrderDetail(cart, key);
+			            out.print(true);
+			         }
+					 else {
+						 out.print(false);
+					 }
+				} 
+			} else {
+				response.sendRedirect(response.encodeRedirectURL("home"));
+			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			response.sendRedirect(response.encodeRedirectURL("home"));
 		}
 	}
 
