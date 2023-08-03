@@ -104,10 +104,13 @@ public class Controller extends HttpServlet {
 				response.sendRedirect(response.encodeRedirectURL("home"));
 			} else if (action.equals("addcart") || action.equals("changecart") || action.equals("deletecart")
 				|| action.equals("checked") || action.equals("cart") || action.equals("buynow")) {
+				//Khi người dùng làm việc với giỏ hàng
 				request.getRequestDispatcher("CartServlet").forward(request, response);
 			} else if (action.equals("pay") || action.equals("address")) {
+				//Khi người dùng làm việc với trang thanh toán
 				request.getRequestDispatcher("PayServlet").forward(request, response);
 			} else if (action.equals("order")) {
+				//Khi người dùng order đơn hàng
 				request.getRequestDispatcher("OrderServlet").forward(request, response);
 			} else {
 				session.setAttribute("currentPage", "home");

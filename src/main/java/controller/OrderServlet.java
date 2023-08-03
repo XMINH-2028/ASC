@@ -41,7 +41,6 @@ public class OrderServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		Function ft = new Function();
 		
 		String name = request.getParameter("name");
 		String phone = request.getParameter("phone");
@@ -50,12 +49,17 @@ public class OrderServlet extends HttpServlet {
 		Order order = new Order();
 		
 		try {
+			//Kiểm tra các điều kiện để order
 			if (cart != null && cart.totalCart() > 0) {
 				if (name != null && !name.trim().equals("") && Function.checkPhone(phone) && user.getAddress() != null
 						&& !user.getAddress().trim().equals("")) {
+					//Tạo order trong database nếu tạo thành công sẽ trả về id đơn hàng
 					int key = order.creatOrder(user, cart.totalProduct(), "");
+					//Nếu tạo thành công sẽ lưu lại các thông tin về user và chi tiết đơn hàng
 					if ( key != 0) {
+						//Lưu các thông tin bổ sung của user
 						user.setUser(name, phone);
+						//Lưu chi tiết đơn hàng
 						order.creatOrderDetail(cart, key);
 			            out.print(true);
 			         }

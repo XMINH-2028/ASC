@@ -61,8 +61,10 @@ public class CartServlet extends HttpServlet {
 				cart.checked(id,quantity);
 				session.setAttribute("cart", cart);
 			} else if (action.equals("cart")) {
+				//Khi người dùng chuyển qua lại giữa các nội dung trong trang bằng navbar
 				String page = request.getParameter("page");
 				if (page.equals("ordered")) {
+					//Hiển thị các đơn đặt hàng
 					cart.creatOrderList();
 					String text = "";
 					for (Order or : cart.getOrderList()) {
@@ -86,6 +88,7 @@ public class CartServlet extends HttpServlet {
 					
 					out.print(text);
 				} else {
+					//Hiển thị các sản phẩm trong giỏ hàng
 					cart.getCart();
 					cart.setPage("selected");
 					cart.setCheck(true);
@@ -93,6 +96,7 @@ public class CartServlet extends HttpServlet {
 					response.sendRedirect(response.encodeRedirectURL("cart"));
 				}
 			} else if (action.equals("buynow")) {
+				//Khi người dùng click buynow thêm sản phẩm vào giỏ hàng và chuyển qua trang cart
 				cart.addCart(id, 1);
 				cart.getCart();
 				cart.setPage("selected");

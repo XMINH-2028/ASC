@@ -51,7 +51,7 @@ public class Validate {
 	
 	/**
 	 * Hàm đặt tham số khi email và password người dùng nhập vào không khớp
-	 * @param error thông báo lỗi
+	 * @param text thông báo lỗi
 	 */
 	public void setCheckInfo(String text) {
 		checkInfo.put("email", text);

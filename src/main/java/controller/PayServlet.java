@@ -49,11 +49,14 @@ public class PayServlet extends HttpServlet {
 		try {
 			if (cart != null && cart.totalCart() > 0) {
 				if (action.equals("pay")) {
+					//Refresh session user khi tải trang
 					user.getUser(user.getEmail(), user.getPassword());
+					//Thay đổi biến điều kiện để truy cập trang
 					user.setCheckPay(true);
 					session.setAttribute("user", user);
 					response.sendRedirect(response.encodeRedirectURL("pay"));
 				} else if (action.equals("address")) {
+					//Khi người dùng cập nhật địa chỉ
 					String type = request.getParameter("type");
 					String province = "";
 					String district = "";
@@ -62,11 +65,13 @@ public class PayServlet extends HttpServlet {
 					String[] address = new String[3];
 					
 					if (type.equals("get")) {
+						//Lấy địa chỉ từ database nếu mới tải trang
 						province = ft.getId(user.getAddress(), 4);
 						district = ft.getId(user.getAddress(), 3);
 						wards = ft.getId(user.getAddress(), 2);
 						house = ft.getId(user.getAddress(), 1);
 					} else if (type.equals("change") || type.equals("save")) {
+						//Lấy địa chỉ từ param khi người dùng thay đổi hoặc lưu địa chỉ mới
 						province = request.getParameter("province");
 						district = request.getParameter("district");
 						wards = request.getParameter("wards");
@@ -86,6 +91,7 @@ public class PayServlet extends HttpServlet {
 						house = "";
 					}
 					Connection con = new ConnectDB().getConnection();
+					//Tạo form với dữ liệu lấy từ database với thông tin các tỉnh, quận huyện, phường xã và nhà ở
 					//Select province
 					String text = "<div class='selectform'>"
 									+ "<div class='main'>"

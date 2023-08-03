@@ -63,13 +63,15 @@ public class LoginServlet extends HttpServlet {
 				//Nếu email và password hợp lệ thì kiểm tra xem có khớp với dữ liệu đã lưu hay không
 				account.getUser(email, password);
 				if (account.getRole() != 0) {
-					//Xóa session lưu thông tin khi kiểm tra thông tin đăng nhập
+					//Xóa session lưu thông tin validate
 					session.removeAttribute("login");
 					//Nếu đúng thì lưu thông tin vào session và cookie nếu người dùng chọn remember
 					session.setAttribute("user", account);
+					//Lấy các sản phẩm trong giỏ hàng và lưu và session
 					ShoppingCart cart = new ShoppingCart(account.getEmail());
 					cart.getCart();
 					session.setAttribute("cart", cart);
+					//Lưu địa chỉ mail vào cookie
 					String remember = request.getParameter("remember");
 					if (remember != null) {
 						Cookie mailCookie = new Cookie("email",email);

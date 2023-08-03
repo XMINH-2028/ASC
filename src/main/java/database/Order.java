@@ -94,7 +94,16 @@ public class Order {
 		this.orderDiscountCode = orderDiscountCode;
 		this.orderAddress = orderAddress;
 	}
-
+	
+	/**
+	 * Hàm tạo đơn trong database
+	 * @param user 
+	 * @param status
+	 * @param code
+	 * @return id đơn hàng generated key
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public int creatOrder(Account user, int status, String code) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		Function ft = new Function();
@@ -121,6 +130,13 @@ public class Order {
 		return rt;
 	}
 	
+	/**
+	 * Hàm lưu chi tiết đơn hàng vào database
+	 * @param cart giỏ hàng
+	 * @param id số đơn hàng
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void creatOrderDetail(ShoppingCart cart, int id) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "INSERT INTO orders_detail VALUES (?, ?, ?, ?)";
@@ -140,6 +156,11 @@ public class Order {
 		con.close();
 	}
 	
+	/**
+	 * Hàm lấy chi tiết đơn hàng
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void getOrderDetail() throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select * from orders_detail where order_id = ?";
@@ -159,6 +180,10 @@ public class Order {
 		con.close();
 	}
 	
+	/**
+	 * Hàm tính tổng tiền đơn hàng
+	 * @return
+	 */
 	public double totalPay() {
 		double rs = 0;
 		for (int i = 0; i < productId.size(); i++) {

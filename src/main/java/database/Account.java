@@ -79,7 +79,14 @@ public class Account {
 	public void setCheckPay(boolean checkPay) {
 		this.checkPay = checkPay;
 	}
-
+	
+	/**
+	 * Hàm lấy thông tin user từ database
+	 * @param mail địa chỉ mail của user
+	 * @param pass mật khẩu
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void getUser(String mail, String pass) throws SQLException, ClassNotFoundException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select * from account where user_mail=? and password=?";
@@ -101,6 +108,13 @@ public class Account {
 		con.close();
 	}
 	
+	/**
+	 * Hàm cập nhật thông tin user vào database
+	 * @param user_name tên
+	 * @param user_phone số điện thoại
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void setUser(String user_name, String user_phone) throws SQLException, ClassNotFoundException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "update account set user_name = ?, user_phone = ?, user_address = ? where user_mail = ?";
@@ -162,7 +176,15 @@ public class Account {
 		con.close();
 	}
 	
-
+	/**
+	 * Hàm tạo user mới khi đăng kí thành công
+	 * @param mail địa chỉ mail
+	 * @param pass mật khẩu
+	 * @param firstname tên
+	 * @param lastname họ
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void creatAccount(String mail, String pass, String firstname, String lastname) throws SQLException, ClassNotFoundException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "insert into account (user_mail, password, account_role, user_name) values(?, ?, ?, ?)";

@@ -90,6 +90,14 @@ public class Product {
 		this.checked = checked;
 	}
 	
+	/**
+	 * Hàm lấy thông tin sản phẩm
+	 * @param id
+	 * @param quality
+	 * @return thông tin chi tiết sản phẩm
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public Product getProduct(int id, int quality) throws ClassNotFoundException, SQLException  {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select * from products where product_id = ?";

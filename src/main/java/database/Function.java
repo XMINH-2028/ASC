@@ -7,12 +7,23 @@ import java.util.List;
 import java.util.Locale;
 
 public class Function {
+	
+	/**
+	 * Hàm kiểm tra số nguyên
+	 * @param text đầu vào kiểm tra
+	 * @return true nếu là số nguyên
+	 */
 	public boolean checkInt(String text) {
 		String regex = "[0-9]+";
 		if (text.matches(regex)) return true;
 		else return false;
 	}
 	
+	/**
+	 * Hàm format giá tiền
+	 * @param price
+	 * @return price đã format
+	 */
 	public String vnd(double price) { 
 		 NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);  
 		 String currency = formatter.format(price);  
@@ -61,6 +72,11 @@ public class Function {
 		return copyList;
 	}
 	
+	/**
+	 * Hàm lấy tên địa chỉ từ chuỗi nhà, xã-phường, quận-huyện, tỉnh-thành phố, id xã-phường, id quận-huyện, id tỉnh-thành phố
+	 * @param text chuổi chứa địa chỉ
+	 * @return tên địa chỉ
+	 */
 	public String getAddress(String text) {
 		if (text == null || text.equals("")) return "";
 		List<String> arr = Arrays.asList(text.split(","));
@@ -72,6 +88,11 @@ public class Function {
 		return rs;
 	}
 	
+	/**
+	 * Hàm lấy id địa chỉ từ chuỗi nhà, xã-phường, quận-huyện, tỉnh-thành phố, id xã-phường, id quận-huyện, id tỉnh-thành phố
+	 * @param text chuổi chứa id địa chỉ
+	 * @return id địa chỉ
+	 */
 	public String getAddressId(String text) {
 		if (text == null || text.equals("")) return "";
 		List<String> arr = Arrays.asList(text.split(","));
@@ -83,6 +104,12 @@ public class Function {
 		return rs;
 	}
 	
+	/**
+	 * Hàm lấy id từng thành phần trong chuỗi nhà, xã-phường, quận-huyện, tỉnh-thành phố, id xã-phường, id quận-huyện, id tỉnh-thành phố
+	 * @param text chuỗi địa chỉ
+	 * @param number số thứ tự thành phần muốn lấy
+	 * @return id thành phần muốn lấy
+	 */
 	public String getId(String text, int number) {
 		String rs = "";
 		if (text != null && !text.equals("")) {
@@ -104,6 +131,11 @@ public class Function {
 		return rs;
 	}
 	
+	/**
+	 * Hàm kiểm tra số điện thoại hợp lệ
+	 * @param text chuỗi đầu vào kiểm tra
+	 * @return true nếu hợp lệ
+	 */
 	public static boolean checkPhone(String text) {
 		if (text == null) return false;
 		String[] arr = {"032","033","034","035","036","037","038","039","086","096","097","098",

@@ -51,7 +51,11 @@ public class ShoppingCart {
 		this.check = check;
 	}
 
-
+	/**
+	 * Hàm lấy các sản phẩm trong giỏ hàng đã lưu từ database
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void getCart() throws ClassNotFoundException, SQLException  {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select x.product_id, product_name, product_des, product_price, product_img_source, "
@@ -81,6 +85,13 @@ public class ShoppingCart {
 		con.close();
 	}
 	
+	/**
+	 * Hàm thêm sản phẩm vào ShoppingCart và database
+	 * @param id
+	 * @param quantity
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void addCart(int id, int quantity) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		Product pr = new Product();
@@ -112,6 +123,13 @@ public class ShoppingCart {
 		}
 	}
 	
+	/**
+	 * Hàm thay đổi số lượng sản phẩm trong database và ShoppingCart
+	 * @param id
+	 * @param quantity
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void changeCart(int id, int quantity) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		for (Product x : productList) {
@@ -129,6 +147,12 @@ public class ShoppingCart {
 		}
 	}
 	
+	/**
+	 * Hàm xóa sản phẩn trong database và ShoppingCart
+	 * @param id
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void deleteCart(int id) throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		for (int i = 0; i < productList.size(); i++) {
@@ -145,6 +169,10 @@ public class ShoppingCart {
 		}
 	}
 	
+	/**
+	 * Hàm tính tổng số sản phẩm đã lựa chọn trong giỏ hàng
+	 * @return quantity
+	 */
 	public double totalCart() {
 		double sum = 0;
 		for (int i = 0; i < productList.size(); i++) {
@@ -155,6 +183,10 @@ public class ShoppingCart {
 		return sum;
 	}
 	
+	/**
+	 * Hàm tính tổng tiền các sản phẩm đã lựa chọn
+	 * @return price
+	 */
 	public int totalProduct() {
 		int sum = 0;
 		for (int i = 0; i < productList.size(); i++) {
@@ -165,6 +197,11 @@ public class ShoppingCart {
 		return sum;
 	}
 	
+	/**
+	 * Hàm thay đổi trạng thái check/uncheck khi người dùng chọn và bỏ chọn
+	 * @param id
+	 * @param checkNumber
+	 */
 	public void checked(int id, int checkNumber){
 		for (Product x : productList) {
 			if (x.getId() == id ) {
@@ -177,6 +214,11 @@ public class ShoppingCart {
 		}
 	}
 	
+	/**
+	 * Hàm lấy các đơn đã đặt từ database
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void creatOrderList() throws ClassNotFoundException, SQLException {
 		Connection con = new ConnectDB().getConnection();
 		String sql = "select * from orders where user_mail = ? order by order_date desc";
