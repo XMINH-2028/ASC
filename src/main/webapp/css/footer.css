@@ -1,0 +1,49 @@
+footer {
+	background: white;
+	text-align: center;
+}
+
+footer .grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	padding: 15px 0;
+}
+
+footer .left a {
+	color: black ;
+}
+
+footer h1 {
+	font-size: 20px;
+	color: #ffc107;
+	margin-bottom: 15px;
+}
+
+footer address p {
+	margin-bottom: 5px;
+}
+
+footer > p {
+	font-size: 20px;
+	color: white;
+	padding: 20px;
+	background: black;
+}
+
+@media only screen and (max-width:600px) {
+	footer .grid-container {
+		grid-template-columns: 1fr;
+	}
+	
+}
+
+@media only screen and (max-width:400px) {
+	footer iframe {
+		width: 90%;
+	}
+	
+	footer > p {
+	    font-size: 16px;
+	}
+
+}

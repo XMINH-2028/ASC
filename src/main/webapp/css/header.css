@@ -1,0 +1,200 @@
+header {
+	background: white;
+}
+
+header .top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: white;
+	padding: 0 30px;
+}
+
+header .logo {
+	max-width: 120px;
+}
+
+header form {
+	width: 50%;
+}
+
+header .searchBox {
+	display: flex;
+	justify-content: flex-end;
+	border: 2px solid black;
+}
+
+header .searchBox input {
+	border: none;
+	border-right: 1px solid black;
+	padding: 5px;
+	width: 100%;
+	font-size: 20px;
+}
+
+header .searchBox input:focus {
+	outline: none;
+}
+
+header .searchBox button {
+	border: none;
+	min-width: 60px;
+	font-size: 30px;
+	padding: 5px;
+}
+
+header .searchBox button i {
+	font-size: 30px;
+}
+
+header .searchBox button:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
+header .topnav {
+	display: flex;
+	justify-content: space-between;
+	background-color: black;
+	color: white;
+	padding: 5px 30px;
+	font-size: 18px;
+}
+
+header .topnav ul {
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+}
+
+header .topnav ul a {
+	color: white;
+	font-size: 18px;
+}
+
+header .topnav ul a:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
+header li {
+	padding: 10px 0;
+}
+
+header .left li {
+	margin-right: 20px;
+}
+
+header .left .menu {
+	display: none;
+}
+
+header .right li {
+	margin-left: 20px;
+}
+
+header .right .admin>span {
+	border: 2px solid white;
+	border-radius: 100%;
+	padding: 10px;
+}
+
+header .right .admin {
+	position: relative;
+}
+
+header .right .admin>span:hover {
+	border: 2px solid #ffc107;
+	cursor: pointer;
+}
+
+header .admin .content {
+	position: absolute;
+	top: 58px;
+	right: -10px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	background-color: silver;
+	width: 200px;
+}
+
+header .admin .content li {
+	margin: 0px;
+	padding: 15px;
+	color: white;
+	width: 100%;
+}
+
+header .admin .content li:nth-of-type(1) {
+	padding: 25px 15px;
+	border-bottom: 2px solid #f1f1f1;
+}
+
+header .admin .content span {
+	border: 2px solid #ffc107;
+	border-radius: 100%;
+	padding: 15px;
+	color: #ffc107;
+	margin-right: 20px;
+}
+
+header .admin .logout {
+	color: white;
+}
+
+header .admin .logout:hover {
+	cursor: pointer;
+	color: #ffc107;
+}
+
+@media screen and (max-width: 992px) {
+  	header .top {
+	    padding: 0 20px;
+	}
+} 
+
+@media only screen and (max-width:600px) {
+	header .left {
+		position: relative;
+	}
+	
+	header .left .menu {
+		display: block;
+		padding: 0;
+	}	
+	
+	header .left .menu:hover {
+		cursor: pointer;
+		color: #ffc107;
+	}	
+	
+	header .left .item {
+	    display: none;
+	    position: absolute;
+	    top: 48px;
+	    left: -20px;
+	    background: black;
+	    padding: 0 20px;
+	    width: 200px;
+	}	
+}
+
+@media only screen and (max-width:460px) {
+	header .searchBox button {
+		font-size: 20px;
+		min-width: 40px;
+	}
+	
+	header .searchBox button i {
+		font-size: 20px;
+	}
+	
+	header .logo {
+	    max-width: 80px;
+	}
+	
+	header .top {
+	    padding: 0 10px;
+	}
+}

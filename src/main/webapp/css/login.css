@@ -1,0 +1,139 @@
+body {
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	padding: 15px;
+	border: 10px solid #999999;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 60vh;
+}
+
+.icon {
+	display: block;
+	max-height: 260px;
+	margin: auto;
+	padding: 15px;
+	border: 15px solid #9835fd;
+	border-radius: 50%;
+}
+
+form {
+	padding: 20px 0;
+}
+
+form p {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-size: 18px;
+	font-weight: bold;
+	margin: 5px 0;
+	display: flex;
+}
+
+label span {
+	color: red;
+	margin-left: 20px;
+}
+
+.wrap input {
+	height: 40px;
+	font-size: 15px;
+	border: 1px solid #d3d3d3;
+	padding: 0 15px;
+}
+
+form button[id="sub"] {
+	width: 100%;
+	padding: 10px;
+	margin: 20px 0 0;
+	font-size: 18px;
+	background: #67ac5b;
+	border: none;
+	color: white;
+}
+
+form button:hover {
+	cursor: pointer;
+	color: gold;
+}
+
+form>p:last-of-type {
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+input[type="checkbox"] {
+	margin-right: 5px;
+}
+
+form>p:last-of-type input:hover {
+	cursor: pointer;
+}
+
+form>p:last-of-type label:hover {
+	cursor: pointer;
+}
+
+.close {
+	display: block;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	font-weight: bold;
+	transform: rotate(45deg);
+}
+
+.close a {
+	font-size: 30px;
+}
+
+.close:hover {
+	cursor: pointer;
+}
+
+.footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	background: #f1f1f1;
+	padding: 15px;
+}
+
+.footer button {
+	padding: 8px 12px;
+	color: white;
+	background: red;
+	border: none;
+}
+
+.footer p {
+	flex-direction: row;
+}
+
+.footer p a {
+	margin-left: 3px;
+}
+
+@media screen and (max-width: 320px) {
+	.icon {
+		max-height: 230px;
+	}
+}
+
+@media screen and (min-width: 1500px) {
+	.icon {
+		max-height: 512px;
+	}
+}
